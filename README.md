@@ -1,2 +1,3 @@
-# Sistem
-Stereogram generator
+# Sistem - A Stereogram generator
+
+Some patience required, I'm working on an initial checkin for my application. A .NET Core CLI application...
