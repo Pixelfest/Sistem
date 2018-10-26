@@ -1,3 +1,24 @@
 # Sistem - A Stereogram generator
 
-Some patience required, I'm working on an initial checkin for my application. A .NET Core CLI application...
+## Stereogram.cs - Core logic
+
+This is the .NET Core implementation for the Stereogram Generator I called Sistem. (Sis stands for Single Image Stereogram, get it :P)
+
+If you're looking to port this to another coding language, this is where to start. This class handles all the logic. It only requires a Depthmap to generate a random dot stereogram. If you add a pattern it will use that.
+
+## Command line application
+
+The commandline application is a basic implementation of the Stereogram generator. I haven't tested it thoroughly but most of the regular scenario's seem to work.
+
+Once compiled you can call the commandlind application with:
+
+```
+dotnet sis.dll -d yourdepthmap.png
+```
+
+Use the -? parameter to see options I've included already.
+
+## Sistem UI
+
+This is currently using a slightly older implementation of the Stereogram.cs class, I will try to include the net .NET Core implementation here. Once done I'll add it to the solution.
+
