@@ -10,46 +10,46 @@ namespace Sistem.CommandLine
 	[HelpOption("-?|-h|--help")]
 	class Program
 	{
-		[Option(CommandOptionType.SingleValue, Description = "The depth map (png, gif, jpg or bmp)", Template = "-d|--depthmap")]
+		[Option(CommandOptionType.SingleValue, Description = "The depth map (png, gif, jpg or bmp)", Template = "-d|--depth-map")]
 		[Required]
-		private string depthMap { get; set; }
+		protected string DepthMap { get; set; }
 
 		[Option(CommandOptionType.SingleValue, Description = "The pattern map (png, gif, jpg or bmp)", Template = "-p|--pattern")]
-		private string pattern { get; set; }
+		protected string Pattern { get; set; }
 
 		[Option(CommandOptionType.SingleValue, Description = "The result filename", Template = "-r|--result")]
-		private string resultFile { get; set; }
+		protected string ResultFile { get; set; }
 
 		[Option(CommandOptionType.SingleValue, Description = "The minimum pattern size in pixels", Template = "-i|--min-separation")]
-		private int? minSeparation { get; set; }
+		protected int? MinSeparation { get; set; }
 
 		[Option(CommandOptionType.SingleValue, Description = "The maximum pattern size in pixels", Template = "-a|--max-separation")]
-		private int? maxSeparation { get; set; }
+		protected int? MaxSeparation { get; set; }
 
 		[Option(CommandOptionType.SingleValue, Description = "The pattern size in pixels, match with max-separation for seamless results", Template = "-w|--pattern-width")]
-		private int? patternWidth { get; set; }
+		protected int? PatternWidth { get; set; }
 
 		[Option(CommandOptionType.SingleValue, Description = "Amount of oversampling (1-8)", Template = "-o|--oversampling")]
 		[Range(0, 8)]
-		private int? oversampling { get; set; }
+		protected int? Oversampling { get; set; }
+		
+		[Option(CommandOptionType.NoValue, Description = "Disable post processing oversampling (for working with really, really big images)", Template = "-z|--disable-ppo")]
+		protected bool? DisablePostProcessingOverSampling { get; set; }
 
 		[Option(CommandOptionType.NoValue, Description = "Use crossview instead of parallel", Template = "-x|--crossview")]
-		private bool? crossView { get; set; }
+		protected bool? CrossView { get; set; }
 
 		[Option(CommandOptionType.NoValue, Description = "Use color for random dot stereogram", Template = "-c|--use-color")]
-		private bool? coloredNoise { get; set; }
+		protected bool? ColoredNoise { get; set; }
 
 		[Option(CommandOptionType.SingleValue, Description = "Noise density for monochrome random dot stereogram (1-99)", Template = "-n|--noise-density")]
 		[Range(1, 99)]
-		private int? noiseDensity { get; set; }
+		protected int? NoiseDensity { get; set; }
 
 
 		private static ConsoleColor _defaultColor;
-		private const ConsoleColor _successColor = ConsoleColor.Green;
-		private const ConsoleColor _warningColor = ConsoleColor.DarkYellow;
-		private const ConsoleColor _errorColor = ConsoleColor.Red;
 
-		static int Main(string[] args)
+		private static int Main(string[] args)
 		{
 			var result = CommandLineApplication.Execute<Program>(args);
 
@@ -61,6 +61,7 @@ namespace Sistem.CommandLine
 			return result;
 		}
 
+		// ReSharper disable once UnusedMember.Local
 		private int OnExecute(CommandLineApplication app)
 		{
 			_defaultColor = Console.ForegroundColor;
@@ -71,7 +72,7 @@ namespace Sistem.CommandLine
 
 			var result = 0;
 
-			string depthMapFile = FindFile(depthMap);
+			string depthMapFile = FindFile(DepthMap);
 			if (string.IsNullOrEmpty(depthMapFile))
 			{
 				WriteError($"Depthmap file could not be found");
@@ -80,9 +81,9 @@ namespace Sistem.CommandLine
 
 			string patternFile = string.Empty;
 
-			if (!string.IsNullOrEmpty(pattern))
+			if (!string.IsNullOrEmpty(Pattern))
 			{
-				patternFile = FindFile(pattern);
+				patternFile = FindFile(Pattern);
 				if (string.IsNullOrEmpty(patternFile))
 				{
 					WriteError($"Pattern file could not be found");
@@ -105,26 +106,29 @@ namespace Sistem.CommandLine
 					if (success)
 					{
 						// Set parameters
-						if (minSeparation.HasValue)
-							stereogram.MinSeparation = minSeparation.Value;
+						if (MinSeparation.HasValue)
+							stereogram.MinSeparation = MinSeparation.Value;
 
-						if (maxSeparation.HasValue)
-							stereogram.MaxSeparation = maxSeparation.Value;
+						if (MaxSeparation.HasValue)
+							stereogram.MaxSeparation = MaxSeparation.Value;
 
-						if (patternWidth.HasValue)
-							stereogram.PatternWidth = patternWidth.Value;
+						if (PatternWidth.HasValue)
+							stereogram.PatternWidth = PatternWidth.Value;
 
-						if (oversampling.HasValue)
-							stereogram.Oversampling = oversampling.Value;
+						if (Oversampling.HasValue)
+							stereogram.Oversampling = Oversampling.Value;
 
-						if (crossView.HasValue)
+						if (CrossView.HasValue)
 							stereogram.CrossView = true;
 
-						if (coloredNoise.HasValue)
+						if (ColoredNoise.HasValue)
 							stereogram.ColoredNoise = true;
 
-						if (noiseDensity.HasValue)
-							stereogram.NoiseDensity = noiseDensity.Value;
+						if (NoiseDensity.HasValue)
+							stereogram.NoiseDensity = NoiseDensity.Value;
+
+						if(DisablePostProcessingOverSampling.HasValue)
+							stereogram.PostProcessingOversampling = false;
 
 						// Generate the stereogram
 						success = stereogram.Generate();
@@ -143,9 +147,13 @@ namespace Sistem.CommandLine
 						WriteWarning(message);
 
 					if (success)
-						WriteSuccess("The stereogram was successfully generated.");
+					{
+						WriteSuccess("The stereogram was successfully generated. Saving...");
 
-					stereogram.SaveResult(resultFile);
+						var fileName = stereogram.SaveResult(ResultFile);
+
+						WriteSuccess("The stereogram was saved as '{0}'", fileName);
+					}
 				}
 			}
 

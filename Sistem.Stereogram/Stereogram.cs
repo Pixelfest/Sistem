@@ -13,15 +13,15 @@ namespace Sistem.Core
 	public class Stereogram : IDisposable
 	{
 		private readonly object _lock = new object();
+		private const double MaxCombinedPixelValue = 196607; // -1 to rule out 0;
 
 		private int _noiseDensity = 50;
 		private int _oversampling = 1;
-		public int _maxSeparation = 90;
+		private int _maxSeparation = 90;
 
-		private Image<Rgba32> _depthMap;
-		private Image<Rgba32> _pattern;
+		private Image<Rgb48> _depthMap;
 
-		private Image<Rgba32> _directDepthMap;
+		private Image<Rgb48> _directDepthMap;
 		private Image<Rgba32> _directPattern;
 		private Image<Rgba32> _directResultMap;
 
@@ -55,7 +55,7 @@ namespace Sistem.Core
 		/// <summary>
 		/// Gets the depth map
 		/// </summary>
-		public Image<Rgba32> DepthMap
+		public Image<Rgb48> DepthMap
 		{
 			get => _depthMap;
 			private set
@@ -77,14 +77,7 @@ namespace Sistem.Core
 		/// <summary>
 		/// Gets the pattern to use
 		/// </summary>
-		public Image<Rgba32> Pattern 
-		{ 
-			get => _pattern; 
-			private set 
-			{ 
-				_pattern = value;
-			} 
-		}
+		public Image<Rgba32> Pattern { get; private set; }
 
 		/// <summary>
 		/// Gets the result image of the stereogram
@@ -188,7 +181,7 @@ namespace Sistem.Core
 		{
 			try
 			{ 
-				DepthMap = Image.Load(filePath);
+				DepthMap = Image.Load<Rgb48>(filePath);
 				return true;
 			}
 			catch (NotSupportedException)
@@ -222,13 +215,14 @@ namespace Sistem.Core
 		/// Save the result
 		/// </summary>
 		/// <param name="path">The path to save the result to</param>
-		public void SaveResult(string path = "")
+		public string SaveResult(string path = "")
 		{
 			if(string.IsNullOrWhiteSpace(path))
 				path = string.Format("result-{0}.png", DateTime.Now.ToString("yyyyMMdd.HH.mm.ss"));
-			
-			if(Result != null)
-				Result.Save(path);
+
+			Result?.Save(path);
+
+			return path;
 		}
 
 		/// <summary>
@@ -246,8 +240,10 @@ namespace Sistem.Core
 			if (PatternWidth < MaxSeparation)
 				ValidationErrors.Add($"Pattern width ({PatternWidth}) should be bigger or equal to maximum separation ({MaxSeparation}).");
 
-			if (_depthMap != null && _depthMap.Width * _depthMap.Height > 10 * 1000 * 1000)
-				ValidationErrors.Add("Only depthmaps lower than 10MP are supported.");
+			if (_depthMap != null && PostProcessingOversampling && (long)_depthMap.Width * _depthMap.Height * _oversampling * 4 > int.MaxValue)
+				ValidationErrors.Add("The depthmap is too big. Try disabling Post Processing Oversampling. The depthmap is limited to 536MP / Oversampling when Post Processing Oversampling is enabled.");
+			else if (_depthMap != null && !PostProcessingOversampling && (long)_depthMap.Width * _depthMap.Height * 4 > int.MaxValue)
+				ValidationErrors.Add("The depthmap is too big. The depthmap is limited to 536MP.");
 
 			if (_depthMap == null)
 				ValidationErrors.Add("No depthmap is set.");
@@ -397,10 +393,9 @@ namespace Sistem.Core
 		private static Image<Rgba32> Resize(Image<Rgba32> source, int width, int height = 0)
 		{
 			if (height == 0)
-				height = (int)(source.Height / (double)(source.Width / (double)width));
+				height = (int)(source.Height / (source.Width / (double)width));
 
-			var resultImage = new Image<Rgba32>(width, height);
-			resultImage = source.Clone();
+			Image<Rgba32> resultImage = source.Clone();
 			resultImage.Mutate(x => x.Resize(width, height));
 
 			return resultImage;
@@ -425,7 +420,7 @@ namespace Sistem.Core
 				var color = _directDepthMap[x, y];
 
 				// Get the color's brightness in a range from 0..1
-				var relativeDepth = (color.R + color.G + color.B) / 765d;
+				var relativeDepth = (color.R + color.G + color.B) / MaxCombinedPixelValue;
 
 				// 90 - 0.1 * (90 - 60)
 				var separation = _virtualMaxSeparation - relativeDepth * (_virtualMaxSeparation - _virtualMinSeparation);
@@ -550,7 +545,10 @@ namespace Sistem.Core
 						if (YShift > 0)
 							calculatedY = y + (x - _virtualStartingPoint) / _virtualMaxSeparation * _currentYShift + _currentPatternHeight;
 
-						colors[x] = _directPattern[(x + _virtualPatternOffset) % _virtualMaxSeparation / _currentOversampling, calculatedY % _currentPatternHeight];
+						var locationX = (x + _virtualPatternOffset) % _virtualMaxSeparation / _currentOversampling;
+						var locationY = (calculatedY + _currentPatternHeight) % _currentPatternHeight;
+
+						colors[x] = _directPattern[locationX, locationY];
 					}
 				}
 				else
@@ -579,7 +577,7 @@ namespace Sistem.Core
 						blue += color.B;
 					}
 
-					_directResultMap[x, y] = new Rgba32(red / _currentOversampling, green / _currentOversampling, blue / _currentOversampling);
+					_directResultMap[x, y] = new Rgba32((byte)Math.Floor(red / (double)_currentOversampling), (byte)Math.Floor(green / (double)_currentOversampling), (byte)Math.Floor(blue / (double)_currentOversampling));
 				}
 		}
 
@@ -594,13 +592,14 @@ namespace Sistem.Core
 		/// <returns>The new separation value</returns>
 		private void FillLookArrays(int y, int x, int[] lookLeft, int[] lookRight, ref double separation)
 		{
+
 			if (x % _currentOversampling == 0)
 			{
 				// Get color from depth map
 				var color = _directDepthMap[x / _currentOversampling, y];
 
 				// Get the color's brightness in a range from 0..1
-				var relativeDepth = (color.R + color.G + color.B) / 765d;
+				var relativeDepth = (color.R + color.G + color.B) / MaxCombinedPixelValue;
 
 				separation = _virtualMaxSeparation - relativeDepth * (_virtualMaxSeparation - _virtualMinSeparation);
 			}
@@ -685,7 +684,7 @@ namespace Sistem.Core
 			_directResultMap?.Dispose();
 			_directDepthMap?.Dispose();
 
-			_pattern?.Dispose();
+			Pattern?.Dispose();
 			_depthMap?.Dispose();
 
 
