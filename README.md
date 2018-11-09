@@ -10,8 +10,12 @@ If you're looking to port this to another coding language, this is where to star
 
 The commandline application is a basic implementation of the Stereogram generator. I haven't tested it thoroughly but most of the regular scenario's seem to work.
 
-Once compiled you can call the commandlind application with:
+The binary releases should be stand-alone, you can call the CLI as follows:
+```
+sis -d yourdepthmap.png
+```
 
+If you're compiling the application yourself in dotnet you can call the commandline after compiling application with:
 ```
 dotnet sis.dll -d yourdepthmap.png
 ```
