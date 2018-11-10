@@ -3,6 +3,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Sistem.Core
@@ -42,6 +43,7 @@ namespace Sistem.Core
 		private int _virtualStartingPoint;
 		private int _virtualPatternOffset;
 
+
 		/// <summary>
 		/// Gets a list of errors, if no stereogram is generated, this is where to look for clues as to why
 		/// </summary>
@@ -58,8 +60,11 @@ namespace Sistem.Core
 		public Image<Rgb48> DepthMap
 		{
 			get => _depthMap;
-			private set
+			set
 			{
+				if (value == null)
+					return;
+				
 				var width = value.Width;
 				var height = value.Height;
 
@@ -77,7 +82,7 @@ namespace Sistem.Core
 		/// <summary>
 		/// Gets the pattern to use
 		/// </summary>
-		public Image<Rgba32> Pattern { get; private set; }
+		public Image<Rgba32> Pattern { get; set; }
 
 		/// <summary>
 		/// Gets the result image of the stereogram
@@ -94,16 +99,16 @@ namespace Sistem.Core
 		/// Gets or sets the maximum separation to use in pixels, limited by the maximum width of the used pattern
 		/// Default = 90
 		/// </summary>
-		public int MaxSeparation 
-		{ 
-			get => _maxSeparation; 
-			set 
-			{ 
+		public int MaxSeparation
+		{
+			get => _maxSeparation;
+			set
+			{
 				_maxSeparation = value;
 
-				if(value > PatternWidth)
+				if (value > PatternWidth)
 					PatternWidth = value;
-			} 
+			}
 		}
 
 		/// <summary>
@@ -116,14 +121,14 @@ namespace Sistem.Core
 		/// Gets or sets the oversampling factor, for smoother results.
 		/// Default = 1
 		/// </summary>
-		public int Oversampling 
-		{ 
-			get => _oversampling; 
-			set 
+		public int Oversampling
+		{
+			get => _oversampling;
+			set
 			{
-				if(value < 1)
+				if (value < 1)
 					_oversampling = 1;
-				else if(value > 8)
+				else if (value > 8)
 					_oversampling = 8;
 				else
 					_oversampling = value;
@@ -180,7 +185,7 @@ namespace Sistem.Core
 		public bool LoadDepthMap(string filePath)
 		{
 			try
-			{ 
+			{
 				DepthMap = Image.Load<Rgb48>(filePath);
 				return true;
 			}
@@ -198,9 +203,28 @@ namespace Sistem.Core
 		/// <param name="filePath">The path of the file to load</param>
 		public bool LoadPattern(string filePath)
 		{
-			try 
-			{ 
+			try
+			{
 				Pattern = Image.Load(filePath);
+				return true;
+			}
+			catch (NotSupportedException)
+			{
+				ValidationErrors.Add("Pattern should be png, gif, jpg or bmp.");
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Load a pattern from a path
+		/// </summary>
+		/// <param name="stream">The stream of the file to load</param>
+		public bool LoadPattern(Stream stream)
+		{
+			try
+			{
+				Pattern = Image.Load(stream);
 				return true;
 			}
 			catch (NotSupportedException)
@@ -217,7 +241,7 @@ namespace Sistem.Core
 		/// <param name="path">The path to save the result to</param>
 		public string SaveResult(string path = "")
 		{
-			if(string.IsNullOrWhiteSpace(path))
+			if (string.IsNullOrWhiteSpace(path))
 				path = string.Format("result-{0}.png", DateTime.Now.ToString("yyyyMMdd.HH.mm.ss"));
 
 			Result?.Save(path);

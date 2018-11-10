@@ -1,0 +1,9 @@
+﻿<Application x:Class="Sistem.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Sistem"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+		<FontFamily x:Key="FontAwesomeRegular">/Fonts/fa-regular-400.ttf#Font Awesome 5 Pro</FontFamily>
+	</Application.Resources>
+</Application>

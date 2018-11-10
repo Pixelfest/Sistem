@@ -1,0 +1,9 @@
+﻿X Enable/disable parallel processing => Helps with debugging
+X Update algorithm to base seperation on pattern width, now a width of 150 will not result in a seperation of 150 for blacks.
+X Option for cross-eyed
+X Add helpers
+X Issues with memory on big images => don't allow
+
+Credits and links
+Add repeating icons/images
+
