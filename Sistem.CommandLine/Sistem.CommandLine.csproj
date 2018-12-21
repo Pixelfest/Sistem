@@ -20,6 +20,8 @@
     <None Remove="Minifig.png" />
     <None Remove="Pattern.png" />
     <None Remove="Pattern2.png" />
+    <None Remove="Rope.png" />
+    <None Remove="TestPattern.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +35,12 @@
 
   <ItemGroup>
     <Content Include="Circles.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rope.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestPattern.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Pattern2.png">

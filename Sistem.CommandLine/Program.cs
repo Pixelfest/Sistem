@@ -28,6 +28,9 @@ namespace Sistem.CommandLine
 
 		[Option(CommandOptionType.SingleValue, Description = "The pattern size in pixels, match with max-separation for seamless results", Template = "-w|--pattern-width")]
 		protected int? PatternWidth { get; set; }
+		
+		[Option(CommandOptionType.SingleValue, Description = "The number of pixels to shift on y-axis, to fix echoes", Template = "-y|--y-shift")]
+		protected int? YShift { get; set; }
 
 		[Option(CommandOptionType.SingleValue, Description = "Amount of oversampling (1-8)", Template = "-o|--oversampling")]
 		[Range(0, 8)]
@@ -114,6 +117,9 @@ namespace Sistem.CommandLine
 
 						if (PatternWidth.HasValue)
 							stereogram.PatternWidth = PatternWidth.Value;
+						
+						if (YShift.HasValue)
+							stereogram.YShift = YShift.Value;
 
 						if (Oversampling.HasValue)
 							stereogram.Oversampling = Oversampling.Value;

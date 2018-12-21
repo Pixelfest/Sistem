@@ -519,7 +519,7 @@ namespace Sistem.Core
 			}
 
 			// The separation in pixels
-			double sep = 0;
+			var sep = 0;
 
 			for (var x = 0; x < _virtualWidth; x++)
 			{
@@ -532,7 +532,7 @@ namespace Sistem.Core
 			{
 				if (lookLeft[x] == x || lookLeft[x] < _virtualStartingPoint)
 				{
-					if (lastLinked == (x - 1))
+					if (lastLinked == x - 1)
 						colors[x] = colors[x - 1];
 					else
 					{
@@ -540,8 +540,11 @@ namespace Sistem.Core
 
 						if (YShift > 0)
 							calculatedY = (y + (x - _virtualStartingPoint) / _virtualMaxSeparation * _currentYShift) + _currentPatternHeight;
+						
+						var locationX = (x + _virtualPatternOffset) % _virtualMaxSeparation / _currentOversampling;
+						var locationY = (calculatedY + _currentPatternHeight) % _currentPatternHeight;
 
-						colors[x] = _directPattern[(x + _virtualPatternOffset) % _virtualMaxSeparation / _currentOversampling, calculatedY % _currentPatternHeight];
+						colors[x] = _directPattern[locationX, locationY];
 					}
 				}
 				else
@@ -614,7 +617,7 @@ namespace Sistem.Core
 		/// <param name="lookLeft">The lookleft array</param>
 		/// <param name="lookRight">The lookright array</param>
 		/// <returns>The new separation value</returns>
-		private void FillLookArrays(int y, int x, int[] lookLeft, int[] lookRight, ref double separation)
+		private void FillLookArrays(int y, int x, int[] lookLeft, int[] lookRight, ref int separation)
 		{
 
 			if (x % _currentOversampling == 0)
@@ -625,11 +628,11 @@ namespace Sistem.Core
 				// Get the color's brightness in a range from 0..1
 				var relativeDepth = (color.R + color.G + color.B) / MaxCombinedPixelValue;
 
-				separation = _virtualMaxSeparation - relativeDepth * (_virtualMaxSeparation - _virtualMinSeparation);
+				separation = (int) Math.Floor(_virtualMaxSeparation - relativeDepth * (_virtualMaxSeparation - _virtualMinSeparation));
 			}
 
-			var left = (int)(x - separation / 2);
-			var right = (int)(left + separation);
+			var left = x - separation / 2;
+			var right = left + separation;
 
 			var visible = true;
 
