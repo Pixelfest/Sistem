@@ -17,10 +17,15 @@
 
   <ItemGroup>
     <None Remove="Circles.png" />
+    <None Remove="Minifig.png" />
     <None Remove="Pattern.png" />
+    <None Remove="Pattern2.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Minifig.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Pattern.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -28,6 +33,9 @@
 
   <ItemGroup>
     <Content Include="Circles.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Pattern2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
