@@ -44,10 +44,13 @@
 					</ListItem>
 					<ListItem>
 						<Paragraph>
-							<Hyperlink NavigateUri="https://www.reddit.com/r/MagicEye/">https://www.reddit.com/r/MagicEye</Hyperlink> - Awesome community that supplied most of the motivation for me to keep going
+							<Hyperlink NavigateUri="https://www.reddit.com/r/MagicEye/">https://www.reddit.com/r/MagicEye</Hyperlink> - Awesome community that supplied most of the motivation for me to keep going 
 						</Paragraph>
 					</ListItem>
 				</List>
+				<Paragraph>
+					<Run FontWeight="Bold" Text="Tip: If you like stereograms checkout Magic Eye's 25th Anniversary Book, it's fantastic."/>
+				</Paragraph>
 			</FlowDocument>
 		</RichTextBox>
 </Window>

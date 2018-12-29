@@ -118,6 +118,11 @@ namespace Sistem.Core
 		public int PatternWidth { get; set; } = 90;
 
 		/// <summary>
+		/// Set the origin for the pattern
+		/// </summary>
+		public int? Origin { get; set; }
+
+		/// <summary>
 		/// Gets or sets the oversampling factor, for smoother results.
 		/// Default = 1
 		/// </summary>
@@ -365,7 +370,14 @@ namespace Sistem.Core
 				_virtualMaxSeparation = MaxSeparation * _currentOversampling;
 			}
 
-			_virtualStartingPoint = _virtualWidth / 2 - _virtualMaxSeparation / 2;
+			if (!Origin.HasValue)
+				Origin = _currentWidth / 2 - MaxSeparation / 2;
+			else if (Origin > _currentWidth - MaxSeparation)
+				Origin = _currentWidth - MaxSeparation;
+			else if (Origin < 0)
+				Origin = 0;
+
+			_virtualStartingPoint = Origin.Value * _currentOversampling;
 			_virtualPatternOffset = _virtualMaxSeparation - (_virtualStartingPoint % _virtualMaxSeparation);
 		}
 
@@ -543,6 +555,9 @@ namespace Sistem.Core
 						
 						var locationX = (x + _virtualPatternOffset) % _virtualMaxSeparation / _currentOversampling;
 						var locationY = (calculatedY + _currentPatternHeight) % _currentPatternHeight;
+						
+						if (locationY < 0)
+							locationY = locationY + _currentPatternHeight;
 
 						colors[x] = _directPattern[locationX, locationY];
 					}
@@ -570,10 +585,13 @@ namespace Sistem.Core
 						var calculatedY = y;
 
 						if (YShift > 0)
-							calculatedY = y + (x - _virtualStartingPoint) / _virtualMaxSeparation * _currentYShift + _currentPatternHeight;
+							calculatedY = (y + (x - _virtualStartingPoint) / _virtualMaxSeparation * _currentYShift) + _currentPatternHeight;
 
 						var locationX = (x + _virtualPatternOffset) % _virtualMaxSeparation / _currentOversampling;
 						var locationY = (calculatedY + _currentPatternHeight) % _currentPatternHeight;
+
+						if (locationY < 0)
+							locationY = locationY + _currentPatternHeight;
 
 						colors[x] = _directPattern[locationX, locationY];
 					}
@@ -619,7 +637,6 @@ namespace Sistem.Core
 		/// <returns>The new separation value</returns>
 		private void FillLookArrays(int y, int x, int[] lookLeft, int[] lookRight, ref int separation)
 		{
-
 			if (x % _currentOversampling == 0)
 			{
 				// Get color from depth map

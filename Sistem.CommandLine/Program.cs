@@ -26,6 +26,9 @@ namespace Sistem.CommandLine
 		[Option(CommandOptionType.SingleValue, Description = "The maximum pattern size in pixels", Template = "-a|--max-separation")]
 		protected int? MaxSeparation { get; set; }
 
+		[Option(CommandOptionType.SingleValue, Description = "The pattern origin, default to center", Template = "-b|--pattern-origin")]
+		protected int? Origin { get; set; }
+
 		[Option(CommandOptionType.SingleValue, Description = "The pattern size in pixels, match with max-separation for seamless results", Template = "-w|--pattern-width")]
 		protected int? PatternWidth { get; set; }
 		
@@ -45,6 +48,9 @@ namespace Sistem.CommandLine
 		[Option(CommandOptionType.NoValue, Description = "Use color for random dot stereogram", Template = "-c|--use-color")]
 		protected bool? ColoredNoise { get; set; }
 
+		[Option(CommandOptionType.NoValue, Description = "Disable parallel processing", Template = "-m|--no-parallel-processing")]
+		protected bool? NoParallelProcessing { get; set; }
+
 		[Option(CommandOptionType.SingleValue, Description = "Noise density for monochrome random dot stereogram (1-99)", Template = "-n|--noise-density")]
 		[Range(1, 99)]
 		protected int? NoiseDensity { get; set; }
@@ -56,7 +62,7 @@ namespace Sistem.CommandLine
 		{
 			var result = CommandLineApplication.Execute<Program>(args);
 
-#if DEBUG
+#if FALSE // Set to true if you want to keep the console window open
 			WriteLine("Press enter to exit.");
 			Console.ReadLine();
 #endif
@@ -118,6 +124,9 @@ namespace Sistem.CommandLine
 						if (PatternWidth.HasValue)
 							stereogram.PatternWidth = PatternWidth.Value;
 						
+						if (Origin.HasValue)
+							stereogram.Origin = Origin.Value;
+
 						if (YShift.HasValue)
 							stereogram.YShift = YShift.Value;
 
@@ -135,6 +144,9 @@ namespace Sistem.CommandLine
 
 						if(DisablePostProcessingOverSampling.HasValue)
 							stereogram.PostProcessingOversampling = false;
+
+						if (NoParallelProcessing.HasValue)
+							stereogram.ParallelProcessing = false;
 
 						// Generate the stereogram
 						success = stereogram.Generate();
