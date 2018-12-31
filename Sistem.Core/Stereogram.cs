@@ -31,6 +31,7 @@ namespace Sistem.Core
 		private int _currentHeight;
 		private int _currentWidth;
 		private int _currentYShift;
+		private int _currentNoiseReductionThreshold;
 		private int _currentNoiseDensity;
 		private int _currentOversampling;
 		private bool _currentParallelProcessing;
@@ -42,7 +43,8 @@ namespace Sistem.Core
 		private int _virtualMinSeparation;
 		private int _virtualStartingPoint;
 		private int _virtualPatternOffset;
-
+		private int _virtualGapFilling;
+		private int _virtualNoiseReductionRadius;
 
 		/// <summary>
 		/// Gets a list of errors, if no stereogram is generated, this is where to look for clues as to why
@@ -144,6 +146,21 @@ namespace Sistem.Core
 		/// Gets or sets the Y-shift, shift the pattern this amount of pixels to prevent echoes
 		/// </summary>
 		public int YShift { get; set; } = 16;
+		
+		/// <summary>
+		/// Gets or sets the size of pattern gaps that are automatically fixed
+		/// </summary>
+		public int GapFilling { get; set; } = 1;
+
+		/// <summary>
+		/// Threshold for noise in the image
+		/// </summary>
+		public int NoiseReductionThreshold { get; set; } = 10;
+
+		/// <summary>
+		/// The amount of pixels to use in noise reduction
+		/// </summary>
+		public int NoiseReductionRadius { get; set; } = 0;
 
 		/// <summary>
 		/// Gets or sets the view type to cross eyed
@@ -330,6 +347,7 @@ namespace Sistem.Core
 			_currentParallelProcessing = ParallelProcessing;
 			_currentYShift = YShift;
 			_currentNoiseDensity = NoiseDensity;
+			_currentNoiseReductionThreshold = NoiseReductionThreshold;
 			_currentPostProcessingOversampling = PostProcessingOversampling;
 
 			_directDepthMap = _depthMap;
@@ -379,6 +397,8 @@ namespace Sistem.Core
 
 			_virtualStartingPoint = Origin.Value * _currentOversampling;
 			_virtualPatternOffset = _virtualMaxSeparation - (_virtualStartingPoint % _virtualMaxSeparation);
+			_virtualGapFilling = GapFilling * _currentOversampling;
+			_virtualNoiseReductionRadius = NoiseReductionRadius * _currentOversampling;
 		}
 
 		/// <summary>
@@ -512,6 +532,8 @@ namespace Sistem.Core
 			var colors = new Rgba32[_virtualWidth];
 			var lookLeft = new int[_virtualWidth];
 			var lookRight = new int[_virtualWidth];
+			var setLeft = new int[_virtualWidth];
+			var setRight = new int[_virtualWidth];
 
 			if (_currentParallelProcessing)
 			{
@@ -519,6 +541,8 @@ namespace Sistem.Core
 				{
 					lookLeft[x] = x;
 					lookRight[x] = x;
+					setLeft[x] = 0;
+					setRight[x] = 0;
 				});
 			}
 			else
@@ -527,6 +551,8 @@ namespace Sistem.Core
 				{
 					lookLeft[x] = x;
 					lookRight[x] = x;
+					setLeft[x] = 0;
+					setRight[x] = 0;
 				}
 			}
 
@@ -535,8 +561,14 @@ namespace Sistem.Core
 
 			for (var x = 0; x < _virtualWidth; x++)
 			{
-				FillLookArrays(y, x, lookLeft, lookRight, ref sep);
+				FillLookArrays(y, x, lookLeft, setLeft, lookRight, setRight, ref sep);
 			}
+
+			if(_virtualGapFilling > 0)
+				FillUnsetGaps(lookLeft, setLeft, lookRight, setRight);
+
+			if(_currentNoiseReductionThreshold > 0 && _virtualNoiseReductionRadius > 0)
+				ApplyNoiseReduction(lookLeft, lookRight);
 
 			// Everything from starting point to the right
 			var lastLinked = -10;
@@ -627,15 +659,127 @@ namespace Sistem.Core
 		}
 
 		/// <summary>
+		/// Apply manual noise reduction on the look-arrays
+		/// </summary>
+		/// <param name="lookLeft">The lookleft array</param>
+		/// <param name="lookRight">The lookright array</param>
+		private void ApplyNoiseReduction(int[] lookLeft, int[] lookRight)
+		{
+			// Ignore the first pixel, if it was noise, we would take the second pixel as noise instead, which is incorrect.
+			for (var x = 1; x < _virtualWidth; x++)
+			{
+				if (Math.Abs(lookLeft[x] - lookLeft[x - 1]) > _currentNoiseReductionThreshold)
+				{
+					for (var lookAhead = x + 1; lookAhead < x + _virtualNoiseReductionRadius; lookAhead++)
+					{
+						if (lookAhead >= lookLeft.Length)
+							break;
+
+						if (Math.Abs(lookLeft[lookAhead] - lookLeft[x - 1]) < _currentNoiseReductionThreshold)
+						{
+							FillArrayGap(lookLeft, x - 1, lookAhead);
+							break;
+						}
+					}
+				}
+
+				var invertX = _virtualWidth - x - 1;
+
+				if (Math.Abs(lookRight[invertX] - lookRight[invertX + 1]) > _currentNoiseReductionThreshold)
+				{
+					for (var lookAhead = invertX; lookAhead > invertX - _virtualNoiseReductionRadius; lookAhead--)
+					{
+						if (lookAhead < 0)
+							break;
+
+						if (Math.Abs(lookRight[lookAhead] - lookRight[invertX + 1]) < _currentNoiseReductionThreshold)
+						{
+							FillArrayGap(lookRight, lookAhead, invertX + 1);
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Fill unset gaps in the look arrays with averages looking at surrounding values
+		/// </summary>
+		/// <param name="lookLeft">The lookleft array</param>
+		/// <param name="setLeft">An array of set indexes for left</param>
+		/// <param name="lookRight">The lookright array</param>
+		/// <param name="setRight">An array of set indexes for right</param>
+		private void FillUnsetGaps(int[] lookLeft, int[] setLeft, int[] lookRight, int[] setRight)
+		{
+			var startLeft = 0;
+			var startRight = 0;
+			
+			for (var x = 0; x < _virtualWidth; x++)
+			{
+				if (setLeft[x] == 1 && setRight[x] == 1 && startLeft == 0 && startRight == 0)
+					continue;
+
+				if (setLeft[x] == 0 && startLeft == 0)
+				{
+					startLeft = x;
+				}
+				else if (setLeft[x] == 1 && startLeft > 0)
+				{
+					if (x - startLeft < _virtualGapFilling)
+						FillArrayGap(lookLeft, startLeft - 1, x);
+
+					startLeft = 0;
+				}
+
+				if (setRight[x] == 0 && startRight == 0)
+				{
+					startRight = x;
+				}
+				else if (setRight[x] == 1 && startRight > 0)
+				{
+					if (x - startRight < _virtualGapFilling)
+						FillArrayGap(lookRight, startRight - 1, x);
+
+					startRight = 0;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Fill a gap in an array.
+		/// The start and end parameter are the indexes of the array where valid values are
+		/// Anything in between will be averaged out on these two values.
+		/// </summary>
+		/// <param name="array">The array to fill a gap for</param>
+		/// <param name="start">The starting index</param>
+		/// <param name="end">The end index</param>
+		private void FillArrayGap(int[] array, int start, int end)
+		{
+			var startValue = array[start];
+			var endValue = array[end];
+
+			var delta = (endValue - startValue) / (float)(end - start);
+			var count = 1;
+
+			for (var x = start + 1; x < end; x++)
+			{
+				array[x] = (int)Math.Round(startValue + count * delta);
+				count++;
+			}
+		}
+
+		/// <summary>
 		/// Fill lookleft and lookright arrays with the calculated values
 		/// </summary>
 		/// <param name="y">The y-coordinate</param>
 		/// <param name="x">The x-coordinate</param>
-		/// <param name="separation">The separation</param>
 		/// <param name="lookLeft">The lookleft array</param>
+		/// <param name="setLeft">The array that keeps track which values have been set for lookleft</param>
 		/// <param name="lookRight">The lookright array</param>
+		/// <param name="setRight">The array that keeps track which values have been set for lookright</param>
+		/// <param name="separation">The separation</param>
 		/// <returns>The new separation value</returns>
-		private void FillLookArrays(int y, int x, int[] lookLeft, int[] lookRight, ref int separation)
+		private void FillLookArrays(int y, int x, int[] lookLeft, int[] setLeft, int[] lookRight, int[] setRight, ref int separation)
 		{
 			if (x % _currentOversampling == 0)
 			{
@@ -681,6 +825,8 @@ namespace Sistem.Core
 				{
 					lookLeft[right] = left;
 					lookRight[left] = right;
+					setLeft[right] = 1;
+					setRight[left] = 1;
 				}
 			}
 		}

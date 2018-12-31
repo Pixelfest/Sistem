@@ -17,7 +17,7 @@ namespace Sistem.CommandLine
 		[Option(CommandOptionType.SingleValue, Description = "The pattern map (png, gif, jpg or bmp)", Template = "-p|--pattern")]
 		protected string Pattern { get; set; }
 
-		[Option(CommandOptionType.SingleValue, Description = "The result filename", Template = "-r|--result")]
+		[Option(CommandOptionType.SingleValue, Description = "The result filename", Template = "-f|--result")]
 		protected string ResultFile { get; set; }
 
 		[Option(CommandOptionType.SingleValue, Description = "The minimum pattern size in pixels", Template = "-i|--min-separation")]
@@ -34,6 +34,15 @@ namespace Sistem.CommandLine
 		
 		[Option(CommandOptionType.SingleValue, Description = "The number of pixels to shift on y-axis, to fix echoes", Template = "-y|--y-shift")]
 		protected int? YShift { get; set; }
+
+		[Option(CommandOptionType.SingleValue, Description = "Fix small echoes by filling pattern gaps (in pixels to fill, default 1)", Template = "-g|--gap-filling")]
+		protected int? GapFilling { get; set; }
+
+		[Option(CommandOptionType.SingleValue, Description = "Fix echo noise in the resulting image (radius, default 3)", Template = "-r|--noise-reduction-radius")]
+		protected int? NoiseReductionRadius { get; set; }
+
+		[Option(CommandOptionType.SingleValue, Description = "Fix echo noise in the resulting image (threshold, default 10)", Template = "-t|--noise-reduction-threshold")]
+		protected int? NoiseReductionThreshold { get; set; }
 
 		[Option(CommandOptionType.SingleValue, Description = "Amount of oversampling (1-8)", Template = "-o|--oversampling")]
 		[Range(0, 8)]
@@ -129,6 +138,15 @@ namespace Sistem.CommandLine
 
 						if (YShift.HasValue)
 							stereogram.YShift = YShift.Value;
+						
+						if (GapFilling.HasValue)
+							stereogram.GapFilling = GapFilling.Value;
+
+						if (NoiseReductionRadius.HasValue)
+							stereogram.NoiseReductionRadius = NoiseReductionRadius.Value;
+
+						if (NoiseReductionThreshold.HasValue)
+							stereogram.NoiseReductionThreshold = NoiseReductionThreshold.Value;
 
 						if (Oversampling.HasValue)
 							stereogram.Oversampling = Oversampling.Value;
