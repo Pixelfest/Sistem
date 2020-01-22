@@ -66,7 +66,7 @@ namespace Sistem.Core
 			{
 				if (value == null)
 					return;
-				
+
 				var width = value.Width;
 				var height = value.Height;
 
@@ -146,7 +146,7 @@ namespace Sistem.Core
 		/// Gets or sets the Y-shift, shift the pattern this amount of pixels to prevent echoes
 		/// </summary>
 		public int YShift { get; set; } = 16;
-		
+
 		/// <summary>
 		/// Gets or sets the size of pattern gaps that are automatically fixed
 		/// </summary>
@@ -451,7 +451,7 @@ namespace Sistem.Core
 			if (height == 0)
 				height = (int)(source.Height / (source.Width / (double)width));
 
-			Image<Rgba32> resultImage = source.Clone();
+			var resultImage = source.Clone();
 			resultImage.Mutate(x => x.Resize(width, height));
 
 			return resultImage;
@@ -564,10 +564,10 @@ namespace Sistem.Core
 				FillLookArrays(y, x, lookLeft, setLeft, lookRight, setRight, ref sep);
 			}
 
-			if(_virtualGapFilling > 0)
+			if (_virtualGapFilling > 0)
 				FillUnsetGaps(lookLeft, setLeft, lookRight, setRight);
 
-			if(_currentNoiseReductionThreshold > 0 && _virtualNoiseReductionRadius > 0)
+			if (_currentNoiseReductionThreshold > 0 && _virtualNoiseReductionRadius > 0)
 				ApplyNoiseReduction(lookLeft, lookRight);
 
 			// Everything from starting point to the right
@@ -584,10 +584,10 @@ namespace Sistem.Core
 
 						if (YShift > 0)
 							calculatedY = (y + (x - _virtualStartingPoint) / _virtualMaxSeparation * _currentYShift) + _currentPatternHeight;
-						
+
 						var locationX = (x + _virtualPatternOffset) % _virtualMaxSeparation / _currentOversampling;
 						var locationY = (calculatedY + _currentPatternHeight) % _currentPatternHeight;
-						
+
 						if (locationY < 0)
 							locationY = locationY + _currentPatternHeight;
 
@@ -642,10 +642,10 @@ namespace Sistem.Core
 			if (!_currentPostProcessingOversampling)
 				for (var x = 0; x < _currentWidth; x++)
 				{
-					int red = 0;
-					int green = 0;
-					int blue = 0;
-					int alpha = 0;
+					var red = 0;
+					var green = 0;
+					var blue = 0;
+					var alpha = 0;
 
 					for (var vx = 0; vx < _currentOversampling; vx++)
 					{
@@ -715,7 +715,7 @@ namespace Sistem.Core
 		{
 			var startLeft = 0;
 			var startRight = 0;
-			
+
 			for (var x = 0; x < _virtualWidth; x++)
 			{
 				if (setLeft[x] == 1 && setRight[x] == 1 && startLeft == 0 && startRight == 0)
@@ -791,7 +791,7 @@ namespace Sistem.Core
 				// Get the color's brightness in a range from 0..1
 				var relativeDepth = (color.R + color.G + color.B) / MaxCombinedPixelValue;
 
-				separation = (int) Math.Floor(_virtualMaxSeparation - relativeDepth * (_virtualMaxSeparation - _virtualMinSeparation));
+				separation = (int)Math.Floor(_virtualMaxSeparation - relativeDepth * (_virtualMaxSeparation - _virtualMinSeparation));
 			}
 
 			var left = x - separation / 2;

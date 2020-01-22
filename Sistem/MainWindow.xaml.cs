@@ -318,7 +318,7 @@ namespace Sistem
 		}
 		private void ScrollViewer_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			object original = e.OriginalSource;
+			var original = e.OriginalSource;
 
 			if (original.GetType() != typeof(ScrollViewer))
 			{
@@ -357,14 +357,14 @@ namespace Sistem
 
 		private void AboutButton_Click(object sender, RoutedEventArgs e)
 		{
-			About about = new About();
+			var about = new About();
 
 			about.ShowDialog();
 		}
 		
 		private void CopyrightMessageButton_Click(object sender, RoutedEventArgs e)
 		{
-			CopyrightMessage copyrightMessage = new CopyrightMessage(_copyrightMessage);
+			var copyrightMessage = new CopyrightMessage(_copyrightMessage);
 
 			if (copyrightMessage.ShowDialog() == true)
 				_copyrightMessage = copyrightMessage.Message;

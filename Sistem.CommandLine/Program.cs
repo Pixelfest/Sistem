@@ -90,14 +90,14 @@ namespace Sistem.CommandLine
 
 			var result = 0;
 
-			string depthMapFile = FindFile(DepthMap);
+			var depthMapFile = FindFile(DepthMap);
 			if (string.IsNullOrEmpty(depthMapFile))
 			{
 				WriteError($"Depthmap file could not be found");
 				result = 2;
 			}
 
-			string patternFile = string.Empty;
+			var patternFile = string.Empty;
 
 			if (!string.IsNullOrEmpty(Pattern))
 			{
@@ -113,7 +113,7 @@ namespace Sistem.CommandLine
 			{
 				using (var stereogram = new Stereogram())
 				{
-					bool success = true;
+					var success = true;
 
 					// Load image files
 					success &= stereogram.LoadDepthMap(depthMapFile);
