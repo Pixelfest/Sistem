@@ -569,7 +569,7 @@ namespace Sistem.Core
 				}
 
 				if (_currentPostProcessingOversampling)
-					_directResultMap[x, y] = new Rgba32(colors[x].R, colors[x].G, colors[x].B);
+					_directResultMap[x, y] = new Rgba32(colors[x].R, colors[x].G, colors[x].B, colors[x].A);
 			}
 
 			// Everything from starting point to the left
@@ -604,7 +604,7 @@ namespace Sistem.Core
 
 
 				if (_currentPostProcessingOversampling)
-					_directResultMap[x, y] = new Rgba32(colors[x].R, colors[x].G, colors[x].B);
+					_directResultMap[x, y] = new Rgba32(colors[x].R, colors[x].G, colors[x].B, colors[x].A);
 			}
 
 			if (!_currentPostProcessingOversampling)
@@ -613,6 +613,7 @@ namespace Sistem.Core
 					int red = 0;
 					int green = 0;
 					int blue = 0;
+					int alpha = 0;
 
 					for (var vx = 0; vx < _currentOversampling; vx++)
 					{
@@ -620,9 +621,10 @@ namespace Sistem.Core
 						red += color.R;
 						green += color.G;
 						blue += color.B;
+						alpha += color.A;
 					}
 
-					_directResultMap[x, y] = new Rgba32((byte)Math.Floor(red / (double)_currentOversampling), (byte)Math.Floor(green / (double)_currentOversampling), (byte)Math.Floor(blue / (double)_currentOversampling));
+					_directResultMap[x, y] = new Rgba32((byte)Math.Floor(red / (double)_currentOversampling), (byte)Math.Floor(green / (double)_currentOversampling), (byte)Math.Floor(blue / (double)_currentOversampling), (byte)Math.Floor(alpha / (double)_currentOversampling));
 				}
 		}
 

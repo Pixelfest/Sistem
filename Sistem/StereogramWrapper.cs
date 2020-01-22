@@ -12,6 +12,7 @@ namespace Sistem
 		private int _minSeparation = 60;
 		private int _maxSeparation = 90;
 		private int _textureWidth = 90;
+		private int _origin;
 		private int _noiseDensity = 50;
 		private StereogramType _stereoType = StereogramType.FastRandomDot;
 		private ViewType _viewType = ViewType.Parallel;
@@ -50,6 +51,7 @@ namespace Sistem
 				MaxSeparation = width / 10;
 				MinSeparation = width / 16;
 				TextureWidth = MaxSeparation;
+				Origin = width / 2;
 
 				SetProperty(ref _depthMap, value);
 			}
@@ -82,6 +84,11 @@ namespace Sistem
 		/// Default = 90
 		/// </summary>
 		public int TextureWidth { get => _textureWidth; set => SetProperty(ref _textureWidth, value); }
+
+		/// <summary>
+		/// The origin of the pattern
+		/// </summary>
+		public int Origin { get => _origin; set => SetProperty(ref _origin, value); }
 
 		/// <summary>
 		/// Oversampling factor, for smoother results.
@@ -181,6 +188,7 @@ namespace Sistem
 				stereogram.YShift = YShift;
 				stereogram.CrossView = ViewType.CrossView == ViewType;
 				stereogram.ColoredNoise = RandomDotUseColor;
+				stereogram.Origin = Origin;
 
 				Progress = "Generating, please wait...";
 				if (stereogram.Generate())

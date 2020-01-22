@@ -62,7 +62,7 @@ namespace Sistem.CommandLine
 		{
 			var result = CommandLineApplication.Execute<Program>(args);
 
-#if FALSE // Set to true if you want to keep the console window open
+#if false // Set to true if you want to keep the console window open
 			WriteLine("Press enter to exit.");
 			Console.ReadLine();
 #endif

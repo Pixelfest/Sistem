@@ -135,7 +135,15 @@
 			<Border>
 				<StackPanel>
 					<TextBlock FontWeight="Bold" Text="The size of the pattern to use"></TextBlock>
-					<TextBlock Text="This defaults to the maximum separation. The pattern as a whole will be repeated then. Change this value to make the pattern larger, but realise it will only use part of the image then. You cannot make the pattern size smaller than the maximum separation."></TextBlock>
+					<TextBlock Text="This defaults to the maximum separation. The pattern as a whole will be repeated then. Change this value to make the pattern larger, but realize it will only use part of the image then. You cannot make the pattern size smaller than the maximum separation."></TextBlock>
+				</StackPanel>
+			</Border>
+		</ToolTip>
+		<ToolTip x:Key="OriginToolTip">
+			<Border>
+				<StackPanel>
+					<TextBlock FontWeight="Bold" Text="The point of origin for the pattern"></TextBlock>
+					<TextBlock Text="This defaults to the center of the image. You can set it to any value within the image to change the point of origin for your stereogram."></TextBlock>
 				</StackPanel>
 			</Border>
 		</ToolTip>
@@ -378,6 +386,11 @@
 									<TextBox x:Name="TextureWidthTextBox" Width="50"  Text="{Binding TextureWidth, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="TextBox_OnlyAllowNumbers"></TextBox>
 								</StackPanel>
 
+								<StackPanel Orientation="Horizontal">
+									<Label Width="125" ToolTip="{Binding Source={StaticResource OriginToolTip}}">Origin</Label>
+									<TextBox x:Name="OriginTextBox" Width="50"  Text="{Binding Origin, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="TextBox_OnlyAllowNumbers"></TextBox>
+								</StackPanel>
+
 								<StackPanel Orientation="Horizontal" Visibility="Collapsed">
 									<Label Width="125" ToolTip="{Binding Source={StaticResource MultiThreadingToolTip}}">Multithreading</Label>
 									<CheckBox x:Name="MultiThreadingCheckBox" Height="24" VerticalContentAlignment="Center" IsChecked="{Binding ParallelProcessing}"></CheckBox>
@@ -434,7 +447,7 @@
 				</StackPanel>
 				<Border x:Name="CanvasBorder" Margin="10,10,10,10" BorderBrush="Black" BorderThickness="1" Background="LightGray">
 					<ScrollViewer x:Name="ScrollViewer" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" PreviewMouseLeftButtonDown="ScrollViewer_PreviewMouseLeftButtonDown" PreviewMouseMove="ScrollViewer_PreviewMouseMove" PreviewMouseLeftButtonUp="ScrollViewer_PreviewMouseLeftButtonUp" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" >
-							<InkCanvas DockPanel.Dock="Right" x:Name="MainCanvas" Margin="0,0,0,0" EditingMode="None" MoveEnabled="True" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White"/>
+							<InkCanvas DockPanel.Dock="Right" x:Name="MainCanvas" Margin="0,0,0,0" EditingMode="None" MoveEnabled="True" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent"/>
 					</ScrollViewer>
 				</Border>
 			</DockPanel>

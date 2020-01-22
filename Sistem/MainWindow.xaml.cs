@@ -11,7 +11,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Microsoft.Win32;
-using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
@@ -30,6 +29,7 @@ namespace Sistem
 		private const string CopyrightLayerName = "Copyright";
 		private const string IndicatorLeftLayerName = "IndicatorLeft";
 		private const string IndicatorRightLayerName = "IndicatorRight";
+		private const double FloatingPointTolerance = 0.01;
 
 		/// <summary>
 		/// The main Stereogram
@@ -46,42 +46,24 @@ namespace Sistem
 		/// </summary>
 		private readonly Image _image;
 		
-		private string _copyrightMessage = string.Format("© Pixelfest {0}", DateTime.Now.Year);
-
-		private DateTime _updateRequested = DateTime.Now;
-		private DateTime _lastUpdateRequested = DateTime.Now;
+		private string _copyrightMessage = $"© Pixelfest {DateTime.Now.Year}";
 
 		private readonly DispatcherTimer _autoUpdateTimer = new DispatcherTimer();
-		private readonly string[] _updateProperties;
 		private readonly string[]  _updateTextureProperties;
 		private bool _fitWindow;
 		
-		private Point _scrollMousePoint = new Point();
+		private Point _scrollMousePoint;
 		private double _horizontalOffset = 1;
 		private double _verticalOffset = 1;
+
+		protected double IndicatorHeight => HelpersCheckBox?.IsChecked == true ? LayersData.Get<Image>(IndicatorLeftLayerName)?.Height ?? 0 : 0;
+		protected double CopyrightHeight => LayersData.Get<TextBlock>(CopyrightLayerName)?.Height ?? 0;
+		protected double DepthMapHeight => StereogramWrapper.DepthMap?.Height ?? 0;
 		
-		private double _indicatorHeight => HelpersCheckBox?.IsChecked == true ? LayersData.Get<Image>(IndicatorLeftLayerName)?.Height ?? 0 : 0;
-		private double _copyrightHeight => LayersData.Get<TextBlock>(CopyrightLayerName)?.Height ?? 0;
-		private double _depthMapHeight => StereogramWrapper.DepthMap?.Height ?? 0;
-		
-		private double _margin => 4;
+		private static double DefaultMargin => 4;
 		
 		public MainWindow()
 		{
-			_updateProperties = new[]
-			{
-				nameof(StereogramWrapper.DepthMap),
-				nameof(StereogramWrapper.MaxSeparation),
-				nameof(StereogramWrapper.MinSeparation),
-				nameof(StereogramWrapper.NoiseDensity),
-				nameof(StereogramWrapper.Oversampling),
-				nameof(StereogramWrapper.Texture),
-				nameof(StereogramWrapper.TextureWidth),
-				nameof(StereogramWrapper.RandomDotUseColor),
-				nameof(StereogramWrapper.StereogramType),
-				nameof(StereogramWrapper.ViewType),
-				nameof(StereogramWrapper.YShift)
-			};
 			_updateTextureProperties = new[]
 			{
 				nameof(StereogramWrapper.Texture),
@@ -96,7 +78,7 @@ namespace Sistem
 			InitializeComponent();
 
 			StereogramWrapper.PropertyChanged += Stereogram_PropertyChanged;
-			this.DataContext = StereogramWrapper;
+			DataContext = StereogramWrapper;
 
 			LayersListView.DataContext = LayersData;
 
@@ -115,28 +97,15 @@ namespace Sistem
 			paddingZoomValuePercentage.Left = 0;
 			ZoomValuePercentageLabel.Padding = paddingZoomValuePercentage;
 
-			_autoUpdateTimer.Tick += AutoUpdateTimer_Tick;
-			_autoUpdateTimer.Interval = new TimeSpan(0,0,0,1);
-
 			UpdateValidationMessages();
-
 		}
 
 		#region Events
-
-		private void AutoUpdateTimer_Tick(object sender, EventArgs e)
-		{
-			//if(_lastUpdateRequested < _updateRequested && ((int)Stereogram.Progress == 0 || (int)Stereogram.Progress == 100))
-			//	Generate();
-		}
 
 		private void Stereogram_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			Dispatcher.Invoke(() =>
 			{
-				if (_updateProperties.Contains(e.PropertyName))
-					_updateRequested = DateTime.Now;
-
 				if (_updateTextureProperties.Contains(e.PropertyName))
 				{
 					SetTextureMask();
@@ -155,7 +124,6 @@ namespace Sistem
 						case StereogramType.Textured:
 							TypeTextured.IsChecked = true;
 							break;
-						default: break;
 					}
 				}
 			});
@@ -225,7 +193,6 @@ namespace Sistem
 				var bitmap = (Bitmap)LoadImage(openFileDialog.FileName);
 				var imageSourceLeft = BitmapToImageSource(bitmap);
 				LeftHelperButton.Content = new Image { Source = imageSourceLeft, Width = 20, Height = 20 };
-				_updateRequested = DateTime.Now;
 			}
 		}
 
@@ -242,7 +209,6 @@ namespace Sistem
 				var bitmap = (Bitmap)LoadImage(openFileDialog.FileName);
 				var imageSourceRight = BitmapToImageSource(bitmap);
 				RightHelperButton.Content = new Image { Source = imageSourceRight, Width = 20, Height = 20 };
-				_updateRequested = DateTime.Now;
 			}
 		}
 
@@ -307,7 +273,6 @@ namespace Sistem
 		{
 			LeftHelperButton.Content = "\uf03e";
 			RightHelperButton.Content = "\uf03e";
-			_updateRequested = DateTime.Now;
 		}
 
 		private void AutoUpdateButton_Click(object sender, RoutedEventArgs e)
@@ -328,7 +293,7 @@ namespace Sistem
 		{
 			_fitWindow = false;
 
-			if(ZoomSlider.Value != ZoomSlider.Minimum)
+			if(Math.Abs(ZoomSlider.Value - ZoomSlider.Minimum) > FloatingPointTolerance)
 			{
 				var closestValue = Math.Round(ZoomSlider.Value / 25) * 25;
 				ZoomSlider.Value = closestValue - ZoomSlider.SmallChange;
@@ -339,7 +304,7 @@ namespace Sistem
 		{
 			_fitWindow = false;
 
-			if(ZoomSlider.Value != ZoomSlider.Maximum)
+			if(Math.Abs(ZoomSlider.Value - ZoomSlider.Maximum) > FloatingPointTolerance)
 			{
 				var closestValue = Math.Round(ZoomSlider.Value / 25) * 25;
 				ZoomSlider.Value = closestValue + ZoomSlider.SmallChange;
@@ -383,9 +348,9 @@ namespace Sistem
 		{
 			if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
 			{
-				if (e.Delta > 0 && ZoomSlider.Value != ZoomSlider.Maximum)
+				if (e.Delta > 0 && Math.Abs(ZoomSlider.Value - ZoomSlider.Maximum) > FloatingPointTolerance)
 					ZoomSlider.Value = ZoomSlider.Value + ZoomSlider.SmallChange;
-				else if(ZoomSlider.Value != ZoomSlider.Minimum)
+				else if(Math.Abs(ZoomSlider.Value - ZoomSlider.Minimum) > FloatingPointTolerance)
 					ZoomSlider.Value = ZoomSlider.Value - ZoomSlider.SmallChange;
 			}
 		}
@@ -419,9 +384,6 @@ namespace Sistem
 			Task.Run(() =>
 			{
 				var success = StereogramWrapper.Generate();
-
-				if (success)
-					_lastUpdateRequested = _updateRequested;
 
 				SetResult(success);
 			});
@@ -514,7 +476,7 @@ namespace Sistem
 					_image.Height = StereogramWrapper.Result.Height;
 					_image.Source = BitmapToImageSource(StereogramWrapper.Result);
 
-					var margin = _indicatorHeight > 0 ? _indicatorHeight + _margin * 2 : 0;
+					var margin = IndicatorHeight > 0 ? IndicatorHeight + DefaultMargin * 2 : 0;
 					_image.Margin = new Thickness(0,margin,0,0);
 
 					SetMainCanvasHeight();
@@ -540,12 +502,12 @@ namespace Sistem
 			}
 
 			// Margin * 1 or 3 when there are indicators
-			var margin = _indicatorHeight == 0 ? 0 : _margin * 2;
+			var margin = Math.Abs(IndicatorHeight) < FloatingPointTolerance ? 0 : DefaultMargin * 2;
 
 			elementCopyright.Text = _copyrightMessage;
-			elementCopyright.FontSize = _depthMapHeight / 50;
-			elementCopyright.Height = _depthMapHeight / 45 + _margin;
-			elementCopyright.Margin = new Thickness(_margin, _indicatorHeight + _depthMapHeight + margin, 0, 0);
+			elementCopyright.FontSize = DepthMapHeight / 50;
+			elementCopyright.Height = DepthMapHeight / 45 + DefaultMargin;
+			elementCopyright.Margin = new Thickness(DefaultMargin, IndicatorHeight + DepthMapHeight + margin, 0, 0);
 		}
 
 		private void SetIndicators()
@@ -590,10 +552,10 @@ namespace Sistem
 			}
 
 			// Only if both helpers are custom do we use them, otherwise use default helpers 
-			if(LeftHelperButton.Content is Image && RightHelperButton.Content is Image)
+			if(LeftHelperButton.Content is Image leftHelper && RightHelperButton.Content is Image rightHelper)
 			{
-				elementLeft.Source = (LeftHelperButton.Content as Image).Source;
-				elementRight.Source = (RightHelperButton.Content as Image).Source;
+				elementLeft.Source = leftHelper.Source;
+				elementRight.Source = rightHelper.Source;
 			}
 			else
 			{
@@ -625,26 +587,26 @@ namespace Sistem
 			var leftX = MainCanvas.Width / 2 - separation - elementLeft.Width / 2;
 			var rightX = MainCanvas.Width / 2 + separation - elementLeft.Width / 2;
 
-			elementLeft.Margin = new Thickness(StereogramWrapper.ViewType == ViewType.Parallel ? leftX : rightX, _margin, 0, 0);
-			elementRight.Margin = new Thickness(StereogramWrapper.ViewType == ViewType.Parallel ? rightX : leftX, _margin, 0, 0);
+			elementLeft.Margin = new Thickness(StereogramWrapper.ViewType == ViewType.Parallel ? leftX : rightX, DefaultMargin, 0, 0);
+			elementRight.Margin = new Thickness(StereogramWrapper.ViewType == ViewType.Parallel ? rightX : leftX, DefaultMargin, 0, 0);
 			
 			var stereogram = LayersData.Get<Image>(StereogramLayerName);
 
 			if (stereogram != null)
-				stereogram.Margin = new Thickness(0, elementRight.Height + _margin * 2, 0,0);
+				stereogram.Margin = new Thickness(0, elementRight.Height + DefaultMargin * 2, 0,0);
 		}
 
 		private void SetMainCanvasHeight()
 		{
 			var margin = 0d;
 
-			if(_indicatorHeight > 0)
-				margin += _margin * 2;
+			if(IndicatorHeight > 0)
+				margin += DefaultMargin * 2;
 
-			if(_copyrightHeight > 0)
-				margin += _margin;
+			if(CopyrightHeight > 0)
+				margin += DefaultMargin;
 
-			MainCanvas.Height = _depthMapHeight + _indicatorHeight + _copyrightHeight + margin;
+			MainCanvas.Height = DepthMapHeight + IndicatorHeight + CopyrightHeight + margin;
 		}
 
 		/// <summary>
