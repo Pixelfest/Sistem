@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
-using System.Windows.Media.Imaging;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats;
+﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
 
 namespace Sistem2.LayerTypes
 {
-	public class ImageLayer : LayerBase, INotifyPropertyChanged
+	public class ImageLayer : LayerBase
 	{
 		private Image<Rgba32> _image;
 		private string _fileName;
@@ -29,7 +23,6 @@ namespace Sistem2.LayerTypes
 				OnPropertyChanged(nameof(ImageSource));  
 			}
 		}
-
 
 		public string FileName
 		{

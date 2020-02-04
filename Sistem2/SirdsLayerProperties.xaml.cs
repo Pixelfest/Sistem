@@ -17,18 +17,18 @@ using SixLabors.ImageSharp.PixelFormats;
 namespace Sistem2
 {
 	/// <summary>
-	/// Interaction logic for ImageLayerProperties.xaml
+	/// Interaction logic for SirdsLayerProperties.xaml
 	/// </summary>
-	public partial class ImageLayerProperties : UserControl
+	public partial class SirdsLayerProperties : UserControl
 	{
-		public ImageLayerProperties()
+		public SirdsLayerProperties()
 		{
 			InitializeComponent();
 		}
 
 		private void LoadImageButtonClick(object sender, RoutedEventArgs e)
 		{
-			if (!(DataContext is ImageLayer imageLayer))
+			if (!(DataContext is SirdsLayer sirdsLayer))
 				return;
 
 			var openFileDialog = new OpenFileDialog
@@ -41,8 +41,10 @@ namespace Sistem2
 			{
 				try
 				{
-					imageLayer.Image = SixLabors.ImageSharp.Image.Load<Rgba32>(openFileDialog.FileName);
-					imageLayer.FileName = openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf('\\') + 1);
+					var image = SixLabors.ImageSharp.Image.Load<Rgb48>(openFileDialog.FileName);
+
+					sirdsLayer.DepthImage = image;
+					sirdsLayer.DepthImageFileName = openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf('\\') + 1);
 				}
 				catch
 				{

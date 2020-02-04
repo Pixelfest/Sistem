@@ -8,6 +8,7 @@ using Microsoft.Win32;
 using Sistem2.LayerTypes;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using Color = SixLabors.ImageSharp.Color;
 using Image = System.Windows.Controls.Image;
 
@@ -37,7 +38,13 @@ namespace Sistem2
 
 		private void AddImageLayerClick(object sender, RoutedEventArgs e)
 		{
-			Layers.Add(new ImageLayer(Image) { Name = $"Layer {Layers.Count}", Visible = true});
+			Layers.Add(new ImageLayer(Image) { Name = $"Image Layer {Layers.Count}", Visible = true});
+			Layers.Draw();
+		}
+
+		private void AddSirdsLayerClick(object sender, RoutedEventArgs e)
+		{
+			Layers.Add(new SirdsLayer(Image) { Name = $"SIRDS Layer {Layers.Count}", Visible = true});
 			Layers.Draw();
 		}
 
@@ -67,6 +74,10 @@ namespace Sistem2
 					BackgroundLayerProperties.Visibility = Visibility.Visible;
 					BackgroundLayerProperties.DataContext = backgroundLayer;
 					break;
+				case SirdsLayer sirdsLayer:
+					SirdsLayerProperties.Visibility = Visibility.Visible;
+					SirdsLayerProperties.DataContext = sirdsLayer;
+					break;
 			}
 		}
 
@@ -77,9 +88,11 @@ namespace Sistem2
 
 		private void Draw()
 		{
+			// Clear the image first
+			Image.Mutate(context => context.Fill(new SolidBrush(new Color(new Rgba32(0,0,0,0)))));
+
 			Layers.Draw();
 			PreviewImage.Source = new ImageSharpImageSource<Rgba32>(Image);
 		}
-
 	}
 }

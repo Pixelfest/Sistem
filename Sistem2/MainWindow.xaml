@@ -12,9 +12,8 @@
 			<MenuItem Header="_File">
 			</MenuItem>
 			<MenuItem Header="_Layers">
-				<MenuItem Header="_Add layer">
-					<MenuItem Header="Add _image layer" Click="AddImageLayerClick"/>
-			</MenuItem>
+				<MenuItem Header="Add _image layer" Click="AddImageLayerClick"/>
+				<MenuItem Header="Add _SIRDS layer" Click="AddSirdsLayerClick"/>
 			</MenuItem>
 			<MenuItem Header="_Draw" Click="DrawClick" />
 
@@ -22,6 +21,7 @@
 		<StackPanel Width="150" DockPanel.Dock="Left" x:Name="LayersStackPanel">
 			<sistem2:ImageLayerProperties x:Name="ImageLayerProperties" Visibility="Collapsed" />
 			<sistem2:BackgroundLayerProperties x:Name="BackgroundLayerProperties" Visibility="Collapsed" />
+			<sistem2:SirdsLayerProperties x:Name="SirdsLayerProperties" Visibility="Collapsed" />
 		</StackPanel>
 		<StackPanel Width="220" DockPanel.Dock="Right">
 			<ListBox Name="LayersListBox" ItemsSource="{Binding}" SelectionChanged="LayersListBoxSelectionChanged" d:DataContext="{d:DesignInstance layerTypes:LayerBase}">

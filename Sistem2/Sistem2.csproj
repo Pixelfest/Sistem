@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sistem.Core\Sistem.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Fonts\fa-regular-400.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -26,10 +30,16 @@
     <Compile Update="BackgroundLayerProperties.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="SirdsLayerProperties.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <Page Update="BackgroundLayerProperties.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="SirdsLayerProperties.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
