@@ -11,7 +11,7 @@ using SixLabors.Primitives;
 
 namespace Sistem2.LayerTypes
 {
-	class ImageLayer : LayerBase, INotifyPropertyChanged
+	public class ImageLayer : LayerBase, INotifyPropertyChanged
 	{
 		private Image<Rgba32> _image;
 		private string _fileName;
@@ -22,9 +22,14 @@ namespace Sistem2.LayerTypes
 			set
 			{
 				_image = value;
-				OnPropertyChanged("Image");  
+
+				DrawPreview();
+
+				OnPropertyChanged(nameof(Image));  
+				OnPropertyChanged(nameof(ImageSource));  
 			}
 		}
+
 
 		public string FileName
 		{
@@ -32,7 +37,7 @@ namespace Sistem2.LayerTypes
 			set
 			{
 				_fileName = value;
-				OnPropertyChanged("FileName");  
+				OnPropertyChanged(nameof(FileName));  
 			}
 		}
 
@@ -51,11 +56,19 @@ namespace Sistem2.LayerTypes
 		{
 		}
 
+		public override void DrawPreview()
+		{
+			var preview = Image.Clone(context => context.Resize(150, 150));
+			Preview = new ImageSharpImageSource<Rgba32>(preview);
+			OnPropertyChanged(nameof(Preview));  
+		}
+
 		public override void Draw()
 		{
 			var location = new Point(0, 0);
-		
-			Target.Mutate(t => t.DrawImage(Image, location, 1));
+
+			if(Image != null)
+				Target.Mutate(t => t.DrawImage(Image, location, 1));
 		}
 	}
 }

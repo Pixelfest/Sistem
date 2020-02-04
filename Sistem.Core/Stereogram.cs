@@ -227,7 +227,7 @@ namespace Sistem.Core
 		{
 			try
 			{
-				Pattern = Image.Load(filePath);
+				Pattern = Image.Load<Rgba32>(filePath);
 				return true;
 			}
 			catch (NotSupportedException)
@@ -246,7 +246,7 @@ namespace Sistem.Core
 		{
 			try
 			{
-				Pattern = Image.Load(stream);
+				Pattern = Image.Load<Rgba32>(stream);
 				return true;
 			}
 			catch (NotSupportedException)

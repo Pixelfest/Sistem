@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Printing;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Controls;
@@ -17,13 +18,17 @@ namespace Sistem2.LayerTypes
 	{
 		//public RenderTargetBitmap Target { get; set; }
 		public Image<Rgba32> Target { get; set; }
+		public ImageSharpImageSource<Rgba32> Preview { get; set; }
 		public string Name { get; set; }
 		public bool Visible { get; set; }
 		public int Order { get; set; }
 
+		public bool IsDeleteEnabled  => true;
+
 		protected LayerBase(Image<Rgba32> target)
 		{
 			this.Target = target;
+			this.Preview = new ImageSharpImageSource<Rgba32>(150,150);
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -35,5 +40,6 @@ namespace Sistem2.LayerTypes
 		}
 
 		public abstract void Draw();
+		public abstract void DrawPreview();
 	}
 }

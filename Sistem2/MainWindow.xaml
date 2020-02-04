@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:layerTypes="clr-namespace:Sistem2.LayerTypes"
+        xmlns:sistem2="clr-namespace:Sistem2"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 	<DockPanel LastChildFill="True">
@@ -12,28 +13,25 @@
 			</MenuItem>
 			<MenuItem Header="_Layers">
 				<MenuItem Header="_Add layer">
-					<MenuItem Header="Add _image layer" Click="AddImageLayer_Click"/>
+					<MenuItem Header="Add _image layer" Click="AddImageLayerClick"/>
 			</MenuItem>
 			</MenuItem>
-			<MenuItem Header="_Draw" Click="Draw_OnClick" />
+			<MenuItem Header="_Draw" Click="DrawClick" />
 
 		</Menu>
-		<StackPanel Width="150" DockPanel.Dock="Left">
-			<GroupBox Name="ImageLayerProperties" Header="Image layer" Visibility="Collapsed" d:DataContext="{d:DesignInstance layerTypes:ImageLayer}">
-				<StackPanel>
-				<Image Source="{Binding Path=ImageSource}" />
-				<TextBlock Text="{Binding Path=FileName}"></TextBlock>
-				<Button Content="Load image" Click="ImageLayer_LoadImage_OnClick" />
-				</StackPanel>
-			</GroupBox>
+		<StackPanel Width="150" DockPanel.Dock="Left" x:Name="LayersStackPanel">
+			<sistem2:ImageLayerProperties x:Name="ImageLayerProperties" Visibility="Collapsed" />
+			<sistem2:BackgroundLayerProperties x:Name="BackgroundLayerProperties" Visibility="Collapsed" />
 		</StackPanel>
-		<StackPanel Width="150" DockPanel.Dock="Right">
-			<ListBox Name="LayersListBox" ItemsSource="{Binding}" SelectionChanged="LayersListBox_OnSelectionChanged" d:DataContext="{d:DesignInstance layerTypes:LayerBase}">
+		<StackPanel Width="220" DockPanel.Dock="Right">
+			<ListBox Name="LayersListBox" ItemsSource="{Binding}" SelectionChanged="LayersListBoxSelectionChanged" d:DataContext="{d:DesignInstance layerTypes:LayerBase}">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
-						<StackPanel>
-							<CheckBox IsChecked="{Binding Visible}"></CheckBox>
-							<TextBlock Text="{Binding Name}"></TextBlock>
+						<StackPanel Orientation="Horizontal">
+							<Image Source="{Binding Path=Preview}" Width="50" Height="50" />
+							<CheckBox IsChecked="{Binding Path=Visible}" VerticalAlignment="Center" Margin="5"></CheckBox>
+							<TextBox Text="{Binding Path=Name}" Height="24" Width="100"></TextBox>
+							<Button IsEnabled="{Binding Path=IsDeleteEnabled}" Content="&#xf1f8;" FontFamily="{StaticResource FontAwesomeRegular}" FontSize="16" VerticalAlignment="Center" Margin="5" Click="DeleteLayerClick" />
 						</StackPanel>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
