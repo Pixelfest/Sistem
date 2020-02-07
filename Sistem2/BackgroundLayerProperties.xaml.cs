@@ -21,9 +21,22 @@ namespace Sistem2
 	/// </summary>
 	public partial class BackgroundLayerProperties : UserControl
 	{
+		Dictionary<string, Measurements> measurements = new Dictionary<string, Measurements>
+		{
+			{ "Pixels", Measurements.Pixels },
+			{ "Centimeters", Measurements.Pixels },
+			{ "Inches", Measurements.Pixels },
+		}; 
+
 		public BackgroundLayerProperties()
 		{
 			InitializeComponent();
+		}
+
+		private void SelectorSelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			var backgroundLayer = (BackgroundLayer) DataContext;
+			backgroundLayer.Measurements = measurements[(MeasurementsTab.SelectedItem as TabItem).Name];
 		}
 	}
 }

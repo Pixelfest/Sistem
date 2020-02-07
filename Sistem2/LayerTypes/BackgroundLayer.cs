@@ -23,7 +23,7 @@ namespace Sistem2.LayerTypes
 				catch {}
 			}
 		}
-
+		
 		public new bool IsDeleteEnabled => false;
 
 		public BackgroundLayer(Image<Rgba32> target) : base(target)

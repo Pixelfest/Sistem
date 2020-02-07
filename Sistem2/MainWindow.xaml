@@ -6,7 +6,7 @@
         xmlns:layerTypes="clr-namespace:Sistem2.LayerTypes"
         xmlns:sistem2="clr-namespace:Sistem2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="1280" Width="800" WindowState="Maximized">
 	<DockPanel LastChildFill="True">
 		<Menu DockPanel.Dock="Top">
 			<MenuItem Header="_File">
@@ -16,9 +16,8 @@
 				<MenuItem Header="Add _SIRDS layer" Click="AddSirdsLayerClick"/>
 			</MenuItem>
 			<MenuItem Header="_Draw" Click="DrawClick" />
-
 		</Menu>
-		<StackPanel Width="150" DockPanel.Dock="Left" x:Name="LayersStackPanel">
+		<StackPanel Width="200" DockPanel.Dock="Left" x:Name="LayersStackPanel">
 			<sistem2:ImageLayerProperties x:Name="ImageLayerProperties" Visibility="Collapsed" />
 			<sistem2:BackgroundLayerProperties x:Name="BackgroundLayerProperties" Visibility="Collapsed" />
 			<sistem2:SirdsLayerProperties x:Name="SirdsLayerProperties" Visibility="Collapsed" />
@@ -37,6 +36,8 @@
 				</ListBox.ItemTemplate>
 			</ListBox>
 		</StackPanel>
-		<Image Margin="0,0,0,0" Name="PreviewImage" />
+		<sistem2:ZoomBorder x:Name="border" ClipToBounds="True" Background="Gray">
+			<Image Margin="0,0,0,0" Name="PreviewImage"  />
+		</sistem2:ZoomBorder>
 	</DockPanel>
 </Window>

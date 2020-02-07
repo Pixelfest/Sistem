@@ -6,13 +6,21 @@
              xmlns:local="clr-namespace:Sistem2"
              xmlns:layerTypes="clr-namespace:Sistem2.LayerTypes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="150"
+             d:DesignHeight="450" d:DesignWidth="200"
              d:DataContext="{d:DesignInstance layerTypes:ImageLayer}">
 	    <GroupBox Header="Image layer" >
 		    <StackPanel>
 			    <Image Source="{Binding Path=ImageSource}" />
 			    <TextBlock Text="{Binding Path=FileName}"></TextBlock>
 			    <Button Content="Load image" Click="LoadImageButtonClick" />
+                <StackPanel Orientation="Horizontal">
+	                <Label Width="50">Top</Label>
+	                <TextBox Text="{Binding Path=Top}"></TextBox>
+                </StackPanel>
+			    <StackPanel Orientation="Horizontal">
+				    <Label Width="50">Left</Label>
+				    <TextBox Text="{Binding Path=Left}"></TextBox>
+			    </StackPanel>
 		    </StackPanel>
 	    </GroupBox>
 </UserControl>

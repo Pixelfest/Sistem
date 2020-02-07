@@ -6,11 +6,61 @@
              xmlns:local="clr-namespace:Sistem2"
              xmlns:layerTypes="clr-namespace:Sistem2.LayerTypes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="150"
+             d:DesignHeight="450" d:DesignWidth="200"
              d:DataContext="{d:DesignInstance layerTypes:BackgroundLayer}">
 	    <GroupBox Header="Background layer" >
 		    <StackPanel>
-			    <TextBox Text="{Binding Path=ColorText}"></TextBox>
+				<TabControl SelectionChanged="SelectorSelectionChanged" Name="MeasurementsTab">
+					<TabItem Header="Metric" Name="Centimeters">
+						<StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<Label Width="75">DPC</Label>
+								<TextBox Width="75" Text="{Binding Path=Dpc}"></TextBox>
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<Label Width="75">Width</Label>
+								<TextBox Width="75" Text="{Binding Path=WidthCentimeter}"></TextBox>
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<Label Width="75">Height</Label>
+								<TextBox Width="75" Text="{Binding Path=HeightCentimeter}"></TextBox>
+							</StackPanel>
+						</StackPanel>
+					</TabItem>
+					<TabItem Header="Imperial" Name="Inches">
+						<StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<Label Width="75">DPI</Label>
+								<TextBox Width="75" Text="{Binding Path=Dpi}"></TextBox>
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<Label Width="75">Width</Label>
+								<TextBox Width="75" Text="{Binding Path=WidthInch}"></TextBox>
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<Label Width="75">Height</Label>
+								<TextBox Width="75" Text="{Binding Path=HeightInch}"></TextBox>
+							</StackPanel>
+						</StackPanel>
+					</TabItem>
+					<TabItem Header="Pixels" Name="Pixels">
+						<StackPanel>
+							<StackPanel Orientation="Horizontal">
+							    <Label Width="75">Width</Label>
+							    <TextBox Width="75" Text="{Binding Path=Width}"></TextBox>
+						    </StackPanel>
+						    <StackPanel Orientation="Horizontal">
+								<Label Width="75">Height</Label>
+							    <TextBox Width="75" Text="{Binding Path=Height}"></TextBox>
+						    </StackPanel>
+					    </StackPanel>
+					</TabItem>
+				</TabControl>
+			    <StackPanel Orientation="Horizontal">
+                    <Label Width="50">Color</Label>
+				    <TextBox Text="{Binding Path=ColorText}"></TextBox>
+			    </StackPanel>
+
 		    </StackPanel>
 	    </GroupBox>
 </UserControl>
