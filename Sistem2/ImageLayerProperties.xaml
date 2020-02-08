@@ -8,18 +8,18 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="200"
              d:DataContext="{d:DesignInstance layerTypes:ImageLayer}">
-	    <GroupBox Header="Image layer" >
+	    <GroupBox Header="Image layer" Margin="{StaticResource ControlMargin}">
 		    <StackPanel>
-			    <Image Source="{Binding Path=ImageSource}" />
+			    <Image Source="{Binding Path=ImageSource}" Width="auto" Height="150" />
 			    <TextBlock Text="{Binding Path=FileName}"></TextBlock>
 			    <Button Content="Load image" Click="LoadImageButtonClick" />
                 <StackPanel Orientation="Horizontal">
-	                <Label Width="50">Top</Label>
-	                <TextBox Text="{Binding Path=Top}"></TextBox>
+				<Label Width="75">Top</Label>
+				<TextBox  Width="75" Text="{Binding Path=Top}"></TextBox>
                 </StackPanel>
 			    <StackPanel Orientation="Horizontal">
-				    <Label Width="50">Left</Label>
-				    <TextBox Text="{Binding Path=Left}"></TextBox>
+				<Label Width="75" >Left</Label>
+				<TextBox Width="75" Text="{Binding Path=Left}"></TextBox>
 			    </StackPanel>
 		    </StackPanel>
 	    </GroupBox>

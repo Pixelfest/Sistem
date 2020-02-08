@@ -10,7 +10,7 @@
              d:DataContext="{d:DesignInstance layerTypes:BackgroundLayer}">
 	    <GroupBox Header="Background layer" >
 		    <StackPanel>
-				<TabControl SelectionChanged="SelectorSelectionChanged" Name="MeasurementsTab">
+				<TabControl SelectionChanged="SelectorSelectionChanged" Name="MeasurementsTab" Margin="{StaticResource ControlMargin}">
 					<TabItem Header="Metric" Name="Centimeters">
 						<StackPanel>
 							<StackPanel Orientation="Horizontal">

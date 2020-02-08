@@ -30,7 +30,13 @@
     <Compile Update="BackgroundLayerProperties.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="SirdsLayerProperties.xaml.cs">
+    <Compile Update="PatternStereogramLayerProperties.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="RandomDotStereogramLayerProperties.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="StereogramLayerProperties.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -39,7 +45,13 @@
     <Page Update="BackgroundLayerProperties.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="SirdsLayerProperties.xaml">
+    <Page Update="PatternStereogramLayerProperties.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="RandomDotStereogramLayerProperties.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="StereogramLayerProperties.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

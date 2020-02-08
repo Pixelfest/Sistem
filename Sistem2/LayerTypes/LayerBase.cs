@@ -44,19 +44,42 @@ namespace Sistem2.LayerTypes
 		public int Width
 		{
 			get => _width;
-			set { _width = value; OnPropertyChanged(nameof(Width));}
+			set
+			{
+				_width = value;
+				OnPropertyChanged(nameof(Width));
+				OnPropertyChanged(nameof(WidthInch));
+				OnPropertyChanged(nameof(WidthCentimeter));
+			}
 		}
 
 		public int Height
 		{
 			get => _height;
-			set { _height = value; OnPropertyChanged(nameof(Height));}
+			set
+			{
+				_height = value; 
+				OnPropertyChanged(nameof(Height));
+				OnPropertyChanged(nameof(HeightInch));
+				OnPropertyChanged(nameof(HeightCentimeter));
+			}
 		}
 
 		public float Dpi
 		{
 			get => _dpi;
-			set { _dpi = value; OnPropertyChanged(nameof(Dpi));}
+			set 
+			{ 
+				_dpi = value;
+				OnPropertyChanged(nameof(Dpi));
+				OnPropertyChanged(nameof(Dpc));
+				OnPropertyChanged(nameof(Width));
+				OnPropertyChanged(nameof(WidthInch));
+				OnPropertyChanged(nameof(WidthCentimeter));
+				OnPropertyChanged(nameof(Height));
+				OnPropertyChanged(nameof(HeightInch));
+				OnPropertyChanged(nameof(HeightCentimeter));
+			}
 		}
 
 		public float TopInch

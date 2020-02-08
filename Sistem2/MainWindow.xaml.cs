@@ -82,13 +82,37 @@ namespace Sistem2
 
 		private void AddImageLayerClick(object sender, RoutedEventArgs e)
 		{
-			Layers.Add(new ImageLayer(Image) { Name = $"Image Layer {Layers.Count}", Visible = true});
+			Layers.Add(new ImageLayer(Image)
+			{
+				Name = $"Image Layer {Layers.Count}",
+				Dpi = BackgroundLayer.Dpi,
+				Visible = true
+
+			});
 			Layers.Draw();
 		}
 
-		private void AddSirdsLayerClick(object sender, RoutedEventArgs e)
+		private void AddRandomDotStereogramLayerClick(object sender, RoutedEventArgs e)
 		{
-			Layers.Add(new SirdsLayer(Image) { Name = $"SIRDS Layer {Layers.Count}", Visible = true});
+			Layers.Add(new RandomDotStereogramLayer(Image)
+			{
+				Name = $"Random Dot Layer {Layers.Count}", 
+				Dpi = BackgroundLayer.Dpi,
+				Visible = true
+
+			});
+			Layers.Draw();
+		}
+
+		private void AddPatternStereogramLayerClick(object sender, RoutedEventArgs e)
+		{
+			Layers.Add(new PatternStereogramLayer(Image)
+			{
+				Name = $"Pattern Layer {Layers.Count}",
+				Dpi = BackgroundLayer.Dpi,
+				Visible = true
+
+			});
 			Layers.Draw();
 		}
 
@@ -118,9 +142,13 @@ namespace Sistem2
 					BackgroundLayerProperties.Visibility = Visibility.Visible;
 					BackgroundLayerProperties.DataContext = backgroundLayer;
 					break;
-				case SirdsLayer sirdsLayer:
-					SirdsLayerProperties.Visibility = Visibility.Visible;
-					SirdsLayerProperties.DataContext = sirdsLayer;
+				case RandomDotStereogramLayer randomDotStereogramLayer:
+					RandomDotStereogramLayerProperties.Visibility = Visibility.Visible;
+					RandomDotStereogramLayerProperties.DataContext = randomDotStereogramLayer;
+					break;
+				case PatternStereogramLayer patternStereogramLayer:
+					PatternStereogramLayerProperties.Visibility = Visibility.Visible;
+					PatternStereogramLayerProperties.DataContext = patternStereogramLayer;
 					break;
 			}
 		}
@@ -137,6 +165,21 @@ namespace Sistem2
 
 			Layers.Draw();
 			PreviewImage.Source = new ImageSharpImageSource<Rgba32>(Image);
+		}
+
+		private void ResetZoom(object sender, RoutedEventArgs e)
+		{
+			ZoomBorder.Reset();
+		}
+
+		private void SetPixelPerfect(object sender, RoutedEventArgs e)
+		{
+			ZoomBorder.Reset100();
+		}
+
+		private void ResetActualSize(object sender, RoutedEventArgs e)
+		{
+			ZoomBorder.SetActualSize((int)BackgroundLayer.Dpi);
 		}
 	}
 }

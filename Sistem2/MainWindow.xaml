@@ -6,23 +6,25 @@
         xmlns:layerTypes="clr-namespace:Sistem2.LayerTypes"
         xmlns:sistem2="clr-namespace:Sistem2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1280" Width="800" WindowState="Maximized">
+        Title="MainWindow" Height="800" Width="1280" WindowState="Maximized">
 	<DockPanel LastChildFill="True">
 		<Menu DockPanel.Dock="Top">
 			<MenuItem Header="_File">
 			</MenuItem>
 			<MenuItem Header="_Layers">
-				<MenuItem Header="Add _image layer" Click="AddImageLayerClick"/>
-				<MenuItem Header="Add _SIRDS layer" Click="AddSirdsLayerClick"/>
+				<MenuItem Header="Add _Image layer" Click="AddImageLayerClick"/>
+				<MenuItem Header="Add _Random Dot Stereogram layer" Click="AddRandomDotStereogramLayerClick"/>
+				<MenuItem Header="Add _Pattern Stereogram layer" Click="AddPatternStereogramLayerClick"/>
 			</MenuItem>
 			<MenuItem Header="_Draw" Click="DrawClick" />
 		</Menu>
 		<StackPanel Width="200" DockPanel.Dock="Left" x:Name="LayersStackPanel">
 			<sistem2:ImageLayerProperties x:Name="ImageLayerProperties" Visibility="Collapsed" />
 			<sistem2:BackgroundLayerProperties x:Name="BackgroundLayerProperties" Visibility="Collapsed" />
-			<sistem2:SirdsLayerProperties x:Name="SirdsLayerProperties" Visibility="Collapsed" />
+			<sistem2:RandomDotStereogramLayerProperties x:Name="RandomDotStereogramLayerProperties" Visibility="Collapsed" />
+			<sistem2:PatternStereogramLayerProperties x:Name="PatternStereogramLayerProperties" Visibility="Collapsed" />
 		</StackPanel>
-		<StackPanel Width="220" DockPanel.Dock="Right">
+		<StackPanel Width="250" DockPanel.Dock="Right">
 			<ListBox Name="LayersListBox" ItemsSource="{Binding}" SelectionChanged="LayersListBoxSelectionChanged" d:DataContext="{d:DesignInstance layerTypes:LayerBase}">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
@@ -36,8 +38,16 @@
 				</ListBox.ItemTemplate>
 			</ListBox>
 		</StackPanel>
-		<sistem2:ZoomBorder x:Name="border" ClipToBounds="True" Background="Gray">
-			<Image Margin="0,0,0,0" Name="PreviewImage"  />
-		</sistem2:ZoomBorder>
+		<DockPanel LastChildFill="True">
+			<StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+				<Button Click="ResetZoom" Padding="{StaticResource ButtonPadding}" Margin="{StaticResource ControlMargin}">Fit</Button>
+				<Button Click="SetPixelPerfect" Padding="{StaticResource ButtonPadding}" Margin="{StaticResource ControlMargin}">Pixel perfect</Button>
+				<Button Click="ResetActualSize" Padding="{StaticResource ButtonPadding}" Margin="{StaticResource ControlMargin}">Actual size</Button>
+				<CheckBox Name="UseLayoutRendering" IsChecked="True" Margin="{StaticResource ControlMargin}">Pixel perfect</CheckBox>
+			</StackPanel>
+			<sistem2:ZoomBorder x:Name="ZoomBorder" ClipToBounds="True" Background="Gray">
+				<Image Margin="0,0,0,0" Name="PreviewImage" UseLayoutRounding="{Binding ElementName=UseLayoutRendering, Path=IsChecked}" />
+			</sistem2:ZoomBorder>
+		</DockPanel>
 	</DockPanel>
 </Window>

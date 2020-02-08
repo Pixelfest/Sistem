@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -51,12 +52,11 @@ namespace Sistem2
 				group.Children.Add(tt);
 				_child.RenderTransform = group;
 				_child.RenderTransformOrigin = new Point(0.0, 0.0);
-				this.MouseWheel += child_MouseWheel;
-				this.MouseLeftButtonDown += child_MouseLeftButtonDown;
-				this.MouseLeftButtonUp += child_MouseLeftButtonUp;
-				this.MouseMove += child_MouseMove;
-				this.PreviewMouseRightButtonDown += new MouseButtonEventHandler(
-				  child_PreviewMouseRightButtonDown);
+				this.MouseWheel += ChildMouseWheel;
+				this.MouseLeftButtonDown += ChildMouseLeftButtonDown;
+				this.MouseLeftButtonUp += ChildMouseLeftButtonUp;
+				this.MouseMove += ChildMouseMove;
+				this.PreviewMouseRightButtonDown += new MouseButtonEventHandler(ChildPreviewMouseRightButtonDown);
 			}
 		}
 
@@ -76,9 +76,54 @@ namespace Sistem2
 			}
 		}
 
+		public void Reset100()
+		{
+			if (_child != null)
+			{
+				var image = _child as Image;
+				var width = image.Source.Width;
+				var height = image.Source.Height;
+
+				var renderWidth = _child.RenderSize.Width;
+
+				var scale = width / renderWidth;
+
+				// reset zoom
+				var st = GetScaleTransform(_child);
+				st.ScaleX = scale;
+				st.ScaleY = scale;
+
+				// reset pan
+				var tt = GetTranslateTransform(_child);
+				tt.X = 0.0;
+				tt.Y = 0.0;
+			}
+		}
+
+		public void SetActualSize(int dpiTarget)
+		{
+			if (_child != null)
+			{
+				var dpiProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
+				var dpiMonitor = (int)dpiProperty.GetValue(null, null);
+				
+				var scale = dpiMonitor / (float)dpiTarget;
+
+				// reset zoom
+				var st = GetScaleTransform(_child);
+				st.ScaleX = scale;
+				st.ScaleY = scale;
+
+				// reset pan
+				var tt = GetTranslateTransform(_child);
+				tt.X = 0.0;
+				tt.Y = 0.0;
+			}
+		}
+
 		#region Child Events
 
-		private void child_MouseWheel(object sender, MouseWheelEventArgs e)
+		private void ChildMouseWheel(object sender, MouseWheelEventArgs e)
 		{
 			if (_child != null)
 			{
@@ -104,7 +149,7 @@ namespace Sistem2
 			}
 		}
 
-		private void child_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		private void ChildMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			if (_child != null)
 			{
@@ -116,7 +161,7 @@ namespace Sistem2
 			}
 		}
 
-		private void child_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		private void ChildMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
 			if (_child != null)
 			{
@@ -125,12 +170,12 @@ namespace Sistem2
 			}
 		}
 
-		void child_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+		void ChildPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			this.Reset();
 		}
 
-		private void child_MouseMove(object sender, MouseEventArgs e)
+		private void ChildMouseMove(object sender, MouseEventArgs e)
 		{
 			if (_child != null)
 			{
