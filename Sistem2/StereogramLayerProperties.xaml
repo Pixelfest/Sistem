@@ -11,12 +11,12 @@
 	<GroupBox Header="Stereogram properties" Margin="{StaticResource ControlMargin}" >
 		<StackPanel>
 			<TextBlock Text="Depth map"></TextBlock>
-			<Button Click="LoadImageButtonClick">
+			<Button Click="LoadDepthIMageButtonClick">
 				<Image Source="{Binding Path=DepthImageSource}" Width="auto" Height="150"/>
 			</Button>
 			<TextBlock Text="{Binding Path=DepthImageFileName}"></TextBlock>
 			<TabControl Name="MeasurementsTab" Margin="{StaticResource ControlMargin}">
-				<TabItem Header="Pixels" Name="Pixels">
+				<TabItem Header="Pixels" Name="Pixels" Margin="0" Padding="0">
 					<StackPanel>
 						<StackPanel Orientation="Horizontal">
 							<Label Width="110">Minimal separation</Label>
@@ -61,7 +61,6 @@
 					</StackPanel>
 				</TabItem>
 			</TabControl>
-
 		</StackPanel>
 	</GroupBox>
 </UserControl>

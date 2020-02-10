@@ -100,14 +100,17 @@ namespace Sistem2
 			}
 		}
 
-		public void SetActualSize(int dpiTarget)
+		public void SetActualSize(int dpiTarget, int targetWidthInch)
 		{
 			if (_child != null)
 			{
 				var dpiProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
 				var dpiMonitor = (int)dpiProperty.GetValue(null, null);
-				
-				var scale = dpiMonitor / (float)dpiTarget;
+
+				// Width of the viewport
+				var actualWidthViewPortInch = _child.RenderSize.Width / (float)dpiMonitor;
+
+				var scale = targetWidthInch / actualWidthViewPortInch;
 
 				// reset zoom
 				var st = GetScaleTransform(_child);

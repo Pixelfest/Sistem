@@ -11,6 +11,13 @@
 		<StackPanel>
 			<local:StereogramLayerProperties x:Name="StereogramLayerProperties" />
 			<GroupBox Header="Pattern layer" Margin="{StaticResource ControlMargin}" >
-			</GroupBox>
+				<StackPanel>
+				<TextBlock Text="Pattern image"></TextBlock>
+				<Button Click="LoadPatternImageButtonClick">
+					<Image Source="{Binding Path=PatternImageSource}" Width="auto" Height="150"/>
+				</Button>
+				<TextBlock Text="{Binding Path=PatternImageFileName}"></TextBlock>
+				</StackPanel>
+		</GroupBox>
 		</StackPanel>
 </UserControl>

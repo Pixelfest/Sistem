@@ -28,7 +28,7 @@ namespace Sistem2
 			InitializeComponent();
 		}
 
-		private void LoadImageButtonClick(object sender, RoutedEventArgs e)
+		private void LoadDepthIMageButtonClick(object sender, RoutedEventArgs e)
 		{
 			var openFileDialog = new OpenFileDialog
 			{

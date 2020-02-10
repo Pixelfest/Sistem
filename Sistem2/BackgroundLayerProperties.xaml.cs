@@ -24,8 +24,8 @@ namespace Sistem2
 		Dictionary<string, Measurements> measurements = new Dictionary<string, Measurements>
 		{
 			{ "Pixels", Measurements.Pixels },
-			{ "Centimeters", Measurements.Pixels },
-			{ "Inches", Measurements.Pixels },
+			{ "Centimeters", Measurements.Centimeters },
+			{ "Inches", Measurements.Inches },
 		}; 
 
 		public BackgroundLayerProperties()
@@ -36,6 +36,10 @@ namespace Sistem2
 		private void SelectorSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			var backgroundLayer = (BackgroundLayer) DataContext;
+
+			if (backgroundLayer == null)
+				return;
+
 			backgroundLayer.Measurements = measurements[(MeasurementsTab.SelectedItem as TabItem).Name];
 		}
 	}

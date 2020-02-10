@@ -39,6 +39,15 @@ namespace Sistem2.LayerTypes
 
 		public override void Draw()
 		{
+			// Clear the image first
+			var options = new GraphicsOptions
+			{
+				AlphaCompositionMode = PixelAlphaCompositionMode.Clear
+			};
+
+			Target.Mutate(context => context.Fill(options, new SolidBrush(new Color(new Rgba32(0, 0, 0, 0)))));
+
+
 			Target.Mutate(image => image.BackgroundColor(Color));
 		}
 

@@ -8,7 +8,7 @@ namespace Sistem2
 	{
 		public void Draw()
 		{
-			foreach (var layer in this.Where(layer => layer.Visible))
+			foreach (var layer in this.Where(layer => layer.Visible).Reverse())
 			{
 				layer.Draw();
 			}

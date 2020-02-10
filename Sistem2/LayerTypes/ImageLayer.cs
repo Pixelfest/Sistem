@@ -51,6 +51,9 @@ namespace Sistem2.LayerTypes
 
 		public override void DrawPreview()
 		{
+			if (Image == null)
+				return;
+
 			var preview = Image.Clone(context => context.Resize(150, 150));
 			Preview = new ImageSharpImageSource<Rgba32>(preview);
 			OnPropertyChanged(nameof(Preview));  
@@ -58,10 +61,12 @@ namespace Sistem2.LayerTypes
 
 		public override void Draw()
 		{
+			if (Image == null)
+				return;
+
 			var location = new Point(0, 0);
 
-			if(Image != null)
-				Target.Mutate(t => t.DrawImage(Image, location, 1));
+			Target.Mutate(t => t.DrawImage(Image, location, 1));
 		}
 	}
 }

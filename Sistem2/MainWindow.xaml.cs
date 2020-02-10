@@ -38,7 +38,7 @@ namespace Sistem2
 
 			BackgroundLayer = new BackgroundLayer(Image)
 			{
-				Name = "Background", 
+				Name = "Document", 
 				Visible = true, 
 				Color = Color.Black, 
 				Order = 0,
@@ -48,9 +48,7 @@ namespace Sistem2
 				Target = Image
 			};
 			BackgroundLayer.PropertyChanged += BackgroundLayerPropertyChanged;
-
-
-			Layers.Add(BackgroundLayer);
+			BackgroundLayerProperties.DataContext = BackgroundLayer;
 		}
 
 		private void BackgroundLayerPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -80,39 +78,47 @@ namespace Sistem2
 			}
 		}
 
-		private void AddImageLayerClick(object sender, RoutedEventArgs e)
+		private void AddImageLayerMenuClick(object sender, RoutedEventArgs e)
 		{
-			Layers.Add(new ImageLayer(Image)
+			var layer = new ImageLayer(Image)
 			{
 				Name = $"Image Layer {Layers.Count}",
 				Dpi = BackgroundLayer.Dpi,
 				Visible = true
+			};
 
-			});
+			Layers.Insert(0, layer);
+			layer.DrawPreview();
 			Layers.Draw();
 		}
 
-		private void AddRandomDotStereogramLayerClick(object sender, RoutedEventArgs e)
+		private void AddRandomDotStereogramLayerMenuClick(object sender, RoutedEventArgs e)
 		{
-			Layers.Add(new RandomDotStereogramLayer(Image)
+			var layer = new RandomDotStereogramLayer(Image)
 			{
 				Name = $"Random Dot Layer {Layers.Count}", 
 				Dpi = BackgroundLayer.Dpi,
 				Visible = true
 
-			});
+			};
+
+			Layers.Insert(0, layer);
+			layer.DrawPreview();
 			Layers.Draw();
 		}
 
-		private void AddPatternStereogramLayerClick(object sender, RoutedEventArgs e)
+		private void AddPatternStereogramLayerMenuClick(object sender, RoutedEventArgs e)
 		{
-			Layers.Add(new PatternStereogramLayer(Image)
+			var layer = new PatternStereogramLayer(Image)
 			{
 				Name = $"Pattern Layer {Layers.Count}",
 				Dpi = BackgroundLayer.Dpi,
 				Visible = true
 
-			});
+			};
+
+			Layers.Insert(0, layer);
+			layer.DrawPreview();
 			Layers.Draw();
 		}
 
@@ -121,6 +127,28 @@ namespace Sistem2
 			var element = e.OriginalSource as FrameworkElement;
 			Layers.Remove(element.DataContext as LayerBase);
 			Layers.Draw();
+		}
+
+		private void LayerUpClick(object sender, RoutedEventArgs e)
+		{
+			var element = e.OriginalSource as FrameworkElement;
+			var layer = element.DataContext as LayerBase;
+
+			var layerIndex = Layers.IndexOf(layer);
+
+			if(layerIndex > 0)
+				Layers.Swap(layerIndex, layerIndex - 1);
+		}
+
+		private void LayerDownClick(object sender, RoutedEventArgs e)
+		{
+			var element = e.OriginalSource as FrameworkElement;
+			var layer = element.DataContext as LayerBase;
+
+			var layerIndex = Layers.IndexOf(layer);
+
+			if (layerIndex < Layers.Count - 2)
+				Layers.Swap(layerIndex, layerIndex + 1);
 		}
 
 		private void LayersListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -137,10 +165,6 @@ namespace Sistem2
 				case ImageLayer imageLayer:
 					ImageLayerProperties.Visibility = Visibility.Visible;
 					ImageLayerProperties.DataContext = imageLayer;
-					break;
-				case BackgroundLayer backgroundLayer:
-					BackgroundLayerProperties.Visibility = Visibility.Visible;
-					BackgroundLayerProperties.DataContext = backgroundLayer;
 					break;
 				case RandomDotStereogramLayer randomDotStereogramLayer:
 					RandomDotStereogramLayerProperties.Visibility = Visibility.Visible;
@@ -161,9 +185,9 @@ namespace Sistem2
 		private void Draw()
 		{
 			// Clear the image first
-			Image.Mutate(context => context.Fill(new SolidBrush(new Color(new Rgba32(0,0,0,0)))));
-
+			BackgroundLayer.Draw();
 			Layers.Draw();
+
 			PreviewImage.Source = new ImageSharpImageSource<Rgba32>(Image);
 		}
 
@@ -179,7 +203,7 @@ namespace Sistem2
 
 		private void ResetActualSize(object sender, RoutedEventArgs e)
 		{
-			ZoomBorder.SetActualSize((int)BackgroundLayer.Dpi);
+			ZoomBorder.SetActualSize((int)BackgroundLayer.Dpi, (int)BackgroundLayer.WidthInch);
 		}
 	}
 }

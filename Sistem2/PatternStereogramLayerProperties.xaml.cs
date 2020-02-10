@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +13,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using Sistem2.LayerTypes;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace Sistem2
 {
@@ -21,14 +24,14 @@ namespace Sistem2
 	/// </summary>
 	public partial class PatternStereogramLayerProperties : UserControl
 	{
-		private RandomDotStereogramLayer _patternStereogramLayer => DataContext as RandomDotStereogramLayer;
+		private PatternStereogramLayer _patternStereogramLayer => DataContext as PatternStereogramLayer;
 
 		public PatternStereogramLayerProperties()
 		{
 			InitializeComponent();
 		}
 
-		private void LoadImageButtonClick(object sender, RoutedEventArgs e)
+		private void LoadPatternImageButtonClick(object sender, RoutedEventArgs e)
 		{
 			var openFileDialog = new OpenFileDialog
 			{
@@ -40,10 +43,9 @@ namespace Sistem2
 			{
 				try
 				{
-					var image = SixLabors.ImageSharp.Image.Load<Rgb48>(openFileDialog.FileName);
+					_patternStereogramLayer.PatternImage = SixLabors.ImageSharp.Image.Load<Rgba32>(openFileDialog.FileName);
 
-					_patternStereogramLayer.DepthImage = image;
-					_patternStereogramLayer.DepthImageFileName = openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf('\\') + 1);
+					_patternStereogramLayer.PatternImageFileName = openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf('\\') + 1);
 				}
 				catch
 				{

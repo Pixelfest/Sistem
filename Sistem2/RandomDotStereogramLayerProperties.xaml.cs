@@ -27,28 +27,5 @@ namespace Sistem2
 		{
 			InitializeComponent();
 		}
-
-		private void LoadImageButtonClick(object sender, RoutedEventArgs e)
-		{
-			var openFileDialog = new OpenFileDialog
-			{
-				Title = "Open image",
-				Filter = "Image File|*.bmp; *.gif; *.jpg; *.jpeg; *.png;"
-			};
-
-			if (openFileDialog.ShowDialog() == true)
-			{
-				try
-				{
-					var image = SixLabors.ImageSharp.Image.Load<Rgb48>(openFileDialog.FileName);
-
-					_randomDotStereogramLayer.DepthImage = image;
-					_randomDotStereogramLayer.DepthImageFileName = openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf('\\') + 1);
-				}
-				catch
-				{
-				}
-			}
-		}
 	}
 }

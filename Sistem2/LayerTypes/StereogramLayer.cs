@@ -155,6 +155,9 @@ namespace Sistem2.LayerTypes
 		/// </summary>
 		public override void DrawPreview()
 		{
+			if (DepthImage == null)
+				return;
+
 			var preview48 = DepthImage.CloneAs<Rgba32>();
 			var preview = preview48.Clone(context => context.Resize(200, 150));
 			Preview = new ImageSharpImageSource<Rgba32>(preview);
