@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:layerTypes="clr-namespace:Sistem2.LayerTypes"
+        xmlns:viewModels="clr-namespace:Sistem2.ViewModels"
         xmlns:sistem2="clr-namespace:Sistem2"
+        xmlns:tools="clr-namespace:Sistem2.Tools"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1280" WindowState="Maximized">
 	<DockPanel LastChildFill="True">
@@ -43,7 +44,7 @@
 				-->
 				</DockPanel>
 				
-				<ListBox Name="LayersListBox" ItemsSource="{Binding}" SelectionChanged="LayersListBoxSelectionChanged" d:DataContext="{d:DesignInstance layerTypes:LayerBase}">
+				<ListBox Name="LayersListBox" ItemsSource="{Binding}" SelectionChanged="LayersListBoxSelectionChanged" d:DataContext="{d:DesignInstance viewModels:LayerBase}">
 					<ListBox.Style>
 						<Style TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
 							<Style.Triggers>
@@ -97,9 +98,13 @@
 			<CheckBox Name="UseLayoutRendering" IsChecked="True" VerticalAlignment="Center">
 				<TextBlock Margin="0,-2,0,0">Pixel perfect</TextBlock>
 			</CheckBox>
+			<CheckBox Name="UseOversampling" IsChecked="False" VerticalAlignment="Center">
+				<TextBlock Margin="0,-2,0,0">Use oversampling</TextBlock>
+			</CheckBox>
+
 		</StackPanel>
-		<sistem2:ZoomBorder x:Name="ZoomBorder" ClipToBounds="True" Background="Gray">
+		<tools:ZoomBorder x:Name="ZoomBorder" ClipToBounds="True" Background="Gray">
 			<Image Margin="0,0,0,0" Name="PreviewImage" UseLayoutRounding="{Binding ElementName=UseLayoutRendering, Path=IsChecked}" />
-		</sistem2:ZoomBorder>
+		</tools:ZoomBorder>
 	</DockPanel>
 </Window>

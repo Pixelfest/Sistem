@@ -1,8 +1,9 @@
-﻿using SixLabors.ImageSharp;
+﻿using Sistem2.Tools;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
-namespace Sistem2.LayerTypes
+namespace Sistem2.ViewModels
 {
 	public class BackgroundLayer : LayerBase
 	{
@@ -37,7 +38,11 @@ namespace Sistem2.LayerTypes
 			OnPropertyChanged(nameof(Preview));  
 		}
 
-		public override void Draw()
+		/// <summary>
+		/// Draw the Background
+		/// </summary>
+		/// <param name="useOversampling">Use oversampling (unused)</param>
+		public override void Draw(bool useOversampling)
 		{
 			// Clear the image first
 			var options = new GraphicsOptions

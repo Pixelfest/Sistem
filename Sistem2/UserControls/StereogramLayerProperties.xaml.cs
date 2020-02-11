@@ -11,26 +11,25 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
-using Sistem2.LayerTypes;
+using Sistem2.ViewModels;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Sistem2
 {
 	/// <summary>
-	/// Interaction logic for ImageLayerProperties.xaml
+	/// Interaction logic for SirdsLayerProperties.xaml
 	/// </summary>
-	public partial class ImageLayerProperties : UserControl
+	public partial class StereogramLayerProperties : UserControl
 	{
-		public ImageLayerProperties()
+		private StereogramLayer _stereogramLayer => DataContext as StereogramLayer;
+
+		public StereogramLayerProperties()
 		{
 			InitializeComponent();
 		}
 
-		private void LoadImageButtonClick(object sender, RoutedEventArgs e)
+		private void LoadDepthImageButtonClick(object sender, RoutedEventArgs e)
 		{
-			if (!(DataContext is ImageLayer imageLayer))
-				return;
-
 			var openFileDialog = new OpenFileDialog
 			{
 				Title = "Open image",
@@ -41,8 +40,10 @@ namespace Sistem2
 			{
 				try
 				{
-					imageLayer.Image = SixLabors.ImageSharp.Image.Load<Rgba32>(openFileDialog.FileName);
-					imageLayer.FileName = openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf('\\') + 1);
+					var image = SixLabors.ImageSharp.Image.Load<Rgb48>(openFileDialog.FileName);
+
+					_stereogramLayer.DepthImage = image;
+					_stereogramLayer.DepthImageFileName = openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf('\\') + 1);
 				}
 				catch
 				{

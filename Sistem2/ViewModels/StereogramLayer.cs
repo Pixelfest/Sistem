@@ -4,12 +4,13 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Media.Imaging;
 using Sistem.Core;
+using Sistem2.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
-namespace Sistem2.LayerTypes
+namespace Sistem2.ViewModels
 {
 	/// <summary>
 	/// Single Image Random Dot Stereogram Layer
@@ -20,6 +21,24 @@ namespace Sistem2.LayerTypes
 		private string _depthImageFileName;
 		private float _minimumSeparation;
 		private float _maximumSeparation;
+		private float _origin;
+
+		private float _eyeDistanceCentimeter;
+
+		/// <summary>
+		/// Gets ot sets the middle of the stereogram, where the pattern starts
+		///
+		/// Usually this is the middle of the stereogram
+		/// </summary>
+		public float Origin
+		{
+			get => _origin;
+			set
+			{
+				_origin = value;
+				OnPropertyChanged(nameof(Origin));
+			}
+		}
 
 		/// <summary>
 		/// The Depth image
@@ -33,6 +52,7 @@ namespace Sistem2.LayerTypes
 
 				MinimumSeparation = value.Width / 8f;
 				MaximumSeparation = value.Width / 7f;
+				Origin = (value.Width - MaximumSeparation) / 2;
 
 				DrawPreview();
 
@@ -69,7 +89,7 @@ namespace Sistem2.LayerTypes
 		}
 
 		/// <summary>
-		/// The MinimumSeparation for the pattern
+		/// Gets or sets the MinimumSeparation for the pattern
 		/// </summary>
 		public float MinimumSeparation
 		{
@@ -83,7 +103,7 @@ namespace Sistem2.LayerTypes
 		}
 
 		/// <summary>
-		/// The MinimumSeparation for the pattern
+		/// Gets or sets the MaximumSeparation for the pattern
 		/// </summary>
 		public float MaximumSeparation
 		{
@@ -95,8 +115,10 @@ namespace Sistem2.LayerTypes
 				OnPropertyChanged(nameof(MaximumDepthCentimeter));
 			}
 		}
-		private float _eyeDistanceCentimeter;
 
+		/// <summary>
+		/// Gets or sets the Distance from the eye to the screen/print in centimeters
+		/// </summary>
 		public float EyeDistanceCentimeter
 		{
 			get => _eyeDistanceCentimeter;
@@ -111,41 +133,57 @@ namespace Sistem2.LayerTypes
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the minimum depth in centimeters
+		/// </summary>
 		public float MinimumDepthCentimeter
 		{
-			get => Tools.EyeDistance * Dpc * EyeDistanceCentimeter / (Tools.EyeDistance * Dpc - MinimumSeparation);
-			set => MinimumSeparation = Tools.EyeDistance * Dpc * ((value - EyeDistanceCentimeter) / value);
+			get => Utilities.EyeDistance * Dpc * EyeDistanceCentimeter / (Utilities.EyeDistance * Dpc - MinimumSeparation);
+			set => MinimumSeparation = Utilities.EyeDistance * Dpc * ((value - EyeDistanceCentimeter) / value);
 		}
 
+		/// <summary>
+		/// Gets or sets the maximum depth in centimeters
+		/// </summary>
 		public float MaximumDepthCentimeter
 		{
-			get => Tools.EyeDistance * Dpc * EyeDistanceCentimeter / (Tools.EyeDistance * Dpc - MaximumSeparation);
-			set => MaximumSeparation = Tools.EyeDistance * Dpc * ((value - EyeDistanceCentimeter) / value);
+			get => Utilities.EyeDistance * Dpc * EyeDistanceCentimeter / (Utilities.EyeDistance * Dpc - MaximumSeparation);
+			set => MaximumSeparation = Utilities.EyeDistance * Dpc * ((value - EyeDistanceCentimeter) / value);
 		}
 
+		/// <summary>
+		/// Gets or sets the Distance from the eye to the screen/print in inches
+		/// </summary>
 		public float EyeDistanceInch
 		{
-			get => Tools.CMToInch(EyeDistanceCentimeter);
-			set => EyeDistanceCentimeter = Tools.InchToCM(value);
+			get => Utilities.CMToInch(EyeDistanceCentimeter);
+			set => EyeDistanceCentimeter = Utilities.InchToCM(value);
 		}
 
+
+		/// <summary>
+		/// Gets or sets the minimum depth in inches
+		/// </summary>
 		public float MinimumDepthInch
 		{
-			get => Tools.CMToInch(MinimumDepthCentimeter);
-			set => MinimumDepthCentimeter = Tools.InchToCM(value);
+			get => Utilities.CMToInch(MinimumDepthCentimeter);
+			set => MinimumDepthCentimeter = Utilities.InchToCM(value);
 		}
 
+		/// <summary>
+		/// Gets or sets the maximum depth in inches
+		/// </summary>
 		public float MaximumDepthInch
 		{
-			get => Tools.CMToInch(MaximumDepthCentimeter);
-			set => MaximumDepthCentimeter = Tools.InchToCM(value);
+			get => Utilities.CMToInch(MaximumDepthCentimeter);
+			set => MaximumDepthCentimeter = Utilities.InchToCM(value);
 		}
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		/// <param name="target"></param>
-		public StereogramLayer(Image<Rgba32> target) : base(target)
+		protected StereogramLayer(Image<Rgba32> target) : base(target)
 		{
 			EyeDistanceCentimeter = 50f;
 		}
@@ -168,12 +206,13 @@ namespace Sistem2.LayerTypes
 		{
 			var stereogram = new Stereogram
 			{
-				DepthMap = DepthImage,
+				DepthMap = DepthImage
 			};
 
 			//Don't use object initializer
 			stereogram.MinSeparation = (int)MinimumSeparation;
 			stereogram.MaxSeparation = (int)MaximumSeparation;
+			stereogram.Origin = (int) Origin;
 
 			return stereogram;
 		}

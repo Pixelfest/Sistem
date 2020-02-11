@@ -3,7 +3,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
 
-namespace Sistem2.LayerTypes
+namespace Sistem2.ViewModels
 {
 	public class RandomDotStereogramLayer : StereogramLayer
 	{
@@ -33,12 +33,16 @@ namespace Sistem2.LayerTypes
 		/// <summary>
 		/// Draw the stereogram
 		/// </summary>
-		public override void Draw()
+		/// <param name="useOversampling">Use oversampling</param>
+		public override void Draw(bool useOversampling)
 		{
 			if (DepthImage == null)
 				return;
 
 			var stereogram = CreateStereogram();
+			
+			if (useOversampling)
+				stereogram.Oversampling = 4;
 
 			stereogram.ColoredNoise = ColoredNoise;
 

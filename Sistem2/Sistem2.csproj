@@ -27,31 +27,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="BackgroundLayerProperties.xaml.cs">
+    <Compile Update="UserControls\BackgroundLayerProperties.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="PatternStereogramLayerProperties.xaml.cs">
+    <Compile Update="UserControls\PatternStereogramLayerProperties.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="RandomDotStereogramLayerProperties.xaml.cs">
+    <Compile Update="UserControls\RandomDotStereogramLayerProperties.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="StereogramLayerProperties.xaml.cs">
+    <Compile Update="UserControls\StereogramLayerProperties.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="BackgroundLayerProperties.xaml">
+    <Page Update="UserControls\BackgroundLayerProperties.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="PatternStereogramLayerProperties.xaml">
+    <Page Update="UserControls\PatternStereogramLayerProperties.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="RandomDotStereogramLayerProperties.xaml">
+    <Page Update="UserControls\RandomDotStereogramLayerProperties.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="StereogramLayerProperties.xaml">
+    <Page Update="UserControls\StereogramLayerProperties.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

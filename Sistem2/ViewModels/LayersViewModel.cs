@@ -1,16 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using Sistem2.LayerTypes;
 
-namespace Sistem2
+namespace Sistem2.ViewModels
 {
 	public class LayersViewModel : ObservableCollection<LayerBase>
 	{
-		public void Draw()
+		public void Draw(bool useOversampling)
 		{
 			foreach (var layer in this.Where(layer => layer.Visible).Reverse())
 			{
-				layer.Draw();
+				layer.Draw(useOversampling);
 			}
 		}
 	}

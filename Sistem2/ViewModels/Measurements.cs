@@ -1,4 +1,4 @@
-﻿namespace Sistem2.LayerTypes
+﻿namespace Sistem2.ViewModels
 {
 	public enum Measurements
 	{

@@ -9,10 +9,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Sistem2.Annotations;
+using Sistem2.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Sistem2.LayerTypes
+namespace Sistem2.ViewModels
 {
 	public abstract class LayerBase : INotifyPropertyChanged
 	{
@@ -108,8 +109,8 @@ namespace Sistem2.LayerTypes
 		
 		public float Dpc
 		{
-			get => Tools.InchToCM(Dpi);
-			set => Dpi = Tools.CMToInch(value);
+			get => Utilities.InchToCM(Dpi);
+			set => Dpi = Utilities.CMToInch(value);
 		}
 
 		public float TopCentimeter
@@ -159,7 +160,15 @@ namespace Sistem2.LayerTypes
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		public abstract void Draw();
+		/// <summary>
+		/// Draw the layer
+		/// </summary>
+		/// <param name="useOversampling">Use oversampling</param>
+		public abstract void Draw(bool useOversampling);
+
+		/// <summary>
+		/// Draw a preview
+		/// </summary>
 		public abstract void DrawPreview();
 	}
 }

@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sistem2"
-             xmlns:layerTypes="clr-namespace:Sistem2.LayerTypes"
+             xmlns:viewModels="clr-namespace:Sistem2.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="200"
-             d:DataContext="{d:DesignInstance layerTypes:ImageLayer}">
+             d:DataContext="{d:DesignInstance viewModels:ImageLayer}">
 	    <GroupBox Header="Image layer" Margin="{StaticResource ControlMargin}">
 		    <StackPanel>
 			    <Image Source="{Binding Path=ImageSource}" Width="auto" Height="150" />

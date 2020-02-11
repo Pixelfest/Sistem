@@ -4,9 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.Win32;
-using Sistem2.LayerTypes;
+using Sistem2.Tools;
+using Sistem2.ViewModels;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -20,6 +22,8 @@ namespace Sistem2
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		private bool useOversampling => UseOversampling?.IsChecked ?? false;
+
 		public LayersViewModel Layers  { get; set; }
 		public BackgroundLayer BackgroundLayer { get; set; }
 
@@ -89,7 +93,7 @@ namespace Sistem2
 
 			Layers.Insert(0, layer);
 			layer.DrawPreview();
-			Layers.Draw();
+			Layers.Draw(useOversampling);
 		}
 
 		private void AddRandomDotStereogramLayerMenuClick(object sender, RoutedEventArgs e)
@@ -104,7 +108,7 @@ namespace Sistem2
 
 			Layers.Insert(0, layer);
 			layer.DrawPreview();
-			Layers.Draw();
+			Layers.Draw(useOversampling);
 		}
 
 		private void AddPatternStereogramLayerMenuClick(object sender, RoutedEventArgs e)
@@ -119,14 +123,14 @@ namespace Sistem2
 
 			Layers.Insert(0, layer);
 			layer.DrawPreview();
-			Layers.Draw();
+			Layers.Draw(useOversampling);
 		}
 
 		private void DeleteLayerClick(object sender, RoutedEventArgs e)
 		{
 			var element = e.OriginalSource as FrameworkElement;
 			Layers.Remove(element.DataContext as LayerBase);
-			Layers.Draw();
+			Layers.Draw(useOversampling);
 		}
 
 		private void LayerUpClick(object sender, RoutedEventArgs e)
@@ -185,8 +189,8 @@ namespace Sistem2
 		private void Draw()
 		{
 			// Clear the image first
-			BackgroundLayer.Draw();
-			Layers.Draw();
+			BackgroundLayer.Draw(useOversampling);
+			Layers.Draw(useOversampling);
 
 			PreviewImage.Source = new ImageSharpImageSource<Rgba32>(Image);
 		}

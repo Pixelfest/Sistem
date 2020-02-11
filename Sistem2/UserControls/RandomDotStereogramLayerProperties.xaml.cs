@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
-using Sistem2.LayerTypes;
+using Sistem2.ViewModels;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Sistem2

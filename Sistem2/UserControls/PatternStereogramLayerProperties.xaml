@@ -4,20 +4,28 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sistem2"
-             xmlns:layerTypes="clr-namespace:Sistem2.LayerTypes"
+             xmlns:layerTypes="clr-namespace:Sistem2.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="200"
+             
              d:DataContext="{d:DesignInstance local:PatternStereogramLayerProperties}">
-		<StackPanel>
-			<local:StereogramLayerProperties x:Name="StereogramLayerProperties" />
-			<GroupBox Header="Pattern layer" Margin="{StaticResource ControlMargin}" >
-				<StackPanel>
+	<StackPanel>
+		<GroupBox Header="Pattern layer" Margin="{StaticResource ControlMargin}" >
+			<StackPanel>
 				<TextBlock Text="Pattern image"></TextBlock>
 				<Button Click="LoadPatternImageButtonClick">
 					<Image Source="{Binding Path=PatternImageSource}" Width="auto" Height="150"/>
 				</Button>
 				<TextBlock Text="{Binding Path=PatternImageFileName}"></TextBlock>
-				</StackPanel>
+			</StackPanel>
 		</GroupBox>
+		<local:StereogramLayerProperties x:Name="StereogramLayerProperties" />
+		<StackPanel Orientation="Horizontal">
+			<Label Width="110">Pattern start</Label>
+			<TextBox Width="40" Text="{Binding Path=PatternStart, StringFormat=N0}"></TextBox>
 		</StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<Label Width="110">Pattern end</Label>
+			<TextBox Width="40" Text="{Binding Path=PatternEnd, StringFormat=N0}"></TextBox>
+		</StackPanel>
+	</StackPanel>
 </UserControl>

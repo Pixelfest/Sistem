@@ -1,9 +1,10 @@
-﻿using SixLabors.ImageSharp;
+﻿using Sistem2.Tools;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
 
-namespace Sistem2.LayerTypes
+namespace Sistem2.ViewModels
 {
 	public class ImageLayer : LayerBase
 	{
@@ -58,8 +59,12 @@ namespace Sistem2.LayerTypes
 			Preview = new ImageSharpImageSource<Rgba32>(preview);
 			OnPropertyChanged(nameof(Preview));  
 		}
-
-		public override void Draw()
+		
+		/// <summary>
+		/// Draw the image
+		/// </summary>
+		/// <param name="useOversampling">Use oversampling (unused)</param>
+		public override void Draw(bool useOversampling)
 		{
 			if (Image == null)
 				return;

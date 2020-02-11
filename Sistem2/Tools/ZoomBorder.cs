@@ -1,12 +1,12 @@
-﻿using System.Linq;
-using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-
-namespace Sistem2
+﻿namespace Sistem2.Tools
 {
+	using System.Linq;
+	using System.Reflection;
+	using System.Windows;
+	using System.Windows.Controls;
+	using System.Windows.Input;
+	using System.Windows.Media;
+
 	/// <summary>
 	/// https://stackoverflow.com/questions/741956/pan-zoom-image
 	/// 

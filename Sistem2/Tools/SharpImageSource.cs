@@ -1,6 +1,4 @@
-﻿namespace Sistem2
-{
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media;
@@ -8,7 +6,9 @@ using System.Windows.Media.Imaging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-    /// <summary>
+namespace Sistem2.Tools
+{
+	/// <summary>
     /// reference article: http://www.i-programmer.info/programming/wpf-workings/822
     /// reference to what needs to be implemented: https://blogs.msdn.microsoft.com/dwayneneed/2008/06/20/implementing-a-custom-bitmapsource/
     ///https://github.com/jongleur1983/SharpImageSource/blob/master/ImageSharp.WpfImageSource/ImageSharpImageSource.cs

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Sistem2
+﻿namespace Sistem2.Tools
 {
-	public static class Tools
+	using System.Collections.Generic;
+
+	public static class Utilities
 	{
 		public const float Factor = 2.54f;
 		public const float EyeDistance = 6.5f;
@@ -24,6 +22,11 @@ namespace Sistem2
 			var temporary = list[indexA];
 			list[indexA] = list[indexB];
 			list[indexB] = temporary;
+		}
+
+		public static bool EqualsWithTolerance(this float value, int compareTo, float tolerance = 0.001f)
+		{
+			return value + tolerance > compareTo && value - tolerance < compareTo;
 		}
 	}
 }
