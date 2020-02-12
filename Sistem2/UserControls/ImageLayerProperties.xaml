@@ -10,7 +10,7 @@
              d:DataContext="{d:DesignInstance viewModels:ImageLayer}">
 	    <GroupBox Header="Image layer" Margin="{StaticResource ControlMargin}">
 		    <StackPanel>
-			    <Image Source="{Binding Path=ImageSource}" Width="auto" Height="150" />
+			    <Image Source="{Binding Path=ImageSource}" Width="auto" Height="100" />
 			    <TextBlock Text="{Binding Path=FileName}"></TextBlock>
 			    <Button Content="Load image" Click="LoadImageButtonClick" />
                 <StackPanel Orientation="Horizontal">

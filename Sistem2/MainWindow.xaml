@@ -11,10 +11,6 @@
 	<DockPanel LastChildFill="True">
 		<Menu DockPanel.Dock="Top">
 			<MenuItem Header="_File" />
-			<!--
-			<MenuItem Header="_Document" Click="DocumentPropertiesMenuClick ">
-			</MenuItem>
-			-->
 			<MenuItem Header="_Layers">
 				<MenuItem Header="Add _Image layer" Click="AddImageLayerMenuClick"/>
 				<MenuItem Header="Add _Random Dot Stereogram layer" Click="AddRandomDotStereogramLayerMenuClick"/>
@@ -25,7 +21,7 @@
 		<StackPanel DockPanel.Dock="Right">
 			<StackPanel>
 				<TextBlock Background="Black" Foreground="White" Margin="0" Padding="4">Document Properties</TextBlock>
-				<sistem2:BackgroundLayerProperties x:Name="BackgroundLayerProperties" />
+				<sistem2:DocumentLayerProperties x:Name="BackgroundLayerProperties" />
 			</StackPanel>
 			<StackPanel Width="270">
 				<DockPanel Background="Black" Margin="0">
@@ -68,13 +64,13 @@
 								</Border>
 								<CheckBox IsChecked="{Binding Path=Visible}" VerticalAlignment="Center"></CheckBox>
 								<TextBox Text="{Binding Path=Name}" Height="24" Width="100"></TextBox>
-								<Button IsEnabled="{Binding Path=IsDeleteEnabled}" FontFamily="{StaticResource FontAwesomeRegular}" FontSize="16" VerticalAlignment="Center" Click="DeleteLayerClick" Margin="0" Padding="0">
+								<Button FontFamily="{StaticResource FontAwesomeRegular}" FontSize="16" VerticalAlignment="Center" Click="DeleteLayerClick" Margin="0" Padding="0">
 									<TextBlock Margin="0" Padding="3">&#xf1f8;</TextBlock>
 								</Button>
-								<Button IsEnabled="{Binding Path=IsDeleteEnabled}" FontFamily="{StaticResource FontAwesomeRegular}" FontSize="16" VerticalAlignment="Center" Click="LayerUpClick" Margin="0" Padding="0">
+								<Button FontFamily="{StaticResource FontAwesomeRegular}" FontSize="16" VerticalAlignment="Center" Click="LayerUpClick" Margin="0" Padding="0">
 									<TextBlock Margin="0" Padding="3">&#xf151;</TextBlock>
 								</Button>
-								<Button IsEnabled="{Binding Path=IsDeleteEnabled}" FontFamily="{StaticResource FontAwesomeRegular}" FontSize="16" VerticalAlignment="Center" Click="LayerDownClick" Margin="0" Padding="0">
+								<Button FontFamily="{StaticResource FontAwesomeRegular}" FontSize="16" VerticalAlignment="Center" Click="LayerDownClick" Margin="0" Padding="0">
 									<TextBlock Margin="0" Padding="3">&#xf150;</TextBlock>
 								</Button>
 							</StackPanel>
@@ -84,7 +80,7 @@
 			</StackPanel>
 			<StackPanel>
 				<TextBlock Background="Black" Foreground="White" Margin="0" Padding="4">Layer Properties</TextBlock>
-				<StackPanel Width="250" x:Name="LayersStackPanel">
+				<StackPanel x:Name="LayersStackPanel">
 					<sistem2:ImageLayerProperties x:Name="ImageLayerProperties" Visibility="Collapsed" />
 					<sistem2:RandomDotStereogramLayerProperties x:Name="RandomDotStereogramLayerProperties" Visibility="Collapsed" />
 					<sistem2:PatternStereogramLayerProperties x:Name="PatternStereogramLayerProperties" Visibility="Collapsed" />
@@ -95,16 +91,9 @@
 			<Button Click="ResetZoom" Margin="0,0,4,0">Fit</Button>
 			<Button Click="SetPixelPerfect" Margin="0,0,4,0">Pixel perfect</Button>
 			<Button Click="ResetActualSize" Margin="0,0,4,0">Actual size</Button>
-			<CheckBox Name="UseLayoutRendering" IsChecked="True" VerticalAlignment="Center">
-				<TextBlock Margin="0,-2,0,0">Pixel perfect</TextBlock>
-			</CheckBox>
-			<CheckBox Name="UseOversampling" IsChecked="False" VerticalAlignment="Center">
-				<TextBlock Margin="0,-2,0,0">Use oversampling</TextBlock>
-			</CheckBox>
-
 		</StackPanel>
 		<tools:ZoomBorder x:Name="ZoomBorder" ClipToBounds="True" Background="Gray">
-			<Image Margin="0,0,0,0" Name="PreviewImage" UseLayoutRounding="{Binding ElementName=UseLayoutRendering, Path=IsChecked}" />
+			<Image Margin="0,0,0,0" Name="PreviewImage" />
 		</tools:ZoomBorder>
 	</DockPanel>
 </Window>

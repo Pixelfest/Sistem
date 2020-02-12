@@ -11,6 +11,9 @@ namespace Sistem2.ViewModels
 		private Image<Rgba32> _image;
 		private string _fileName;
 
+		/// <summary>
+		/// The image to draw
+		/// </summary>
 		public Image<Rgba32> Image
 		{
 			get => _image;
@@ -25,6 +28,9 @@ namespace Sistem2.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// The filename of the image
+		/// </summary>
 		public string FileName
 		{
 			get => _fileName;
@@ -35,6 +41,9 @@ namespace Sistem2.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// The image-source for drawing on the UI
+		/// </summary>
 		public ImageSharpImageSource<Rgba32> ImageSource
 		{
 			get
@@ -46,10 +55,17 @@ namespace Sistem2.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="target">The target of the layer</param>
 		public ImageLayer(Image<Rgba32> target) : base(target)
 		{
 		}
 
+		/// <summary>
+		/// Draw a preview of the layer
+		/// </summary>
 		public override void DrawPreview()
 		{
 			if (Image == null)
@@ -63,8 +79,7 @@ namespace Sistem2.ViewModels
 		/// <summary>
 		/// Draw the image
 		/// </summary>
-		/// <param name="useOversampling">Use oversampling (unused)</param>
-		public override void Draw(bool useOversampling)
+		public override void Draw()
 		{
 			if (Image == null)
 				return;

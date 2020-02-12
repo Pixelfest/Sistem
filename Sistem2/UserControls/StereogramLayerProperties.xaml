@@ -6,66 +6,64 @@
              xmlns:local="clr-namespace:Sistem2"
              xmlns:layerTypes="clr-namespace:Sistem2.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="200"
              d:DataContext="{d:DesignInstance local:StereogramLayerProperties}">
 	<StackPanel>
 		<GroupBox Header="Depth image" Margin="{StaticResource ControlMargin}" >
 			<StackPanel>
-				<TextBlock Text="Depth map"></TextBlock>
 				<Button Click="LoadDepthImageButtonClick">
-					<Image Source="{Binding Path=DepthImageSource}" Width="auto" Height="150"/>
+					<Image Source="{Binding Path=DepthImageSource}" Width="auto" Height="100"/>
 				</Button>
 				<TextBlock Text="{Binding Path=DepthImageFileName}"></TextBlock>
 			</StackPanel>
 		</GroupBox>
 		<TabControl Name="MeasurementsTab" Margin="{StaticResource ControlMargin}">
-			<TabItem Header="Pixels" Name="Pixels" Margin="0" Padding="0">
+			<TabItem Header="Pixels" Name="Pixels">
 				<StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label Width="110">Minimal separation</Label>
-						<TextBox Width="40" Text="{Binding Path=MinimumSeparation, StringFormat=N0}"></TextBox>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label Width="110">Maximum separation</Label>
-						<TextBox Width="40" Text="{Binding Path=MaximumSeparation, StringFormat=N0}"></TextBox>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label Width="110">Origin</Label>
-						<TextBox Width="40" Text="{Binding Path=Origin, StringFormat=N0}"></TextBox>
-					</StackPanel>
+					<DockPanel>
+						<Label>Minimal separation</Label>
+						<TextBox Text="{Binding Path=MinimumSeparation, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
+					<DockPanel>
+						<Label>Maximum separation</Label>
+						<TextBox Text="{Binding Path=MaximumSeparation, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
+					<DockPanel>
+						<Label>Origin</Label>
+						<TextBox Text="{Binding Path=Origin, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
 
 				</StackPanel>
 			</TabItem>
 			<TabItem Header="Metric" Name="Centimeters">
 				<StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label Width="110">Distance to screen</Label>
-						<TextBox Width="40" Text="{Binding Path=EyeDistanceCentimeter, StringFormat=N0}"></TextBox>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label Width="110">Minimum depth</Label>
-						<TextBox Width="40" Text="{Binding Path=MinimumDepthCentimeter, StringFormat=N0}"></TextBox>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label Width="110">Maximum depth</Label>
-						<TextBox Width="40" Text="{Binding Path=MaximumDepthCentimeter, StringFormat=N0}"></TextBox>
-					</StackPanel>
+					<DockPanel>
+						<Label>Distance to screen</Label>
+						<TextBox Text="{Binding Path=EyeDistanceCentimeter, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
+					<DockPanel>
+						<Label>Minimum depth</Label>
+						<TextBox Text="{Binding Path=MinimumDepthCentimeter, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
+					<DockPanel>
+						<Label>Maximum depth</Label>
+						<TextBox Text="{Binding Path=MaximumDepthCentimeter, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
 				</StackPanel>
 			</TabItem>
 			<TabItem Header="Imperial" Name="Inches">
 				<StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label Width="110">Distance to screen</Label>
-						<TextBox Width="75" Text="{Binding Path=EyeDistanceInch, StringFormat=N0}"></TextBox>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label Width="110">Minimum depth</Label>
-						<TextBox Width="75" Text="{Binding Path=MinimumDepthInch, StringFormat=N0}"></TextBox>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label Width="110">Maximum depth</Label>
-						<TextBox Width="75" Text="{Binding Path=MaximumDepthInch, StringFormat=N0}"></TextBox>
-					</StackPanel>
+					<DockPanel>
+						<Label>Distance to screen</Label>
+						<TextBox Text="{Binding Path=EyeDistanceInch, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
+					<DockPanel>
+						<Label>Minimum depth</Label>
+						<TextBox Text="{Binding Path=MinimumDepthInch, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
+					<DockPanel>
+						<Label>Maximum depth</Label>
+						<TextBox Text="{Binding Path=MaximumDepthInch, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
 				</StackPanel>
 			</TabItem>
 		</TabControl>

@@ -5,6 +5,9 @@ using SixLabors.Primitives;
 
 namespace Sistem2.ViewModels
 {
+	/// <summary>
+	/// Random dot stereogram
+	/// </summary>
 	public class RandomDotStereogramLayer : StereogramLayer
 	{
 		private bool _coloredNoise;
@@ -33,17 +36,13 @@ namespace Sistem2.ViewModels
 		/// <summary>
 		/// Draw the stereogram
 		/// </summary>
-		/// <param name="useOversampling">Use oversampling</param>
-		public override void Draw(bool useOversampling)
+		public override void Draw()
 		{
 			if (DepthImage == null)
 				return;
 
 			var stereogram = CreateStereogram();
-			
-			if (useOversampling)
-				stereogram.Oversampling = 4;
-
+			stereogram.Oversampling = Oversampling;
 			stereogram.ColoredNoise = ColoredNoise;
 
 			if (stereogram.Generate())

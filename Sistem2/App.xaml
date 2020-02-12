@@ -33,5 +33,14 @@
 		<Style TargetType="{x:Type CheckBox}">
 			<Setter Property="Margin" Value="{StaticResource ControlMargin}"></Setter>
 		</Style>
+
+		<Style x:Key="TextBoxRight" TargetType="{x:Type TextBox}">
+			<Setter Property="Width" Value="64"/>
+			<Setter Property="Height" Value="22"/>
+			<Setter Property="DockPanel.Dock" Value="Right"/>
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+			<Setter Property="TextAlignment" Value="Right"/>
+			<Setter Property="Margin" Value="4"/>
+		</Style>
 	</Application.Resources>
 </Application>

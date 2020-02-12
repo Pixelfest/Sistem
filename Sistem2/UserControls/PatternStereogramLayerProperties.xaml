@@ -8,24 +8,23 @@
              mc:Ignorable="d" 
              
              d:DataContext="{d:DesignInstance local:PatternStereogramLayerProperties}">
-	<StackPanel>
+	<StackPanel Margin="0">
 		<GroupBox Header="Pattern layer" Margin="{StaticResource ControlMargin}" >
 			<StackPanel>
-				<TextBlock Text="Pattern image"></TextBlock>
 				<Button Click="LoadPatternImageButtonClick">
-					<Image Source="{Binding Path=PatternImageSource}" Width="auto" Height="150"/>
+					<Image Source="{Binding Path=PatternImageSource}" Width="auto" Height="100"/>
 				</Button>
 				<TextBlock Text="{Binding Path=PatternImageFileName}"></TextBlock>
 			</StackPanel>
 		</GroupBox>
 		<local:StereogramLayerProperties x:Name="StereogramLayerProperties" />
-		<StackPanel Orientation="Horizontal">
-			<Label Width="110">Pattern start</Label>
-			<TextBox Width="40" Text="{Binding Path=PatternStart, StringFormat=N0}"></TextBox>
-		</StackPanel>
-		<StackPanel Orientation="Horizontal">
-			<Label Width="110">Pattern end</Label>
-			<TextBox Width="40" Text="{Binding Path=PatternEnd, StringFormat=N0}"></TextBox>
-		</StackPanel>
+		<DockPanel>
+			<Label>Pattern start</Label>
+			<TextBox Text="{Binding Path=PatternStart, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+		</DockPanel>
+		<DockPanel>
+			<Label>Pattern end</Label>
+			<TextBox Text="{Binding Path=PatternEnd, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+		</DockPanel>
 	</StackPanel>
 </UserControl>

@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="UserControls\BackgroundLayerProperties.xaml.cs">
+    <Compile Update="UserControls\DocumentLayerProperties.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControls\PatternStereogramLayerProperties.xaml.cs">
@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="UserControls\BackgroundLayerProperties.xaml">
+    <Page Update="UserControls\DocumentLayerProperties.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\PatternStereogramLayerProperties.xaml">

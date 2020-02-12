@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
-using System.Windows.Media.Imaging;
-using Sistem.Core;
+﻿using Sistem.Core;
 using Sistem2.Tools;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
@@ -99,6 +93,7 @@ namespace Sistem2.ViewModels
 				_minimumSeparation = value;
 				OnPropertyChanged(nameof(MinimumSeparation));
 				OnPropertyChanged(nameof(MinimumDepthCentimeter));
+				OnPropertyChanged(nameof(MinimumDepthInch));
 			}
 		}
 
@@ -113,6 +108,7 @@ namespace Sistem2.ViewModels
 				_maximumSeparation = value;
 				OnPropertyChanged(nameof(MaximumSeparation));
 				OnPropertyChanged(nameof(MaximumDepthCentimeter));
+				OnPropertyChanged(nameof(MaximumDepthInch));
 			}
 		}
 
@@ -126,10 +122,11 @@ namespace Sistem2.ViewModels
 			{
 				_eyeDistanceCentimeter = value; OnPropertyChanged(nameof(EyeDistanceCentimeter));
 				OnPropertyChanged(nameof(MinimumSeparation));
-				OnPropertyChanged(nameof(MinimumDepthCentimeter));
-				OnPropertyChanged(nameof(MinimumDepthCentimeter));
 				OnPropertyChanged(nameof(MaximumSeparation));
+				OnPropertyChanged(nameof(MinimumDepthCentimeter));
 				OnPropertyChanged(nameof(MaximumDepthCentimeter));
+				OnPropertyChanged(nameof(MinimumDepthInch));
+				OnPropertyChanged(nameof(MaximumDepthInch));
 			}
 		}
 
@@ -202,6 +199,10 @@ namespace Sistem2.ViewModels
 			OnPropertyChanged(nameof(Preview));  
 		}
 
+		/// <summary>
+		/// Create a Stereogram object with the base properties
+		/// </summary>
+		/// <returns>A Stereogram</returns>
 		public Stereogram CreateStereogram()
 		{
 			var stereogram = new Stereogram

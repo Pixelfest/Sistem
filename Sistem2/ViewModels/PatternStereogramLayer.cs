@@ -1,5 +1,4 @@
-﻿using Sistem.Core;
-using Sistem2.Tools;
+﻿using Sistem2.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -8,6 +7,9 @@ using SixLabors.Primitives;
 
 namespace Sistem2.ViewModels
 {
+	/// <summary>
+	/// Pattern stereogram
+	/// </summary>
 	public class PatternStereogramLayer : StereogramLayer
 	{
 		private Image<Rgba32> _patternImage;
@@ -25,7 +27,15 @@ namespace Sistem2.ViewModels
 			get => _patternStart;
 			set
 			{
-				_patternStart = value;
+				if (value >= 0)
+				{
+					_patternStart = value;
+				}
+				else
+				{
+					_patternStart = 0;
+				}
+
 				OnPropertyChanged(nameof(PatternStart));
 			}
 		}
@@ -40,7 +50,15 @@ namespace Sistem2.ViewModels
 			get => _patternEnd;
 			set
 			{
-				_patternEnd = value;
+				if (value <= PatternImage?.Width)
+				{
+					_patternEnd = value;
+				}
+				else
+				{
+					_patternEnd = PatternImage?.Width ?? 0;
+				}
+
 				OnPropertyChanged(nameof(PatternEnd));
 			}
 		}
@@ -104,8 +122,7 @@ namespace Sistem2.ViewModels
 		/// <summary>
 		/// Draw the stereogram
 		/// </summary>
-		/// <param name="useOversampling">Use oversampling</param>
-		public override void Draw(bool useOversampling)
+		public override void Draw()
 		{
 			if (DepthImage == null || PatternImage == null)
 				return;
@@ -113,9 +130,7 @@ namespace Sistem2.ViewModels
 			var stereogram = CreateStereogram();
 
 			stereogram.Pattern = RenderPatternImage();
-
-			if (useOversampling)
-				stereogram.Oversampling = 4;
+			stereogram.Oversampling = Oversampling;
 
 			if (stereogram.Generate())
 			{
@@ -126,6 +141,10 @@ namespace Sistem2.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Render the PatternImage to the desired crop and size
+		/// </summary>
+		/// <returns>The rendered pattern image</returns>
 		private Image<Rgba32> RenderPatternImage()
 		{
 			Image<Rgba32> patternImage;
