@@ -12,14 +12,16 @@ namespace Sistem2.ViewModels
 	/// </summary>
 	public abstract class LayerBase : INotifyPropertyChanged
 	{
+		protected Image<Rgba32> CachedImage = null;
 		private int _top;
 		private int _left;
 		private int _width;
 		private int _height;
 		private float _dpi;
+		private float _opacity;
 		private int _oversampling;
 		private Measurements _measurements;
-
+		
 		/// <summary>
 		/// The measurements to use
 		/// </summary>
@@ -27,6 +29,15 @@ namespace Sistem2.ViewModels
 		{
 			get => _measurements;
 			set { _measurements = value; OnPropertyChanged(nameof(Measurements)); }
+		}
+
+		/// <summary>
+		/// Gets or sets the opacity of this layer
+		/// </summary>
+		public float Opacity
+		{
+			get => _opacity;
+			set { _opacity = value; OnPropertyChanged(nameof(Opacity)); }
 		}
 
 		/// <summary>
@@ -226,8 +237,10 @@ namespace Sistem2.ViewModels
 		/// <param name="target">The target image to draw to</param>
 		protected LayerBase(Image<Rgba32> target)
 		{
-			this.Target = target;
-			this.Preview = new ImageSharpImageSource<Rgba32>(150,150);
+			CachedImage = null;
+			Target = target;
+			Opacity = 1;
+			Preview = new ImageSharpImageSource<Rgba32>(150,150);
 		}
 		/// <summary>
 		/// Draw the layer
@@ -251,6 +264,8 @@ namespace Sistem2.ViewModels
 		[NotifyPropertyChangedInvocator]
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
+			CachedImage = null;
+
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 

@@ -7,7 +7,7 @@
         xmlns:sistem2="clr-namespace:Sistem2"
         xmlns:tools="clr-namespace:Sistem2.Tools"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1280" WindowState="Maximized">
+        Title="MainWindow" Height="800" Width="1280" WindowState="Maximized" KeyDown="KeyDownEvent">
 	<DockPanel LastChildFill="True">
 		<Menu DockPanel.Dock="Top">
 			<MenuItem Header="_File" />
@@ -58,6 +58,7 @@
 					</ListBox.Style>
 					<ListBox.ItemTemplate>
 						<DataTemplate>
+							<StackPanel>
 							<StackPanel Orientation="Horizontal">
 								<Border>
 									<Image Source="{Binding Path=Preview}" Width="50" Height="50" />
@@ -73,6 +74,8 @@
 								<Button FontFamily="{StaticResource FontAwesomeRegular}" FontSize="16" VerticalAlignment="Center" Click="LayerDownClick" Margin="0" Padding="0">
 									<TextBlock Margin="0" Padding="3">&#xf150;</TextBlock>
 								</Button>
+							</StackPanel>
+								<Slider x:Name="OversamplingSlider" IsSnapToTickEnabled="False" Value="{Binding Path=Opacity}" Width="75" Maximum="1" Minimum="0" SmallChange="0.01" TickPlacement="Both"/>
 							</StackPanel>
 						</DataTemplate>
 					</ListBox.ItemTemplate>

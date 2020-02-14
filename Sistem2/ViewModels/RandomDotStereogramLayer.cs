@@ -41,16 +41,22 @@ namespace Sistem2.ViewModels
 			if (DepthImage == null)
 				return;
 
+			var location = new Point(0, 0);
+
+			if (CachedImage != null)
+			{
+				Target.Mutate(t => t.DrawImage(CachedImage, location, Opacity));
+				return;
+			}
+
 			var stereogram = CreateStereogram();
 			stereogram.Oversampling = Oversampling;
 			stereogram.ColoredNoise = ColoredNoise;
 
-			if (stereogram.Generate())
+			if (stereogram.Generate() && stereogram.Result != null)
 			{
-				var location = new Point(0, 0);
-
-				if (stereogram.Result != null)
-					Target.Mutate(t => t.DrawImage(stereogram.Result, location, 1));
+				CachedImage = stereogram.Result; 
+				Target.Mutate(t => t.DrawImage(stereogram.Result, location, Opacity));
 			}
 		}
 	}

@@ -1,4 +1,5 @@
-﻿using Sistem2.Tools;
+﻿using System.Numerics;
+using Sistem2.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -111,12 +112,17 @@ namespace Sistem2.ViewModels
 			}
 		}
 
+		public float Zoom { get; set; } = 1;
+
+		public int PatternYShift { get; set; } = 1;
+
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		/// <param name="target"></param>
 		public PatternStereogramLayer(Image<Rgba32> target) : base(target)
 		{
+
 		}
 
 		/// <summary>
@@ -127,17 +133,23 @@ namespace Sistem2.ViewModels
 			if (DepthImage == null || PatternImage == null)
 				return;
 
+			var location = new Point(0, 0);
+
+			if (CachedImage != null)
+			{
+				Target.Mutate(t => t.DrawImage(CachedImage, location, 1));
+				return;
+			}
+
 			var stereogram = CreateStereogram();
 
 			stereogram.Pattern = RenderPatternImage();
 			stereogram.Oversampling = Oversampling;
 
-			if (stereogram.Generate())
+			if (stereogram.Generate() && stereogram.Result != null)
 			{
-				var location = new Point(0, 0);
-
-				if (stereogram.Result != null)
-					Target.Mutate(t => t.DrawImage(stereogram.Result, location, 1));
+				CachedImage = stereogram.Result;
+				Target.Mutate(t => t.DrawImage(stereogram.Result, location, 1));
 			}
 		}
 
@@ -164,8 +176,15 @@ namespace Sistem2.ViewModels
 
 			var factor = MaximumSeparation / (float) patternWidth;
 
+			factor *= Zoom;
+			
+
 			if (!factor.EqualsWithTolerance(1))
 				patternImage.Mutate(image => image.Resize((int)MaximumSeparation, (int) (PatternImage.Height * factor), new RobidouxSharpResampler()));
+
+			//if (PatternYShift != 0)
+			//{
+			//}
 
 			return patternImage;
 		}

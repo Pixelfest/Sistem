@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using Sistem2.ViewModels;
 
@@ -9,6 +11,8 @@ namespace Sistem2
 	/// </summary>
 	public partial class DocumentLayerProperties : UserControl
 	{
+		private DocumentLayer _documentLayer => DataContext as DocumentLayer;
+
 		readonly Dictionary<string, Measurements> _measurements = new Dictionary<string, Measurements>
 		{
 			{ "Pixels", Measurements.Pixels },
@@ -24,6 +28,7 @@ namespace Sistem2
 			InitializeComponent();
 		}
 
+/*
 		/// <summary>
 		/// Update the documents Measurements when the tab is changed
 		/// </summary>
@@ -37,6 +42,11 @@ namespace Sistem2
 				return;
 
 			backgroundLayer.Measurements = _measurements[(MeasurementsTab.SelectedItem as TabItem).Name];
+		}
+*/
+		private void AutoSizeClick(object sender, RoutedEventArgs e)
+		{
+			_documentLayer.OnAutoSize();
 		}
 	}
 }

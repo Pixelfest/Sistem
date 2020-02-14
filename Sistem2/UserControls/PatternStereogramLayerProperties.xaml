@@ -20,11 +20,12 @@
 		<local:StereogramLayerProperties x:Name="StereogramLayerProperties" />
 		<DockPanel>
 			<Label>Pattern start</Label>
-			<TextBox Text="{Binding Path=PatternStart, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+			<TextBox Text="{Binding Path=PatternStart, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="PatternStartMouseWheel"></TextBox>
 		</DockPanel>
 		<DockPanel>
 			<Label>Pattern end</Label>
-			<TextBox Text="{Binding Path=PatternEnd, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+			<TextBox Text="{Binding Path=PatternEnd, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="PatternEndMouseWheel"></TextBox>
 		</DockPanel>
+
 	</StackPanel>
 </UserControl>

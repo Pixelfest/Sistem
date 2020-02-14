@@ -44,8 +44,12 @@ namespace Sistem2.ViewModels
 			{
 				_depthImage = value;
 
-				MinimumSeparation = value.Width / 8f;
-				MaximumSeparation = value.Width / 7f;
+				MinimumSeparation = _depthImage.Width / 8f;
+				MaximumSeparation = _depthImage.Width / 7f;
+
+				Width = _depthImage.Width;
+				Height = _depthImage.Height;
+
 				Origin = (value.Width - MaximumSeparation) / 2;
 
 				DrawPreview();

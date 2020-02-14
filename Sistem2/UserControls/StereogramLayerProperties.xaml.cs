@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Microsoft.Win32;
 using Sistem2.ViewModels;
 using SixLabors.ImageSharp.PixelFormats;
@@ -47,6 +48,51 @@ namespace Sistem2
 				{
 				}
 			}
+		}
+
+		/// <summary>
+		/// Handle the event when the mousewheel is used
+		/// </summary>
+		/// <param name="sender">The event sender</param>
+		/// <param name="e">The event arguments</param>
+		private void MimimumSeparationMouseWheel(object sender, MouseWheelEventArgs e)
+		{
+			int multiplier = 1;
+
+			if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+				multiplier = 10;
+
+			_stereogramLayer.MinimumSeparation += e.Delta < 0 ? -1 * multiplier : 1 * multiplier;
+		}
+
+		/// <summary>
+		/// Handle the event when the mousewheel is used
+		/// </summary>
+		/// <param name="sender">The event sender</param>
+		/// <param name="e">The event arguments</param>
+		private void MaximumSeparationMouseWheel(object sender, MouseWheelEventArgs e)
+		{
+			int multiplier = 1;
+
+			if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+				multiplier = 10;
+
+			_stereogramLayer.MaximumSeparation += e.Delta < 0 ? -1 * multiplier : 1 * multiplier;
+		}
+
+		/// <summary>
+		/// Handle the event when the mousewheel is used
+		/// </summary>
+		/// <param name="sender">The event sender</param>
+		/// <param name="e">The event arguments</param>
+		private void OriginMouseWheel(object sender, MouseWheelEventArgs e)
+		{
+			int multiplier = 1;
+
+			if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+				multiplier = 10;
+
+			_stereogramLayer.Origin += e.Delta < 0 ? -1 * multiplier : 1 * multiplier;
 		}
 	}
 }

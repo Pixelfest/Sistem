@@ -1,4 +1,5 @@
-﻿using Sistem2.Tools;
+﻿using System;
+using Sistem2.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -10,6 +11,15 @@ namespace Sistem2.ViewModels
 	/// </summary>
 	public class DocumentLayer : LayerBase
 	{
+		public event EventHandler AutoSize;
+
+		public void OnAutoSize()
+		{
+			EventHandler handler = AutoSize;
+			if (null != handler)
+				handler(this, EventArgs.Empty);
+		}
+
 		/// <summary>
 		/// Background color
 		/// </summary>

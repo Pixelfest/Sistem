@@ -86,7 +86,7 @@ namespace Sistem2.ViewModels
 
 			var location = new Point(0, 0);
 
-			Target.Mutate(t => t.DrawImage(Image, location, 1));
+			Target.Mutate(t => t.DrawImage(Image, location, Opacity));
 		}
 	}
 }

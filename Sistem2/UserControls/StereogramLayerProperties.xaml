@@ -16,23 +16,26 @@
 				<TextBlock Text="{Binding Path=DepthImageFileName}"></TextBlock>
 			</StackPanel>
 		</GroupBox>
+		<!--
 		<TabControl Name="MeasurementsTab" Margin="{StaticResource ControlMargin}">
 			<TabItem Header="Pixels" Name="Pixels">
+				-->
 				<StackPanel>
 					<DockPanel>
-						<Label>Minimal separation</Label>
-						<TextBox Text="{Binding Path=MinimumSeparation, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+						<Label>Minimum separation</Label>
+						<TextBox Text="{Binding Path=MinimumSeparation, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="MimimumSeparationMouseWheel"></TextBox>
 					</DockPanel>
 					<DockPanel>
 						<Label>Maximum separation</Label>
-						<TextBox Text="{Binding Path=MaximumSeparation, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+						<TextBox Text="{Binding Path=MaximumSeparation, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="MaximumSeparationMouseWheel"></TextBox>
 					</DockPanel>
 					<DockPanel>
 						<Label>Origin</Label>
-						<TextBox Text="{Binding Path=Origin, StringFormat=N0}" Style="{StaticResource TextBoxRight}"></TextBox>
+						<TextBox Text="{Binding Path=Origin, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="OriginMouseWheel"></TextBox>
 					</DockPanel>
 
 				</StackPanel>
+			<!--
 			</TabItem>
 			<TabItem Header="Metric" Name="Centimeters">
 				<StackPanel>
@@ -67,5 +70,6 @@
 				</StackPanel>
 			</TabItem>
 		</TabControl>
+	-->
 	</StackPanel>
 </UserControl>
