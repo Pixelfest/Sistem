@@ -16,6 +16,8 @@ namespace Sistem2.ViewModels
 		private float _minimumSeparation;
 		private float _maximumSeparation;
 		private float _origin;
+		private bool _drawDepthImage;
+
 
 		private float _eyeDistanceCentimeter;
 
@@ -178,6 +180,16 @@ namespace Sistem2.ViewModels
 		{
 			get => Utilities.CMToInch(MaximumDepthCentimeter);
 			set => MaximumDepthCentimeter = Utilities.InchToCM(value);
+		}
+
+		public bool DrawDepthImage
+		{
+			get => _drawDepthImage;
+			set
+			{
+				_drawDepthImage = value;
+				OnPropertyChanged(nameof(DrawDepthImage));
+			}
 		}
 
 		/// <summary>

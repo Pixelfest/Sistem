@@ -21,6 +21,7 @@
 			<TabItem Header="Pixels" Name="Pixels">
 				-->
 				<StackPanel>
+					<CheckBox IsChecked="{Binding Path=DrawDepthImage}">Show depth image</CheckBox>
 					<DockPanel>
 						<Label>Minimum separation</Label>
 						<TextBox Text="{Binding Path=MinimumSeparation, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="MimimumSeparationMouseWheel"></TextBox>

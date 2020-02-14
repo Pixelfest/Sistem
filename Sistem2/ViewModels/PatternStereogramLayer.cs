@@ -134,6 +134,12 @@ namespace Sistem2.ViewModels
 				return;
 
 			var location = new Point(0, 0);
+			
+			if (DrawDepthImage)
+			{
+				Target.Mutate(t => t.DrawImage(DepthImage, location, Opacity));
+				return;
+			}
 
 			if (CachedImage != null)
 			{
