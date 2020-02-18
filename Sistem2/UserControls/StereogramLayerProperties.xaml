@@ -24,17 +24,12 @@
 					<CheckBox IsChecked="{Binding Path=DrawDepthImage}">Show depth image</CheckBox>
 					<DockPanel>
 						<Label>Minimum separation</Label>
-						<TextBox Text="{Binding Path=MinimumSeparation, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="MimimumSeparationMouseWheel"></TextBox>
+						<TextBox Text="{Binding Path=MinimumSeparation, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="MinimumSeparationMouseWheel"></TextBox>
 					</DockPanel>
 					<DockPanel>
 						<Label>Maximum separation</Label>
 						<TextBox Text="{Binding Path=MaximumSeparation, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="MaximumSeparationMouseWheel"></TextBox>
 					</DockPanel>
-					<DockPanel>
-						<Label>Origin</Label>
-						<TextBox Text="{Binding Path=Origin, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="OriginMouseWheel"></TextBox>
-					</DockPanel>
-
 				</StackPanel>
 			<!--
 			</TabItem>

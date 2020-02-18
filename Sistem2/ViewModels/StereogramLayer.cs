@@ -52,7 +52,8 @@ namespace Sistem2.ViewModels
 				Width = _depthImage.Width;
 				Height = _depthImage.Height;
 
-				Origin = (value.Width - MaximumSeparation) / 2;
+				if(this is PatternStereogramLayer || this is RandomDotStereogramLayer)
+					Origin = (value.Width - MaximumSeparation) / 2;
 
 				DrawPreview();
 

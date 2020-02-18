@@ -30,6 +30,9 @@
     <Compile Update="UserControls\DocumentLayerProperties.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\FullImageStereogramLayerProperties.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\PatternStereogramLayerProperties.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -43,6 +46,9 @@
 
   <ItemGroup>
     <Page Update="UserControls\DocumentLayerProperties.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\FullImageStereogramLayerProperties.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\PatternStereogramLayerProperties.xaml">

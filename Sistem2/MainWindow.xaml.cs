@@ -194,6 +194,27 @@ namespace Sistem2
 		}
 
 		/// <summary>
+		/// Add full image stereogram layer event handler
+		/// </summary>
+		/// <param name="sender">Event sender</param>
+		/// <param name="e">Event arguments</param>
+		private void AddFullImageStereogramLayerMenuClick(object sender, RoutedEventArgs e)
+		{
+			var layer = new FullImageStereogramLayer(Image)
+			{
+				Name = $"Full Image Layer {Layers.Count}",
+				Dpi = DocumentLayer.Dpi,
+				Origin = 0,
+				Visible = true
+
+			};
+
+			Layers.Insert(0, layer);
+			layer.DrawPreview();
+			Layers.Draw();
+		}
+
+		/// <summary>
 		/// Delete a layer
 		/// </summary>
 		/// <param name="sender">Event sender</param>
@@ -274,6 +295,10 @@ namespace Sistem2
 				case PatternStereogramLayer patternStereogramLayer:
 					PatternStereogramLayerProperties.Visibility = Visibility.Visible;
 					PatternStereogramLayerProperties.DataContext = patternStereogramLayer;
+					break;
+				case FullImageStereogramLayer fullImageStereogramLayer:
+					FullImageStereogramLayerProperties.Visibility = Visibility.Visible;
+					FullImageStereogramLayerProperties.DataContext = fullImageStereogramLayer;
 					break;
 			}
 		}

@@ -70,7 +70,7 @@ namespace Sistem2.Tools
 
         public override void CopyPixels(Array pixels, int stride, int offset)
         {
-            Int32Rect sourceRect = new Int32Rect(0, 0, this.PixelWidth, this.PixelHeight);
+            var sourceRect = new Int32Rect(0, 0, this.PixelWidth, this.PixelHeight);
             base.CopyPixels(sourceRect, pixels, stride, offset);
         }
 
@@ -99,18 +99,18 @@ namespace Sistem2.Tools
 
             checked
             {
-                int offsetInBytes = offset * elementSize;
+                var offsetInBytes = offset * elementSize;
                 if (offsetInBytes >= bufferSize)
                 {
                     throw new IndexOutOfRangeException();
                 }
 
                 // Get the address of the data in the array by pinning it.
-                GCHandle arrayHandle = GCHandle.Alloc(pixels, GCHandleType.Pinned);
+                var arrayHandle = GCHandle.Alloc(pixels, GCHandleType.Pinned);
                 try
                 {
                     // Adjust the buffer and bufferSize to account for the offset.
-                    IntPtr buffer = arrayHandle.AddrOfPinnedObject();
+                    var buffer = arrayHandle.AddrOfPinnedObject();
                     buffer = new IntPtr(((long)buffer) + (long)offsetInBytes);
                     bufferSize -= offsetInBytes;
 
@@ -160,8 +160,8 @@ namespace Sistem2.Tools
                     throw new ArgumentOutOfRangeException(nameof(stride));
                 }
 
-                uint minStrideInBits = (uint)(sourceRect.Width * Format.BitsPerPixel);
-                uint minStrideInBytes = ((minStrideInBits + 7) / 8);
+                var minStrideInBits = (uint)(sourceRect.Width * Format.BitsPerPixel);
+                var minStrideInBytes = ((minStrideInBits + 7) / 8);
                 if (stride < minStrideInBytes)
                 {
                     throw new ArgumentOutOfRangeException(nameof(stride));
@@ -172,7 +172,7 @@ namespace Sistem2.Tools
                     throw new ArgumentOutOfRangeException(nameof(bufferSize));
                 }
 
-                uint minBufferSize = (uint)((sourceRect.Height - 1) * stride) + minStrideInBytes;
+                var minBufferSize = (uint)((sourceRect.Height - 1) * stride) + minStrideInBytes;
                 if (bufferSize < minBufferSize)
                 {
                     throw new ArgumentOutOfRangeException(nameof(bufferSize));
@@ -192,14 +192,14 @@ namespace Sistem2.Tools
             {
                 unsafe
                 {
-                    byte* pBytes = (byte*)buffer.ToPointer();
-                    for (int y = 0; y < sourceRect.Height; y++)
+                    var pBytes = (byte*)buffer.ToPointer();
+                    for (var y = 0; y < sourceRect.Height; y++)
                     {
-	                    Rgba32* pPixel = (Rgba32*)pBytes;
+	                    var pPixel = (Rgba32*)pBytes;
 
-                        for (int x = 0; x < sourceRect.Width; x++)
+                        for (var x = 0; x < sourceRect.Width; x++)
                         {
-	                        Rgba32 dest = default(Rgba32);
+	                        var dest = default(Rgba32);
                             this.source[x, y].ToRgba32(ref dest);
 
                             // Write sRGB (non-linear) since it is implied by
@@ -239,7 +239,7 @@ namespace Sistem2.Tools
                 {
                     checked
                     {
-                        object exemplar = pixels.GetValue(0);
+                        var exemplar = pixels.GetValue(0);
                         elementSize = Marshal.SizeOf(exemplar);
                         sourceBufferSize = pixels.GetLength(0) * elementSize;
                         elementType = exemplar.GetType();
@@ -256,7 +256,7 @@ namespace Sistem2.Tools
                 {
                     checked
                     {
-                        object exemplar = pixels.GetValue(0, 0);
+                        var exemplar = pixels.GetValue(0, 0);
                         elementSize = Marshal.SizeOf(exemplar);
                         sourceBufferSize = pixels.GetLength(0) * pixels.GetLength(1) * elementSize;
                         elementType = exemplar.GetType();

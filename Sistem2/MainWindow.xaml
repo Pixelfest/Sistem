@@ -11,11 +11,6 @@
 	<DockPanel LastChildFill="True">
 		<Menu DockPanel.Dock="Top">
 			<MenuItem Header="_File" />
-			<MenuItem Header="_Layers">
-				<MenuItem Header="Add _Image layer" Click="AddImageLayerMenuClick"/>
-				<MenuItem Header="Add _Random Dot Stereogram layer" Click="AddRandomDotStereogramLayerMenuClick"/>
-				<MenuItem Header="Add _Pattern Stereogram layer" Click="AddPatternStereogramLayerMenuClick"/>
-			</MenuItem>
 			<MenuItem Header="_Draw" Click="DrawClick" />
 		</Menu>
 		<StackPanel DockPanel.Dock="Right">
@@ -31,6 +26,7 @@
 							<MenuItem Foreground="Black" Header="Add _Image layer" Click="AddImageLayerMenuClick"/>
 							<MenuItem Foreground="Black" Header="Add _Random Dot Stereogram layer" Click="AddRandomDotStereogramLayerMenuClick"/>
 							<MenuItem Foreground="Black" Header="Add _Pattern Stereogram layer" Click="AddPatternStereogramLayerMenuClick"/>
+							<MenuItem Foreground="Black" Header="Add _Full Image Stereogram layer" Click="AddFullImageStereogramLayerMenuClick"/>
 						</MenuItem>
 					</Menu>
 					<!--
@@ -87,6 +83,7 @@
 					<sistem2:ImageLayerProperties x:Name="ImageLayerProperties" Visibility="Collapsed" />
 					<sistem2:RandomDotStereogramLayerProperties x:Name="RandomDotStereogramLayerProperties" Visibility="Collapsed" />
 					<sistem2:PatternStereogramLayerProperties x:Name="PatternStereogramLayerProperties" Visibility="Collapsed" />
+					<sistem2:FullImageStereogramLayerProperties x:Name="FullImageStereogramLayerProperties" Visibility="Collapsed" />
 				</StackPanel>
 			</StackPanel>
 		</StackPanel>

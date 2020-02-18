@@ -15,7 +15,7 @@ namespace Sistem2.ViewModels
 
 		public void OnAutoSize()
 		{
-			EventHandler handler = AutoSize;
+			var handler = AutoSize;
 			if (null != handler)
 				handler(this, EventArgs.Empty);
 		}
