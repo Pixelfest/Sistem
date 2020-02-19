@@ -8,14 +8,15 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance local:StereogramLayerProperties}">
 	<StackPanel>
-		<GroupBox Header="Depth image" Margin="{StaticResource ControlMargin}" >
+
+		<!--<GroupBox Header="Depth image" Margin="{StaticResource ControlMargin}" >
 			<StackPanel>
 				<Button Click="LoadDepthImageButtonClick">
 					<Image Source="{Binding Path=DepthImageSource}" Width="auto" Height="100"/>
 				</Button>
 				<TextBlock Text="{Binding Path=DepthImageFileName}"></TextBlock>
 			</StackPanel>
-		</GroupBox>
+		</GroupBox>-->
 		<!--
 		<TabControl Name="MeasurementsTab" Margin="{StaticResource ControlMargin}">
 			<TabItem Header="Pixels" Name="Pixels">

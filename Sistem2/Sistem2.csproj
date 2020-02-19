@@ -27,7 +27,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="UserControls\PatternProperties.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\DocumentLayerProperties.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\BaseLayerProperties.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControls\FullImageStereogramLayerProperties.xaml.cs">
@@ -42,10 +48,19 @@
     <Compile Update="UserControls\StereogramLayerProperties.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\DepthMapProperties.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="UserControls\PatternProperties.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="UserControls\DocumentLayerProperties.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\BaseLayerProperties.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\FullImageStereogramLayerProperties.xaml">
@@ -58,6 +73,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\StereogramLayerProperties.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\DepthMapProperties.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

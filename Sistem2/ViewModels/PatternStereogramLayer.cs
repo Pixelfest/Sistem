@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using Sistem2.Tools;
+﻿using Sistem2.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -11,7 +10,7 @@ namespace Sistem2.ViewModels
 	/// <summary>
 	/// Pattern stereogram
 	/// </summary>
-	public class PatternStereogramLayer : StereogramLayer
+	public class PatternStereogramLayer : StereogramLayer, IHaveAPattern
 	{
 		private Image<Rgba32> _patternImage;
 		private string _patternImageFileName;
@@ -101,12 +100,12 @@ namespace Sistem2.ViewModels
 		/// <summary>
 		/// The Pattern Image source
 		/// </summary>
-		public ImageSharpImageSource<Rgb24> PatternImageSource
+		public ImageSharpImageSource<Rgba32> PatternImageSource
 		{
 			get
 			{
 				if (PatternImage != null)
-					return new ImageSharpImageSource<Rgb24>(PatternImage.CloneAs<Rgb24>());
+					return new ImageSharpImageSource<Rgba32>(PatternImage.CloneAs<Rgba32>());
 
 				return null;
 			}

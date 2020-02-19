@@ -8,6 +8,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="200"
              d:DataContext="{d:DesignInstance viewModels:ImageLayer}">
+	<StackPanel Margin="0">
+		<local:BaseLayerProperties x:Name="BaseLayerProperties" />
+		
 	    <GroupBox Header="Image layer" Margin="{StaticResource ControlMargin}">
 		    <StackPanel>
 			    <Image Source="{Binding Path=ImageSource}" Width="auto" Height="100" />
@@ -23,4 +26,6 @@
 			    </StackPanel>
 		    </StackPanel>
 	    </GroupBox>
+
+	</StackPanel>
 </UserControl>

@@ -9,7 +9,12 @@
              d:DesignHeight="450" d:DesignWidth="200"
              d:DataContext="{d:DesignInstance local:RandomDotStereogramLayerProperties}">
 		<StackPanel>
+		    <local:BaseLayerProperties x:Name="BaseLayerProperties" />
+			
+		    <local:DepthMapProperties x:Name="DepthMapProperties" />
+			
 			<local:StereogramLayerProperties x:Name="StereogramLayerProperties" />
+			
 			<GroupBox Header="Random Dot Properties" Margin="{StaticResource ControlMargin}" >
 				<CheckBox IsChecked="{Binding Path=ColoredNoise}">Use colors</CheckBox>
 			</GroupBox>

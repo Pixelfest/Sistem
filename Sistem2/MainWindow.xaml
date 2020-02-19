@@ -71,7 +71,6 @@
 									<TextBlock Margin="0" Padding="3">&#xf150;</TextBlock>
 								</Button>
 							</StackPanel>
-								<Slider x:Name="OversamplingSlider" IsSnapToTickEnabled="False" Value="{Binding Path=Opacity}" Width="75" Maximum="1" Minimum="0" SmallChange="0.01" TickPlacement="Both"/>
 							</StackPanel>
 						</DataTemplate>
 					</ListBox.ItemTemplate>

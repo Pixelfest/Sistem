@@ -8,15 +8,13 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance layerTypes:FullImageStereogramLayer}">
 	<StackPanel Margin="0">
-		<GroupBox Header="Pattern layer" Margin="{StaticResource ControlMargin}" >
-			<StackPanel>
-				<Button Click="LoadPatternImageButtonClick">
-					<Image Source="{Binding Path=PatternImageSource}" Width="auto" Height="100"/>
-				</Button>
-				<TextBlock Text="{Binding Path=PatternImageFileName}"></TextBlock>
-			</StackPanel>
-		</GroupBox>
+		<local:BaseLayerProperties x:Name="BaseLayerProperties" />
+		
+		<local:DepthMapProperties x:Name="DepthMapProperties" />
+		<local:PatternProperties x:Name="PatternProperties" />
+		
 		<local:StereogramLayerProperties x:Name="StereogramLayerProperties" />
+	
 		<DockPanel>
 			<Label>Shift origin</Label>
 			<TextBox Text="{Binding Path=Shift, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="ShiftMouseWheel"></TextBox>

@@ -9,7 +9,7 @@ namespace Sistem2.ViewModels
 	/// <summary>
 	/// Single Image Random Dot Stereogram Layer
 	/// </summary>
-	public abstract class StereogramLayer : LayerBase
+	public abstract class StereogramLayer : LayerBase, IHaveADepthImage
 	{
 		private Image<Rgb48> _depthImage;
 		private string _depthImageFileName;

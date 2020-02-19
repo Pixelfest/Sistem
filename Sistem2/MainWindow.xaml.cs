@@ -4,7 +4,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using Sistem2.Tools;
 using Sistem2.ViewModels;
 using SixLabors.ImageSharp;
@@ -292,13 +291,13 @@ namespace Sistem2
 					RandomDotStereogramLayerProperties.Visibility = Visibility.Visible;
 					RandomDotStereogramLayerProperties.DataContext = randomDotStereogramLayer;
 					break;
-				case PatternStereogramLayer patternStereogramLayer:
-					PatternStereogramLayerProperties.Visibility = Visibility.Visible;
-					PatternStereogramLayerProperties.DataContext = patternStereogramLayer;
-					break;
 				case FullImageStereogramLayer fullImageStereogramLayer:
 					FullImageStereogramLayerProperties.Visibility = Visibility.Visible;
 					FullImageStereogramLayerProperties.DataContext = fullImageStereogramLayer;
+					break;
+				case PatternStereogramLayer patternStereogramLayer:
+					PatternStereogramLayerProperties.Visibility = Visibility.Visible;
+					PatternStereogramLayerProperties.DataContext = patternStereogramLayer;
 					break;
 			}
 		}

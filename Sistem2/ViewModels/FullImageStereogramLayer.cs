@@ -1,9 +1,6 @@
-﻿using System.Numerics;
-using Sistem2.Tools;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Processing.Processors.Transforms;
 using SixLabors.Primitives;
 
 namespace Sistem2.ViewModels
@@ -11,11 +8,9 @@ namespace Sistem2.ViewModels
 	/// <summary>
 	/// Pattern stereogram
 	/// </summary>
-	public class FullImageStereogramLayer : StereogramLayer
+	public class FullImageStereogramLayer : PatternStereogramLayer
 	{
-		private Image<Rgba32> _patternImage;
 		private int _shift;
-		private string _patternImageFileName;
 
 		public int Shift
 		{
@@ -27,50 +22,6 @@ namespace Sistem2.ViewModels
 				DrawPreview();
 
 				OnPropertyChanged(nameof(Shift));
-			}
-		}
-
-		/// <summary>
-		/// The Pattern image
-		/// </summary>
-		public Image<Rgba32> PatternImage
-		{
-			get => _patternImage;
-			set
-			{
-				_patternImage = value;
-
-				DrawPreview();
-
-				OnPropertyChanged(nameof(PatternImage));
-				OnPropertyChanged(nameof(PatternImageSource));
-			}
-		}
-
-		/// <summary>
-		/// The Filename for the Pattern image
-		/// </summary>
-		public string PatternImageFileName
-		{
-			get => _patternImageFileName;
-			set
-			{
-				_patternImageFileName = value;
-				OnPropertyChanged(nameof(PatternImageFileName));
-			}
-		}
-
-		/// <summary>
-		/// The Pattern Image source
-		/// </summary>
-		public ImageSharpImageSource<Rgb24> PatternImageSource
-		{
-			get
-			{
-				if (PatternImage != null)
-					return new ImageSharpImageSource<Rgb24>(PatternImage.CloneAs<Rgb24>());
-
-				return null;
 			}
 		}
 
