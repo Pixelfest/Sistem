@@ -14,9 +14,6 @@ using Image = System.Windows.Controls.Image;
 
 namespace Sistem2
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow
 	{
 		private bool _drawing = false;
@@ -25,21 +22,8 @@ namespace Sistem2
 
 		public delegate void UpdateImageCallback(Image<Rgba32> image);
 
-		/// <summary>
-		/// The Layers ViewModel
-		/// </summary>
 		public LayersViewModel Layers  { get; set; }
-
-		/// <summary>
-		/// The Document
-		/// </summary>
 		public DocumentLayer DocumentLayer { get; set; }
-
-
-
-		/// <summary>
-		/// The main image
-		/// </summary>
 		public Image<Rgba32> Image { 
 			get => _image;
 			set
@@ -49,11 +33,6 @@ namespace Sistem2
 			}
 		}
 
-		//public ImageSharpImageSource<Rgba32> ImageSource { get; set; }
-
-		/// <summary>
-		/// Constructor
-		/// </summary>
 		public MainWindow()
 		{
 			Layers = new LayersViewModel();
@@ -80,11 +59,6 @@ namespace Sistem2
 			BackgroundLayerProperties.DataContext = DocumentLayer;
 		}
 
-		/// <summary>
-		/// Event handler for then the AutoSize button is clicked on Document
-		/// </summary>
-		/// <param name="sender">Event sender</param>
-		/// <param name="e">Event arguments</param>
 		private void DocumentLayerAutoSize(object sender, System.EventArgs e)
 		{
 			if (!Layers.Any())
@@ -97,11 +71,6 @@ namespace Sistem2
 			DocumentLayer.Height = height;
 		}
 
-		/// <summary>
-		/// Event handler for changes on the document
-		/// </summary>
-		/// <param name="sender">Event sender</param>
-		/// <param name="e">Event arguments</param>
 		private void DocumentPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			switch (e.PropertyName)
@@ -117,10 +86,10 @@ namespace Sistem2
 
 					break;
 				}
-				case nameof(DocumentLayer.Measurements):
+				case nameof(DocumentLayer.MeasurementsTabIndex):
 				{
 					foreach (var layer in Layers)
-						layer.Measurements = DocumentLayer.Measurements;
+						layer.MeasurementsTabIndex = DocumentLayer.MeasurementsTabIndex;
 
 					break;
 				}
@@ -134,11 +103,6 @@ namespace Sistem2
 			}
 		}
 
-		/// <summary>
-		/// Add image layer event handler
-		/// </summary>
-		/// <param name="sender">Event sender</param>
-		/// <param name="e">Event arguments</param>
 		private void AddImageLayerMenuClick(object sender, RoutedEventArgs e)
 		{
 			var layer = new ImageLayer(Image)
@@ -153,11 +117,6 @@ namespace Sistem2
 			Layers.Draw();
 		}
 
-		/// <summary>
-		/// Add random dot layer event handler
-		/// </summary>
-		/// <param name="sender">Event sender</param>
-		/// <param name="e">Event arguments</param>
 		private void AddRandomDotStereogramLayerMenuClick(object sender, RoutedEventArgs e)
 		{
 			var layer = new RandomDotStereogramLayer(Image)
@@ -172,11 +131,6 @@ namespace Sistem2
 			Layers.Draw();
 		}
 
-		/// <summary>
-		/// Add pattern stereogram layer event handler
-		/// </summary>
-		/// <param name="sender">Event sender</param>
-		/// <param name="e">Event arguments</param>
 		private void AddPatternStereogramLayerMenuClick(object sender, RoutedEventArgs e)
 		{
 			var layer = new PatternStereogramLayer(Image)
@@ -192,11 +146,6 @@ namespace Sistem2
 			Layers.Draw();
 		}
 
-		/// <summary>
-		/// Add full image stereogram layer event handler
-		/// </summary>
-		/// <param name="sender">Event sender</param>
-		/// <param name="e">Event arguments</param>
 		private void AddFullImageStereogramLayerMenuClick(object sender, RoutedEventArgs e)
 		{
 			var layer = new FullImageStereogramLayer(Image)
@@ -213,65 +162,45 @@ namespace Sistem2
 			Layers.Draw();
 		}
 
-		/// <summary>
-		/// Delete a layer
-		/// </summary>
-		/// <param name="sender">Event sender</param>
-		/// <param name="e">Event arguments</param>
+		// Layer events
+
 		private void DeleteLayerClick(object sender, RoutedEventArgs e)
 		{
-			var element = e.OriginalSource as FrameworkElement;
+			var layer = LayersListBox.SelectedItem as LayerBase;
 
-			if (element == null)
+			if(layer == null)
 				return;
 
-			Layers.Remove(element.DataContext as LayerBase);
-			Layers.Draw();
+			Layers.Remove(layer);
+			Draw();
 		}
 
-		/// <summary>
-		/// Move a layer up
-		/// </summary>
-		/// <param name="sender">Event sender</param>
-		/// <param name="e">Event arguments</param>
 		private void LayerUpClick(object sender, RoutedEventArgs e)
 		{
-			var element = e.OriginalSource as FrameworkElement;
+			var layer = LayersListBox.SelectedItem as LayerBase;
 
-			if (element == null)
+			if (layer == null)
 				return;
 
-			var layer = element.DataContext as LayerBase;
 			var layerIndex = Layers.IndexOf(layer);
 
 			if(layerIndex > 0)
 				Layers.Swap(layerIndex, layerIndex - 1);
 		}
 
-		/// <summary>
-		/// Move a layer down
-		/// </summary>
-		/// <param name="sender">Event sender</param>
-		/// <param name="e">Event arguments</param>
 		private void LayerDownClick(object sender, RoutedEventArgs e)
 		{
-			var element = e.OriginalSource as FrameworkElement;
-			
-			if (element == null)
+			var layer = LayersListBox.SelectedItem as LayerBase;
+
+			if (layer == null)
 				return;
-			
-			var layer = element.DataContext as LayerBase;
+
 			var layerIndex = Layers.IndexOf(layer);
 
 			if (layerIndex < Layers.Count - 1)
 				Layers.Swap(layerIndex, layerIndex + 1);
 		}
 
-		/// <summary>
-		/// Select a layer
-		/// </summary>
-		/// <param name="sender">Event sender</param>
-		/// <param name="e">Event arguments</param>
 		private void LayersListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			var selectedItem = LayersListBox.SelectedItem;
@@ -302,19 +231,13 @@ namespace Sistem2
 			}
 		}
 
-		/// <summary>
-		/// Draw the image event handler
-		/// </summary>
-		/// <param name="sender">Event sender</param>
-		/// <param name="e">Event arguments</param>
+		// Drawing
+
 		private void DrawClick(object sender, RoutedEventArgs e)
 		{
 			Draw();
 		}
 
-		/// <summary>
-		/// Draw the image
-		/// </summary>
 		private void Draw()
 		{
 			if (_drawing)
@@ -347,44 +270,29 @@ namespace Sistem2
 			thread.Start();
 		}
 
-		/// <summary>
-		/// Method for updating the image in the UI
-		/// </summary>
-		/// <param name="image">The image to set</param>
 		private void UpdateImage(Image<Rgba32> image)
 		{
 			PreviewImage.Source = new ImageSharpImageSource<Rgba32>(image);
 		}
 
-		/// <summary>
-		/// Reset zoom on zoomborder
-		/// </summary>
-		/// <param name="sender">Event sender</param>
-		/// <param name="e">Event arguments</param>
+		// Zoom buttons
+
 		private void ResetZoom(object sender, RoutedEventArgs e)
 		{
 			ZoomBorder.Reset();
 		}
 
-		/// <summary>
-		/// Set zoomborder 1:1 on screen pixels
-		/// </summary>
-		/// <param name="sender">Event sender</param>
-		/// <param name="e">Event arguments</param>
 		private void SetPixelPerfect(object sender, RoutedEventArgs e)
 		{
 			ZoomBorder.Reset100();
 		}
 
-		/// <summary>
-		/// Set zoomborder 1:1 on actual size, as far as we know because the actual monitor DPI is unknown
-		/// </summary>
-		/// <param name="sender">Event sender</param>
-		/// <param name="e">Event arguments</param>
 		private void ResetActualSize(object sender, RoutedEventArgs e)
 		{
 			ZoomBorder.SetActualSize((int)DocumentLayer.Dpi, (int)DocumentLayer.WidthInch);
 		}
+
+		// Fumbling
 
 		private new void KeyDownEvent(object sender, KeyEventArgs e)
 		{

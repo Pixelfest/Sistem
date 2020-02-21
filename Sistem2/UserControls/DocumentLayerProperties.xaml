@@ -8,10 +8,10 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance layerTypes:DocumentLayer}">
 	<StackPanel>
-		<!--
+		
 		<TabControl SelectionChanged="SelectorSelectionChanged" Name="MeasurementsTab" Margin="{StaticResource ControlMargin}">
 			<TabItem Header="Pixels" Name="Pixels">
-				-->
+				
 				<StackPanel>
 					<DockPanel>
 						<Label>Width</Label>
@@ -23,7 +23,7 @@
 					</DockPanel>
 					<Button Click="AutoSizeClick">Auto size</Button>
 				</StackPanel>
-			<!--
+			
 			</TabItem>
 			<TabItem Header="Metric" Name="Centimeters">
 				<StackPanel>
@@ -58,7 +58,7 @@
 				</StackPanel>
 			</TabItem>
 		</TabControl>
-		-->
+		
 		<DockPanel>
 			<Label>Background color</Label>
 			<TextBox Text="{Binding Path=BackgroundColorText}" Style="{StaticResource TextBoxRight}"></TextBox>

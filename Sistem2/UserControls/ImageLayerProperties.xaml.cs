@@ -6,25 +6,13 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Sistem2
 {
-	/// <summary>
-	/// Interaction logic for ImageLayerProperties.xaml
-	/// </summary>
 	public partial class ImageLayerProperties : UserControl
 	{
-		/// <summary>
-		/// Constructor
-		/// </summary>
 		public ImageLayerProperties()
 		{
 			InitializeComponent();
 		}
 
-
-		/// <summary>
-		/// Handle the event to load an image
-		/// </summary>
-		/// <param name="sender">The event sender</param>
-		/// <param name="e">The event arguments</param>
 		private void LoadImageButtonClick(object sender, RoutedEventArgs e)
 		{
 			if (!(DataContext is ImageLayer imageLayer))

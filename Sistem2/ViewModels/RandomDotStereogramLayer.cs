@@ -5,16 +5,10 @@ using SixLabors.Primitives;
 
 namespace Sistem2.ViewModels
 {
-	/// <summary>
-	/// Random dot stereogram
-	/// </summary>
 	public class RandomDotStereogramLayer : StereogramLayer
 	{
 		private bool _coloredNoise;
 
-		/// <summary>
-		/// The MinimumSeparation for the pattern
-		/// </summary>
 		public bool ColoredNoise
 		{
 			get => _coloredNoise;
@@ -25,17 +19,10 @@ namespace Sistem2.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="target"></param>
 		public RandomDotStereogramLayer(Image<Rgba32> target) : base(target)
 		{
 		}
 
-		/// <summary>
-		/// Draw the stereogram
-		/// </summary>
 		public override void Draw()
 		{
 			if (DepthImage == null)

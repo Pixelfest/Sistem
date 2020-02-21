@@ -5,9 +5,6 @@ using SixLabors.Primitives;
 
 namespace Sistem2.ViewModels
 {
-	/// <summary>
-	/// Pattern stereogram
-	/// </summary>
 	public class FullImageStereogramLayer : PatternStereogramLayer
 	{
 		private int _shift;
@@ -25,18 +22,10 @@ namespace Sistem2.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="target"></param>
 		public FullImageStereogramLayer(Image<Rgba32> target) : base(target)
 		{
 
 		}
-
-		/// <summary>
-		/// Draw the stereogram
-		/// </summary>
 		public override void Draw()
 		{
 			if (DepthImage == null || PatternImage == null || DepthImage.Width > PatternImage.Width)
@@ -81,10 +70,6 @@ namespace Sistem2.ViewModels
 			Target.Mutate(context => context.DrawImage(CachedImage, location, opacity: Opacity));
 		}
 
-		/// <summary>
-		/// Render the PatternImage to the desired crop and size
-		/// </summary>
-		/// <returns>The rendered pattern image</returns>
 		private Image<Rgba32> RenderPatternImage(int start)
 		{
 			// Take only part of the pattern

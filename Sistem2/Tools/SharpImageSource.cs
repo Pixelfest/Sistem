@@ -8,7 +8,6 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Sistem2.Tools
 {
-	/// <summary>
     /// reference article: http://www.i-programmer.info/programming/wpf-workings/822
     /// reference to what needs to be implemented: https://blogs.msdn.microsoft.com/dwayneneed/2008/06/20/implementing-a-custom-bitmapsource/
     ///https://github.com/jongleur1983/SharpImageSource/blob/master/ImageSharp.WpfImageSource/ImageSharpImageSource.cs

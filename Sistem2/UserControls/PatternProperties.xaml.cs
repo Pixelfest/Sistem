@@ -6,26 +6,15 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Sistem2
 {
-	/// <summary>
-	/// Interaction logic for SirdsLayerProperties.xaml
-	/// </summary>
 	public partial class PatternProperties : UserControl
 	{
 		private IHaveAPattern _dataContext => DataContext as IHaveAPattern;
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
 		public PatternProperties()
 		{
 			InitializeComponent();
 		}
 
-		/// <summary>
-		/// Handle the event to load a pattern image
-		/// </summary>
-		/// <param name="sender">The event sender</param>
-		/// <param name="e">The event arguments</param>
 		private void LoadPatternImageButtonClick(object sender, RoutedEventArgs e)
 		{
 			var openFileDialog = new OpenFileDialog

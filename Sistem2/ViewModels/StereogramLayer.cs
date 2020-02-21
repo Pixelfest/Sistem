@@ -6,9 +6,6 @@ using SixLabors.ImageSharp.Processing;
 
 namespace Sistem2.ViewModels
 {
-	/// <summary>
-	/// Single Image Random Dot Stereogram Layer
-	/// </summary>
 	public abstract class StereogramLayer : LayerBase, IHaveADepthImage
 	{
 		private Image<Rgb48> _depthImage;
@@ -21,11 +18,6 @@ namespace Sistem2.ViewModels
 
 		private float _eyeDistanceCentimeter;
 
-		/// <summary>
-		/// Gets ot sets the middle of the stereogram, where the pattern starts
-		///
-		/// Usually this is the middle of the stereogram
-		/// </summary>
 		public float Origin
 		{
 			get => _origin;
@@ -36,9 +28,6 @@ namespace Sistem2.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// The Depth image
-		/// </summary>
 		public Image<Rgb48> DepthImage
 		{
 			get => _depthImage;
@@ -62,9 +51,6 @@ namespace Sistem2.ViewModels
 			}
 		}
 		
-		/// <summary>
-		/// The Filename for the depth image
-		/// </summary>
 		public string DepthImageFileName
 		{
 			get => _depthImageFileName;
@@ -75,9 +61,6 @@ namespace Sistem2.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// The Depth Image source
-		/// </summary>
 		public ImageSharpImageSource<Rgb48> DepthImageSource
 		{
 			get
@@ -89,9 +72,6 @@ namespace Sistem2.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the MinimumSeparation for the pattern
-		/// </summary>
 		public float MinimumSeparation
 		{
 			get => _minimumSeparation;
@@ -104,9 +84,6 @@ namespace Sistem2.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the MaximumSeparation for the pattern
-		/// </summary>
 		public float MaximumSeparation
 		{
 			get => _maximumSeparation;
@@ -119,9 +96,6 @@ namespace Sistem2.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the Distance from the eye to the screen/print in centimeters
-		/// </summary>
 		public float EyeDistanceCentimeter
 		{
 			get => _eyeDistanceCentimeter;
@@ -137,46 +111,30 @@ namespace Sistem2.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the minimum depth in centimeters
-		/// </summary>
 		public float MinimumDepthCentimeter
 		{
 			get => Utilities.EyeDistance * Dpc * EyeDistanceCentimeter / (Utilities.EyeDistance * Dpc - MinimumSeparation);
 			set => MinimumSeparation = Utilities.EyeDistance * Dpc * ((value - EyeDistanceCentimeter) / value);
 		}
 
-		/// <summary>
-		/// Gets or sets the maximum depth in centimeters
-		/// </summary>
 		public float MaximumDepthCentimeter
 		{
 			get => Utilities.EyeDistance * Dpc * EyeDistanceCentimeter / (Utilities.EyeDistance * Dpc - MaximumSeparation);
 			set => MaximumSeparation = Utilities.EyeDistance * Dpc * ((value - EyeDistanceCentimeter) / value);
 		}
 
-		/// <summary>
-		/// Gets or sets the Distance from the eye to the screen/print in inches
-		/// </summary>
 		public float EyeDistanceInch
 		{
 			get => Utilities.CMToInch(EyeDistanceCentimeter);
 			set => EyeDistanceCentimeter = Utilities.InchToCM(value);
 		}
-
-
-		/// <summary>
-		/// Gets or sets the minimum depth in inches
-		/// </summary>
+		
 		public float MinimumDepthInch
 		{
 			get => Utilities.CMToInch(MinimumDepthCentimeter);
 			set => MinimumDepthCentimeter = Utilities.InchToCM(value);
 		}
 
-		/// <summary>
-		/// Gets or sets the maximum depth in inches
-		/// </summary>
 		public float MaximumDepthInch
 		{
 			get => Utilities.CMToInch(MaximumDepthCentimeter);
@@ -193,18 +151,11 @@ namespace Sistem2.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="target"></param>
 		protected StereogramLayer(Image<Rgba32> target) : base(target)
 		{
 			EyeDistanceCentimeter = 50f;
 		}
 
-		/// <summary>
-		/// Draw the depth image for the preview
-		/// </summary>
 		public override void DrawPreview()
 		{
 			if (DepthImage == null)
@@ -216,10 +167,6 @@ namespace Sistem2.ViewModels
 			OnPropertyChanged(nameof(Preview));  
 		}
 
-		/// <summary>
-		/// Create a Stereogram object with the base properties
-		/// </summary>
-		/// <returns>A Stereogram</returns>
 		public Stereogram CreateStereogram()
 		{
 			var stereogram = new Stereogram

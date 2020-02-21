@@ -7,26 +7,15 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Sistem2
 {
-	/// <summary>
-	/// Interaction logic for SirdsLayerProperties.xaml
-	/// </summary>
 	public partial class StereogramLayerProperties : UserControl
 	{
 		private StereogramLayer _stereogramLayer => DataContext as StereogramLayer;
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
 		public StereogramLayerProperties()
 		{
 			InitializeComponent();
 		}
 
-		/// <summary>
-		/// Handle the event to load a pattern image
-		/// </summary>
-		/// <param name="sender">The event sender</param>
-		/// <param name="e">The event arguments</param>
 		private void LoadDepthImageButtonClick(object sender, RoutedEventArgs e)
 		{
 			var openFileDialog = new OpenFileDialog
@@ -50,11 +39,6 @@ namespace Sistem2
 			}
 		}
 
-		/// <summary>
-		/// Handle the event when the mousewheel is used
-		/// </summary>
-		/// <param name="sender">The event sender</param>
-		/// <param name="e">The event arguments</param>
 		private void MinimumSeparationMouseWheel(object sender, MouseWheelEventArgs e)
 		{
 			var multiplier = 1;
@@ -65,11 +49,6 @@ namespace Sistem2
 			_stereogramLayer.MinimumSeparation += e.Delta < 0 ? -1 * multiplier : 1 * multiplier;
 		}
 
-		/// <summary>
-		/// Handle the event when the mousewheel is used
-		/// </summary>
-		/// <param name="sender">The event sender</param>
-		/// <param name="e">The event arguments</param>
 		private void MaximumSeparationMouseWheel(object sender, MouseWheelEventArgs e)
 		{
 			var multiplier = 1;

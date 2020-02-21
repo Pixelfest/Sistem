@@ -7,9 +7,6 @@ using SixLabors.Primitives;
 
 namespace Sistem2.ViewModels
 {
-	/// <summary>
-	/// Pattern stereogram
-	/// </summary>
 	public class PatternStereogramLayer : StereogramLayer, IHaveAPattern
 	{
 		private Image<Rgba32> _patternImage;
@@ -17,11 +14,6 @@ namespace Sistem2.ViewModels
 		private int _patternStart;
 		private int _patternEnd;
 
-		/// <summary>
-		/// Gets ot sets the start location for taking the pattern from the pattern image
-		///
-		/// Usually this is 0, unless you only want to use part of the pattern
-		/// </summary>
 		public int PatternStart
 		{
 			get => _patternStart;
@@ -40,11 +32,6 @@ namespace Sistem2.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// Gets ot sets the end location for taking the pattern from the pattern image
-		///
-		/// Usually this is PatternImage.Width, unless you only want to use part of the pattern
-		/// </summary>
 		public int PatternEnd
 		{
 			get => _patternEnd;
@@ -63,9 +50,6 @@ namespace Sistem2.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// The Pattern image
-		/// </summary>
 		public Image<Rgba32> PatternImage
 		{
 			get => _patternImage;
@@ -84,9 +68,6 @@ namespace Sistem2.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// The Filename for the Pattern image
-		/// </summary>
 		public string PatternImageFileName
 		{
 			get => _patternImageFileName;
@@ -97,9 +78,6 @@ namespace Sistem2.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// The Pattern Image source
-		/// </summary>
 		public ImageSharpImageSource<Rgba32> PatternImageSource
 		{
 			get
@@ -115,18 +93,11 @@ namespace Sistem2.ViewModels
 
 		public int PatternYShift { get; set; } = 1;
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="target"></param>
 		public PatternStereogramLayer(Image<Rgba32> target) : base(target)
 		{
 
 		}
 
-		/// <summary>
-		/// Draw the stereogram
-		/// </summary>
 		public override void Draw()
 		{
 			if (DepthImage == null || PatternImage == null)
@@ -158,10 +129,6 @@ namespace Sistem2.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// Render the PatternImage to the desired crop and size
-		/// </summary>
-		/// <returns>The rendered pattern image</returns>
 		private Image<Rgba32> RenderPatternImage()
 		{
 			Image<Rgba32> patternImage;

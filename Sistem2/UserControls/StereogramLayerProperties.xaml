@@ -17,10 +17,10 @@
 				<TextBlock Text="{Binding Path=DepthImageFileName}"></TextBlock>
 			</StackPanel>
 		</GroupBox>-->
-		<!--
-		<TabControl Name="MeasurementsTab" Margin="{StaticResource ControlMargin}">
+		
+		<TabControl Name="MeasurementsTab" Margin="{StaticResource ControlMargin}" SelectedIndex="{Binding Path=MeasurementsTabIndex}">
 			<TabItem Header="Pixels" Name="Pixels">
-				-->
+				
 				<StackPanel>
 					<CheckBox IsChecked="{Binding Path=DrawDepthImage}">Show depth image</CheckBox>
 					<DockPanel>
@@ -32,7 +32,7 @@
 						<TextBox Text="{Binding Path=MaximumSeparation, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="MaximumSeparationMouseWheel"></TextBox>
 					</DockPanel>
 				</StackPanel>
-			<!--
+			
 			</TabItem>
 			<TabItem Header="Metric" Name="Centimeters">
 				<StackPanel>
@@ -67,6 +67,6 @@
 				</StackPanel>
 			</TabItem>
 		</TabControl>
-	-->
+	
 	</StackPanel>
 </UserControl>

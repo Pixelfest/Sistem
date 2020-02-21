@@ -6,26 +6,15 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Sistem2
 {
-	/// <summary>
-	/// Interaction logic for SirdsLayerProperties.xaml
-	/// </summary>
 	public partial class DepthMapProperties : UserControl
 	{
 		private IHaveADepthImage _dataContext => DataContext as IHaveADepthImage;
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
 		public DepthMapProperties()
 		{
 			InitializeComponent();
 		}
 
-		/// <summary>
-		/// Handle the event to load a pattern image
-		/// </summary>
-		/// <param name="sender">The event sender</param>
-		/// <param name="e">The event arguments</param>
 		private void LoadDepthImageButtonClick(object sender, RoutedEventArgs e)
 		{
 			var openFileDialog = new OpenFileDialog

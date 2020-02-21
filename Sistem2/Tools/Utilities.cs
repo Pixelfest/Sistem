@@ -7,14 +7,14 @@
 		public const float Factor = 2.54f;
 		public const float EyeDistance = 6.5f;
 
-		public static float InchToCM(float value)
+		public static float InchToCM(float inches)
 		{
-			return value / Factor;
+			return inches * Factor;
 		}
 
-		public static float CMToInch(float value)
+		public static float CMToInch(float centimeters)
 		{
-			return value * Factor;
+			return centimeters / Factor;
 		}
 
 		public static void Swap<T>(this IList<T> list, int indexA, int indexB)
