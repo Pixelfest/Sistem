@@ -9,8 +9,16 @@
              d:DataContext="{d:DesignInstance layerTypes:BaseLayer}">
 	<StackPanel Margin="0">
 		<DockPanel>
-			<Label>Opacity</Label>
-			<Slider x:Name="OversamplingSlider" IsSnapToTickEnabled="False" Value="{Binding Path=Opacity}" Maximum="1" Minimum="0" SmallChange="0.01" TickPlacement="Both"/>
+			<Label Width="75">Visible</Label>
+			<CheckBox IsChecked="{Binding Path=Visible}" VerticalAlignment="Center"></CheckBox>
+		</DockPanel>
+		<DockPanel>
+			<Label Width="75">Name</Label>
+			<TextBox Text="{Binding Path=Name}" Height="24" Width="200"></TextBox>
+		</DockPanel>
+		<DockPanel>
+			<Label Width="75">Opacity</Label>
+			<Slider x:Name="OversamplingSlider" IsSnapToTickEnabled="False" Value="{Binding Path=Opacity}" Maximum="1" Minimum="0" SmallChange="0.01" TickPlacement="Both" Width="200"/>
 		</DockPanel>
 	</StackPanel>
 </UserControl>
