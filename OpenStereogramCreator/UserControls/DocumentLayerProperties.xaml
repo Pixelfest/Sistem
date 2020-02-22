@@ -8,10 +8,10 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance layerTypes:DocumentLayer}">
 	<StackPanel>
-		
+
 		<TabControl SelectionChanged="SelectorSelectionChanged" Name="MeasurementsTab" Margin="{StaticResource ControlMargin}">
 			<TabItem Header="Pixels" Name="Pixels">
-				
+
 				<StackPanel>
 					<DockPanel>
 						<Label>Width</Label>
@@ -23,7 +23,7 @@
 					</DockPanel>
 					<Button Click="AutoSizeClick">Auto size</Button>
 				</StackPanel>
-			
+
 			</TabItem>
 			<TabItem Header="Metric" Name="Centimeters">
 				<StackPanel>
@@ -58,18 +58,21 @@
 				</StackPanel>
 			</TabItem>
 		</TabControl>
-		
+
 		<DockPanel>
 			<Label>Background color</Label>
 			<TextBox Text="{Binding Path=BackgroundColorText}" Style="{StaticResource TextBoxRight}"></TextBox>
 		</DockPanel>
 		<DockPanel>
 			<StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-			<Label>Oversampling - </Label>
-			<Label Content="{Binding Path=Oversampling}"></Label>
-				</StackPanel>
-			<Slider x:Name="OversamplingSlider" DockPanel.Dock="Right" HorizontalAlignment="Right" IsSnapToTickEnabled="True" Value="{Binding Path=Oversampling}" Width="64" Maximum="8" Minimum="1" SmallChange="1" TickPlacement="Both"/>
+				<Label VerticalAlignment="Center">
+					<TextBlock>
+				<Run Text="Oversampling - "></Run>
+				<Run Text="{Binding Path=Oversampling}"></Run>
+					</TextBlock>
+				</Label>
+			</StackPanel>
+			<Slider x:Name="OversamplingSlider" DockPanel.Dock="Right" HorizontalAlignment="Right" IsSnapToTickEnabled="True" Value="{Binding Path=Oversampling}" Width="64" Maximum="8" Minimum="1" SmallChange="1" TickPlacement="Both" Margin="4"/>
 		</DockPanel>
-
 	</StackPanel>
 </UserControl>

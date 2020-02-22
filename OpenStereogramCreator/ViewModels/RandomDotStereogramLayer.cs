@@ -8,6 +8,7 @@ namespace OpenStereogramCreator.ViewModels
 	public class RandomDotStereogramLayer : StereogramLayer
 	{
 		private bool _coloredNoise;
+		private int _density;
 
 		public bool ColoredNoise
 		{
@@ -16,6 +17,16 @@ namespace OpenStereogramCreator.ViewModels
 			{
 				_coloredNoise = value;
 				OnPropertyChanged(nameof(ColoredNoise));
+			}
+		}
+
+		public int Density
+		{
+			get => _density;
+			set
+			{
+				_density = value;
+				OnPropertyChanged(nameof(Density));
 			}
 		}
 
@@ -45,6 +56,7 @@ namespace OpenStereogramCreator.ViewModels
 			var stereogram = CreateStereogram();
 			stereogram.Oversampling = Oversampling;
 			stereogram.ColoredNoise = ColoredNoise;
+			stereogram.NoiseDensity = Density;
 
 			if (stereogram.Generate() && stereogram.Result != null)
 			{

@@ -14,6 +14,17 @@
 		    <local:DepthMapProperties x:Name="DepthMapProperties" />
 			
 			<local:StereogramLayerProperties x:Name="StereogramLayerProperties" />
+		<DockPanel>
+			<StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+				<Label VerticalAlignment="Center">
+					<TextBlock>
+				<Run Text="Density - "></Run>
+				<Run Text="{Binding Path=Density}"></Run>
+					</TextBlock>
+				</Label>
+			</StackPanel>
+			<Slider DockPanel.Dock="Right" HorizontalAlignment="Right" IsSnapToTickEnabled="True" Value="{Binding Path=Density}" Width="64" Maximum="99" Minimum="1" SmallChange="10" TickPlacement="Both" Margin="4"/>
+		</DockPanel>
 			
 			<GroupBox Header="Random Dot Properties" Margin="{StaticResource ControlMargin}" >
 				<CheckBox IsChecked="{Binding Path=ColoredNoise}">Use colors</CheckBox>

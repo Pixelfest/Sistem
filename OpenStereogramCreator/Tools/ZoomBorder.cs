@@ -120,8 +120,6 @@
 			}
 		}
 
-		#region Child Events
-
 		private void ChildMouseWheel(object sender, MouseWheelEventArgs e)
 		{
 			if (_child != null)
@@ -187,7 +185,5 @@
 				}
 			}
 		}
-
-		#endregion
 	}
 }
