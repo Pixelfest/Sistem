@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="OpenStereogramCreator.RandomDotStereogramLayerProperties"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OpenStereogramCreator"
+             xmlns:layerTypes="clr-namespace:OpenStereogramCreator.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="200"
+             d:DataContext="{d:DesignInstance local:RandomDotStereogramLayerProperties}">
+		<StackPanel>
+		    <local:BaseLayerProperties x:Name="BaseLayerProperties" />
+			
+		    <local:DepthMapProperties x:Name="DepthMapProperties" />
+			
+			<local:StereogramLayerProperties x:Name="StereogramLayerProperties" />
+			
+			<GroupBox Header="Random Dot Properties" Margin="{StaticResource ControlMargin}" >
+				<CheckBox IsChecked="{Binding Path=ColoredNoise}">Use colors</CheckBox>
+			</GroupBox>
+		</StackPanel>
+</UserControl>

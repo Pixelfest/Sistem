@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="OpenStereogramCreator.BaseLayerProperties"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OpenStereogramCreator"
+             xmlns:layerTypes="clr-namespace:OpenStereogramCreator.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance layerTypes:LayerBase}">
+	<StackPanel Margin="0">
+		<DockPanel>
+			<Label Width="75">Visible</Label>
+			<CheckBox IsChecked="{Binding Path=Visible}" VerticalAlignment="Center"></CheckBox>
+		</DockPanel>
+		<DockPanel>
+			<Label Width="75">Name</Label>
+			<TextBox Text="{Binding Path=Name}" Height="24" Width="200"></TextBox>
+		</DockPanel>
+		<DockPanel>
+			<Label Width="75">Opacity</Label>
+			<Slider x:Name="OversamplingSlider" IsSnapToTickEnabled="False" Value="{Binding Path=Opacity}" Maximum="1" Minimum="0" SmallChange="0.01" TickPlacement="Both" Width="200"/>
+		</DockPanel>
+	</StackPanel>
+</UserControl>

@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="OpenStereogramCreator.DocumentLayerProperties"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OpenStereogramCreator"
+             xmlns:layerTypes="clr-namespace:OpenStereogramCreator.ViewModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance layerTypes:DocumentLayer}">
+	<StackPanel>
+		
+		<TabControl SelectionChanged="SelectorSelectionChanged" Name="MeasurementsTab" Margin="{StaticResource ControlMargin}">
+			<TabItem Header="Pixels" Name="Pixels">
+				
+				<StackPanel>
+					<DockPanel>
+						<Label>Width</Label>
+						<TextBox Text="{Binding Path=Width}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
+					<DockPanel>
+						<Label>Height</Label>
+						<TextBox Text="{Binding Path=Height}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
+					<Button Click="AutoSizeClick">Auto size</Button>
+				</StackPanel>
+			
+			</TabItem>
+			<TabItem Header="Metric" Name="Centimeters">
+				<StackPanel>
+					<DockPanel>
+						<Label>DPC</Label>
+						<TextBox Text="{Binding Path=Dpc}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
+					<DockPanel>
+						<Label>Width</Label>
+						<TextBox Text="{Binding Path=WidthCentimeter}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
+					<DockPanel>
+						<Label >Height</Label>
+						<TextBox Text="{Binding Path=HeightCentimeter}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
+				</StackPanel>
+			</TabItem>
+			<TabItem Header="Imperial" Name="Inches">
+				<StackPanel>
+					<DockPanel>
+						<Label>DPI</Label>
+						<TextBox Text="{Binding Path=Dpi}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
+					<DockPanel>
+						<Label>Width</Label>
+						<TextBox Text="{Binding Path=WidthInch}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
+					<DockPanel>
+						<Label>Height</Label>
+						<TextBox Text="{Binding Path=HeightInch}" Style="{StaticResource TextBoxRight}"></TextBox>
+					</DockPanel>
+				</StackPanel>
+			</TabItem>
+		</TabControl>
+		
+		<DockPanel>
+			<Label>Background color</Label>
+			<TextBox Text="{Binding Path=BackgroundColorText}" Style="{StaticResource TextBoxRight}"></TextBox>
+		</DockPanel>
+		<DockPanel>
+			<StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+			<Label>Oversampling - </Label>
+			<Label Content="{Binding Path=Oversampling}"></Label>
+				</StackPanel>
+			<Slider x:Name="OversamplingSlider" DockPanel.Dock="Right" HorizontalAlignment="Right" IsSnapToTickEnabled="True" Value="{Binding Path=Oversampling}" Width="64" Maximum="8" Minimum="1" SmallChange="1" TickPlacement="Both"/>
+		</DockPanel>
+
+	</StackPanel>
+</UserControl>

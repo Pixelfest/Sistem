@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="OpenStereogramCreator.FullImageStereogramLayerProperties"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OpenStereogramCreator"
+             xmlns:layerTypes="clr-namespace:OpenStereogramCreator.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance layerTypes:FullImageStereogramLayer}">
+	<StackPanel Margin="0">
+		<local:BaseLayerProperties x:Name="BaseLayerProperties" />
+		
+		<local:DepthMapProperties x:Name="DepthMapProperties" />
+		<local:PatternProperties x:Name="PatternProperties" />
+		
+		<local:StereogramLayerProperties x:Name="StereogramLayerProperties" />
+	
+		<DockPanel>
+			<Label>Shift origin</Label>
+			<TextBox Text="{Binding Path=Shift, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="ShiftMouseWheel"></TextBox>
+		</DockPanel>
+
+	</StackPanel>
+</UserControl>
