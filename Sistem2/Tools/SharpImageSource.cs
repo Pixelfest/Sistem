@@ -64,6 +64,14 @@ namespace Sistem2.Tools
         public override double DpiY => this.source.Metadata.VerticalResolution;
 
         public override BitmapPalette Palette => null;
+        
+        public override bool IsDownloading => false;
+
+        public override event EventHandler DownloadCompleted;
+
+        public override event EventHandler<DownloadProgressEventArgs> DownloadProgress;
+
+        public override event EventHandler<ExceptionEventArgs> DownloadFailed;
 
         public override event EventHandler<ExceptionEventArgs> DecodeFailed;
 
@@ -268,12 +276,5 @@ namespace Sistem2.Tools
             }
         }
 
-        public override bool IsDownloading => false;
-
-        public override event EventHandler DownloadCompleted;
-
-        public override event EventHandler<DownloadProgressEventArgs> DownloadProgress;
-
-        public override event EventHandler<ExceptionEventArgs> DownloadFailed;
     }
 }

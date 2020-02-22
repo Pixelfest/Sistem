@@ -2,6 +2,7 @@
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
+using System;
 
 namespace Sistem2.ViewModels
 {
@@ -55,7 +56,7 @@ namespace Sistem2.ViewModels
 
 				stereogram.Pattern = RenderPatternImage(start);
 				stereogram.Oversampling = Oversampling;
-				stereogram.Origin = start - (int) (MaximumSeparation / 2f) + Shift;
+				stereogram.Origin = start - (int) Math.Floor(MaximumSeparation / 2f) + Shift;
 
 				if (stereogram.Generate() && stereogram.Result != null)
 				{

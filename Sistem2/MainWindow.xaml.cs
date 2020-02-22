@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.Win32;
 using Sistem2.Tools;
 using Sistem2.ViewModels;
 using SixLabors.ImageSharp;
@@ -348,6 +350,30 @@ namespace Sistem2
 			}
 
 			Draw();
+		}
+
+		private void SaveButtonClick(object sender, RoutedEventArgs e)
+		{
+			var saveFileDialog = new SaveFileDialog
+			{
+				Title = "Open image",
+				Filter = "Image File|*.png"
+			};
+
+			if (saveFileDialog.ShowDialog() == true)
+			{
+				try
+				{
+					using(var stream = new FileStream(saveFileDialog.FileName, FileMode.Create, FileAccess.ReadWrite))
+					{ 
+						Image.SaveAsPng(stream);
+					}
+				}
+				catch
+				{
+					MessageBox.Show("Something went wrong");
+				}
+			}
 		}
 	}
 }

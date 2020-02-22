@@ -10,18 +10,18 @@
         Title="MainWindow" Height="800" Width="1280" WindowState="Maximized" KeyDown="KeyDownEvent">
 	<DockPanel LastChildFill="True">
 		<Menu DockPanel.Dock="Top">
-			<MenuItem Header="_File" />
+			<MenuItem Header="_Save as PNG" Click="SaveButtonClick" />
 			<MenuItem Header="_Draw" Click="DrawClick" />
 		</Menu>
-		<StackPanel DockPanel.Dock="Right">
-			<Expander IsExpanded="True">
+		<StackPanel DockPanel.Dock="Right" Width="300">
+			<Expander IsExpanded="True" BorderThickness="1" BorderBrush="Black" Margin="3" Padding="2">
 				<Expander.Header>
 					<TextBlock FontWeight="Bold">Document Properties</TextBlock>
 				</Expander.Header>
 
 				<sistem2:DocumentLayerProperties x:Name="BackgroundLayerProperties" />
 			</Expander>
-			<Expander IsExpanded="True">
+			<Expander IsExpanded="True" BorderThickness="1" BorderBrush="Black" Margin="3" Padding="2">
 				<Expander.Header>
 					<TextBlock FontWeight="Bold">Layers</TextBlock>
 				</Expander.Header>
@@ -77,7 +77,7 @@
 
 				</DockPanel>
 			</Expander>
-			<Expander IsExpanded="True">
+			<Expander IsExpanded="True" BorderThickness="1" BorderBrush="Black" Margin="3" Padding="2">
 				<Expander.Header>
 					<TextBlock FontWeight="Bold">Current Layer Properties</TextBlock>
 				</Expander.Header>

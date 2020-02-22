@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Sistem2"
              xmlns:layerTypes="clr-namespace:Sistem2.ViewModels"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance layerTypes:BaseLayer}">
+             d:DataContext="{d:DesignInstance layerTypes:LayerBase}">
 	<StackPanel Margin="0">
 		<DockPanel>
 			<Label Width="75">Visible</Label>

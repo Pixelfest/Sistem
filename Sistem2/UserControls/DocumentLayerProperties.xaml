@@ -63,11 +63,13 @@
 			<Label>Background color</Label>
 			<TextBox Text="{Binding Path=BackgroundColorText}" Style="{StaticResource TextBoxRight}"></TextBox>
 		</DockPanel>
-		<StackPanel Orientation="Horizontal">
-			<Label Width="120" >Oversampling</Label>
-			<Slider x:Name="OversamplingSlider" IsSnapToTickEnabled="True" Value="{Binding Path=Oversampling}" Width="75" Maximum="8" Minimum="1" SmallChange="1" TickPlacement="Both"/>
+		<DockPanel>
+			<StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+			<Label Width="120">Oversampling - </Label>
 			<Label Width="25" Content="{Binding Path=Oversampling}"></Label>
-		</StackPanel>
+				</StackPanel>
+			<Slider x:Name="OversamplingSlider" IsSnapToTickEnabled="True" Value="{Binding Path=Oversampling}" Width="75" Maximum="8" Minimum="1" SmallChange="1" TickPlacement="Both"/>
+		</DockPanel>
 
 	</StackPanel>
 </UserControl>

@@ -10,10 +10,11 @@
 	<StackPanel>
 		<GroupBox Header="Pattern" Margin="{StaticResource ControlMargin}" >
 			<StackPanel>
-				<Button Click="LoadPatternImageButtonClick">
-					<Image Source="{Binding Path=PatternImageSource}" Width="auto" Height="100"/>
-				</Button>
+					<Image Source="{Binding Path=PatternImageSource}" Width="auto" Height="50"/>
 				<TextBlock Text="{Binding Path=PatternImageFileName}"></TextBlock>
+				<Button Click="LoadPatternImageButtonClick">
+					Load
+				</Button>
 			</StackPanel>
 		</GroupBox>
 	</StackPanel>

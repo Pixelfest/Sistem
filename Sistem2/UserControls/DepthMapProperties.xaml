@@ -10,10 +10,12 @@
 	<StackPanel>
 		<GroupBox Header="Depth image" Margin="{StaticResource ControlMargin}" >
 			<StackPanel>
-				<Button Click="LoadDepthImageButtonClick">
-					<Image Source="{Binding Path=DepthImageSource}" Width="auto" Height="100"/>
-				</Button>
+				<Image Source="{Binding Path=DepthImageSource}" Width="auto" Height="50" />
 				<TextBlock Text="{Binding Path=DepthImageFileName}"></TextBlock>
+				<Button Click="LoadDepthImageButtonClick">
+					<TextBlock VerticalAlignment="Center">Load</TextBlock>
+				</Button>
+				<Button Click="InvertButtonClick">Invert</Button>
 			</StackPanel>
 		</GroupBox>
 	</StackPanel>

@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using Microsoft.Win32;
 using Sistem2.ViewModels;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace Sistem2
 {
@@ -31,11 +32,18 @@ namespace Sistem2
 
 					_dataContext.DepthImage = image;
 					_dataContext.DepthImageFileName = openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf('\\') + 1);
+					
+					
 				}
 				catch
 				{
 				}
 			}
+		}
+
+		private void InvertButtonClick(object sender, RoutedEventArgs e)
+		{
+			_dataContext.DepthImage = _dataContext.DepthImage.Clone(context => context.Invert());
 		}
 	}
 }
