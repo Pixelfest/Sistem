@@ -1,9 +1,9 @@
-﻿using OpenStereogramCreator.Tools;
+﻿using System.Runtime.CompilerServices;
+using OpenStereogramCreator.Annotations;
+using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Processing.Processors.Transforms;
-using SixLabors.Primitives;
 
 namespace OpenStereogramCreator.ViewModels
 {
@@ -57,7 +57,7 @@ namespace OpenStereogramCreator.ViewModels
 			{
 				_patternImage = value;
 
-				// Reset these to use the complete pattern
+				// SetFitToWindow these to use the complete pattern
 				PatternStart = 0;
 				PatternEnd = _patternImage.Width;
 
@@ -93,27 +93,17 @@ namespace OpenStereogramCreator.ViewModels
 
 		public int PatternYShift { get; set; } = 1;
 
-		public PatternStereogramLayer(Image<Rgba32> target) : base(target)
-		{
-
-		}
-
-		public override void Draw()
+		public override void Render()
 		{
 			if (DepthImage == null || PatternImage == null)
 				return;
 
-			var location = new Point(0, 0);
-			
+			if (CachedImage != null)
+				return;
+
 			if (DrawDepthImage)
 			{
-				Target.Mutate(t => t.DrawImage(DepthImage, location, Opacity));
-				return;
-			}
-
-			if (CachedImage != null)
-			{
-				Target.Mutate(t => t.DrawImage(CachedImage, location, 1));
+				CachedImage = DepthImage.CloneAs<Rgba32>();
 				return;
 			}
 
@@ -125,7 +115,6 @@ namespace OpenStereogramCreator.ViewModels
 			if (stereogram.Generate() && stereogram.Result != null)
 			{
 				CachedImage = stereogram.Result;
-				Target.Mutate(t => t.DrawImage(stereogram.Result, location, 1));
 			}
 		}
 
@@ -152,9 +141,28 @@ namespace OpenStereogramCreator.ViewModels
 			
 
 			if (!factor.EqualsWithTolerance(1))
-				patternImage.Mutate(image => image.Resize((int)MaximumSeparation, (int) (PatternImage.Height * factor), new RobidouxSharpResampler()));
+				patternImage.Mutate(image => image.Resize((int)MaximumSeparation, (int) (PatternImage.Height * factor), KnownResamplers.RobidouxSharp));
 
 			return patternImage;
+		}
+
+		[NotifyPropertyChangedInvocator]
+		protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			switch (propertyName)
+			{
+				case nameof(PatternStart):
+				case nameof(PatternEnd):
+				case nameof(PatternYShift):
+				case nameof(PatternImage):
+				case nameof(Zoom):
+					CachedImage = null;
+					break;
+				default:
+					break;
+			}
+
+			base.OnPropertyChanged(propertyName);
 		}
 	}
 }

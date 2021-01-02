@@ -1,8 +1,9 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.Primitives;
 using System;
+using System.Runtime.CompilerServices;
+using OpenStereogramCreator.Annotations;
 
 namespace OpenStereogramCreator.ViewModels
 {
@@ -23,26 +24,21 @@ namespace OpenStereogramCreator.ViewModels
 			}
 		}
 
-		public FullImageStereogramLayer(Image<Rgba32> target) : base(target)
-		{
-
-		}
-		public override void Draw()
+		public override void Render()
 		{
 			if (DepthImage == null || PatternImage == null || DepthImage.Width > PatternImage.Width)
 				return;
 
 			var location = new Point(0, 0);
 			
-			if (DrawDepthImage)
-			{
-				Target.Mutate(t => t.DrawImage(DepthImage, location, Opacity));
-				return;
-			}
 
 			if (CachedImage != null)
+				return;
+
+			if (DrawDepthImage)
 			{
-				Target.Mutate(t => t.DrawImage(CachedImage, location, Opacity));
+				CachedImage = DepthImage.CloneAs<Rgba32>();
+
 				return;
 			}
 
@@ -60,15 +56,13 @@ namespace OpenStereogramCreator.ViewModels
 
 				if (stereogram.Generate() && stereogram.Result != null)
 				{
-					CachedImage = stereogram.Result;
-					result.Mutate(t => t.DrawImage(stereogram.Result, location, 1));
+					result.Mutate(t => t.DrawImage(stereogram.Result, location, Opacity));
 				}
 
 				start += (int)MaximumSeparation;
 			}
 
 			CachedImage = result.Clone();
-			Target.Mutate(context => context.DrawImage(CachedImage, location, opacity: Opacity));
 		}
 
 		private Image<Rgba32> RenderPatternImage(int start)
@@ -79,6 +73,21 @@ namespace OpenStereogramCreator.ViewModels
 			var patternImage = PatternImage.Clone(context => context.Crop(new Rectangle(start, 0, patternWidth, PatternImage.Height)));
 
 			return patternImage;
+		}
+
+		[NotifyPropertyChangedInvocator]
+		protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			switch (propertyName)
+			{
+				case nameof(Shift):
+					CachedImage = null;
+					break;
+				default:
+					break;
+			}
+
+			base.OnPropertyChanged(propertyName);
 		}
 	}
 }

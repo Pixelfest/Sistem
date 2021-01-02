@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance local:PatternProperties}">
 	<StackPanel>
-		<GroupBox Header="Pattern" Margin="{StaticResource ControlMargin}" >
+		<GroupBox Header="Pattern image" Margin="{StaticResource ControlMargin}" >
 			<StackPanel>
 					<Image Source="{Binding Path=PatternImageSource}" Width="auto" Height="50" />
 				<TextBlock Text="{Binding Path=PatternImageFileName}"></TextBlock>

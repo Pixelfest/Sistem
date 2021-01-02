@@ -1,4 +1,6 @@
-﻿using Sistem.Core;
+﻿using System.Runtime.CompilerServices;
+using OpenStereogramCreator.Annotations;
+using Sistem.Core;
 using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -14,7 +16,6 @@ namespace OpenStereogramCreator.ViewModels
 		private float _maximumSeparation;
 		private float _origin;
 		private bool _drawDepthImage;
-
 
 		private float _eyeDistanceCentimeter;
 
@@ -41,23 +42,23 @@ namespace OpenStereogramCreator.ViewModels
 				Width = _depthImage.Width;
 				Height = _depthImage.Height;
 
-				if(this is PatternStereogramLayer || this is RandomDotStereogramLayer)
+				if (this is PatternStereogramLayer || this is RandomDotStereogramLayer)
 					Origin = (value.Width - MaximumSeparation) / 2;
 
 				DrawPreview();
 
-				OnPropertyChanged(nameof(DepthImage));  
-				OnPropertyChanged(nameof(DepthImageSource));  
+				OnPropertyChanged(nameof(DepthImage));
+				OnPropertyChanged(nameof(DepthImageSource));
 			}
 		}
-		
+
 		public string DepthImageFileName
 		{
 			get => _depthImageFileName;
 			set
 			{
 				_depthImageFileName = value;
-				OnPropertyChanged(nameof(DepthImageFileName));  
+				OnPropertyChanged(nameof(DepthImageFileName));
 			}
 		}
 
@@ -65,7 +66,7 @@ namespace OpenStereogramCreator.ViewModels
 		{
 			get
 			{
-				if (DepthImage != null) 
+				if (DepthImage != null)
 					return new ImageSharpImageSource<Rgb48>(DepthImage);
 
 				return null;
@@ -101,7 +102,8 @@ namespace OpenStereogramCreator.ViewModels
 			get => _eyeDistanceCentimeter;
 			set
 			{
-				_eyeDistanceCentimeter = value; OnPropertyChanged(nameof(EyeDistanceCentimeter));
+				_eyeDistanceCentimeter = value;
+				OnPropertyChanged(nameof(EyeDistanceCentimeter));
 				OnPropertyChanged(nameof(MinimumSeparation));
 				OnPropertyChanged(nameof(MaximumSeparation));
 				OnPropertyChanged(nameof(MinimumDepthCentimeter));
@@ -128,7 +130,7 @@ namespace OpenStereogramCreator.ViewModels
 			get => Utilities.CMToInch(EyeDistanceCentimeter);
 			set => EyeDistanceCentimeter = Utilities.InchToCM(value);
 		}
-		
+
 		public float MinimumDepthInch
 		{
 			get => Utilities.CMToInch(MinimumDepthCentimeter);
@@ -151,7 +153,7 @@ namespace OpenStereogramCreator.ViewModels
 			}
 		}
 
-		protected StereogramLayer(Image<Rgba32> target) : base(target)
+		protected StereogramLayer()
 		{
 			EyeDistanceCentimeter = 50f;
 		}
@@ -164,7 +166,7 @@ namespace OpenStereogramCreator.ViewModels
 			var preview48 = DepthImage.CloneAs<Rgba32>();
 			var preview = preview48.Clone(context => context.Resize(200, 150));
 			Preview = new ImageSharpImageSource<Rgba32>(preview);
-			OnPropertyChanged(nameof(Preview));  
+			OnPropertyChanged(nameof(Preview));
 		}
 
 		public Stereogram CreateStereogram()
@@ -177,9 +179,28 @@ namespace OpenStereogramCreator.ViewModels
 			//Don't use object initializer
 			stereogram.MinSeparation = (int)MinimumSeparation;
 			stereogram.MaxSeparation = (int)MaximumSeparation;
-			stereogram.Origin = (int) Origin;
+			stereogram.Origin = (int)Origin;
 
 			return stereogram;
+		}
+
+		[NotifyPropertyChangedInvocator]
+		protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			switch (propertyName)
+			{
+				case nameof(MinimumSeparation):
+				case nameof(MaximumSeparation):
+				case nameof(Origin):
+				case nameof(DrawDepthImage):
+				case nameof(DepthImage):
+					CachedImage = null;
+					break;
+				default:
+					break;
+			}
+
+			base.OnPropertyChanged(propertyName);
 		}
 	}
 }

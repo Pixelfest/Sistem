@@ -9,7 +9,7 @@
              d:DataContext="{d:DesignInstance layerTypes:DocumentLayer}">
 	<StackPanel>
 
-		<TabControl SelectionChanged="SelectorSelectionChanged" Name="MeasurementsTab" Margin="{StaticResource ControlMargin}">
+		<TabControl SelectionChanged="SelectorSelectionChanged" Name="MeasurementsTab">
 			<TabItem Header="Pixels" Name="Pixels">
 
 				<StackPanel>

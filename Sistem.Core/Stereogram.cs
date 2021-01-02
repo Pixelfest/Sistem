@@ -511,9 +511,9 @@ namespace Sistem.Core
 					if (!ColoredNoise)
 					{
 						if (random.Next(100) > _currentNoiseDensity)
-							_directResultMap[x, y] = Rgba32.White;
+							_directResultMap[x, y] = Color.White;
 						else
-							_directResultMap[x, y] = Rgba32.Black;
+							_directResultMap[x, y] = Color.Black;
 					}
 					else
 						_directResultMap[x, y] = new Rgba32((byte)random.Next(255), (byte)random.Next(255), (byte)random.Next(255));
@@ -848,9 +848,9 @@ namespace Sistem.Core
 				{
 					if (!ColoredNoise)
 						if (random.Next(100) > _noiseDensity)
-							result[x, y] = Rgba32.White;
+							result[x, y] = Color.White;
 						else
-							result[x, y] = Rgba32.Black;
+							result[x, y] = Color.Black;
 					else
 						result[x, y] = new Rgba32((byte)random.Next(255), (byte)random.Next(255), (byte)random.Next(255));
 				}

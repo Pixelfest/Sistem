@@ -1,8 +1,9 @@
-﻿using OpenStereogramCreator.Tools;
+﻿using System.Runtime.CompilerServices;
+using OpenStereogramCreator.Annotations;
+using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.Primitives;
 
 namespace OpenStereogramCreator.ViewModels
 {
@@ -17,6 +18,9 @@ namespace OpenStereogramCreator.ViewModels
 			set
 			{
 				_image = value;
+
+				Width = value.Width;
+				Height = value.Height;
 
 				DrawPreview();
 
@@ -46,10 +50,6 @@ namespace OpenStereogramCreator.ViewModels
 			}
 		}
 
-		public ImageLayer(Image<Rgba32> target) : base(target)
-		{
-		}
-
 		public override void DrawPreview()
 		{
 			if (Image == null)
@@ -60,14 +60,31 @@ namespace OpenStereogramCreator.ViewModels
 			OnPropertyChanged(nameof(Preview));  
 		}
 		
-		public override void Draw()
+		public override void Render()
 		{
 			if (Image == null)
 				return;
 
-			var location = new Point(0, 0);
+			if (CachedImage != null)
+				return;
 
-			Target.Mutate(t => t.DrawImage(Image, location, Opacity));
+			CachedImage = Image;
 		}
+
+		[NotifyPropertyChangedInvocator]
+		protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			switch (propertyName)
+			{
+				case nameof(Image):
+					CachedImage = null;
+					break;
+				default:
+					break;
+			}
+
+			base.OnPropertyChanged(propertyName);
+		}
+
 	}
 }

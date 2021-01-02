@@ -28,7 +28,6 @@ namespace OpenStereogramCreator
 				try
 				{
 					_dataContext.PatternImage = SixLabors.ImageSharp.Image.Load<Rgba32>(openFileDialog.FileName);
-
 					_dataContext.PatternImageFileName = openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf('\\') + 1);
 				}
 				catch

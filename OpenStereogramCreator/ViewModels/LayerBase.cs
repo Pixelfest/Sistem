@@ -9,7 +9,8 @@ namespace OpenStereogramCreator.ViewModels
 {
 	public abstract class LayerBase : INotifyPropertyChanged
 	{
-		protected Image<Rgba32> CachedImage = null;
+		public Image<Rgba32> CachedImage { get; set; }
+
 		private int _top;
 		private int _left;
 		private int _width;
@@ -145,8 +146,7 @@ namespace OpenStereogramCreator.ViewModels
 			set => Top = (int) (value * Dpc);
 		}
 
-
-		public float LeftCentimeter
+        public float LeftCentimeter
 		{
 			get => Left / Dpc;
 			set => Left = (int) (value * Dpc);
@@ -164,8 +164,6 @@ namespace OpenStereogramCreator.ViewModels
 			set => Height = (int) (value * Dpc);
 		}
 
-		public Image<Rgba32> Target { get; set; }
-
 		public ImageSharpImageSource<Rgba32> Preview { get; set; }
 
 		public string Name 
@@ -180,15 +178,14 @@ namespace OpenStereogramCreator.ViewModels
 			set { _visible = value; OnPropertyChanged(nameof(Visible)); } 
 		}
 
-		protected LayerBase(Image<Rgba32> target)
+		protected LayerBase()
 		{
 			CachedImage = null;
-			Target = target;
 			Opacity = 1;
 			Preview = new ImageSharpImageSource<Rgba32>(150,150);
 		}
 
-		public abstract void Draw();
+		public abstract void Render();
 
 		public abstract void DrawPreview();
 
@@ -197,10 +194,20 @@ namespace OpenStereogramCreator.ViewModels
 		[NotifyPropertyChangedInvocator]
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
-			CachedImage = null;
+			switch (propertyName)
+			{
+				case nameof(Visible):
+				case nameof(Oversampling):
+					CachedImage = null;
+					break;
+				case nameof(Opacity):
+					// Trigger update, don't clear the cached image.
+					break;
+				default:
+					break;
+			}
 
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
-
-	}
+    }
 }

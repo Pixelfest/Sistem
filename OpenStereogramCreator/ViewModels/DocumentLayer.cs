@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+using OpenStereogramCreator.Annotations;
 using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Processing.Processors.Drawing;
 
 namespace OpenStereogramCreator.ViewModels
 {
@@ -23,7 +26,7 @@ namespace OpenStereogramCreator.ViewModels
 			{
 				try
 				{
-					BackgroundColor = Color.FromHex(value);
+					BackgroundColor = Color.ParseHex(value);
 
 					DrawPreview();
 
@@ -33,10 +36,6 @@ namespace OpenStereogramCreator.ViewModels
 			}
 		}
 		
-		public DocumentLayer(Image<Rgba32> target) : base(target)
-		{
-		}
-
 		public override void DrawPreview()
 		{
 			var preview = new Image<Rgba32>(150, 150).Clone(context => context.BackgroundColor(BackgroundColor));
@@ -45,18 +44,35 @@ namespace OpenStereogramCreator.ViewModels
 			OnPropertyChanged(nameof(Preview));  
 		}
 
-		public override void Draw()
+		public override void Render()
 		{
-			// Clear the image first
-			var options = new GraphicsOptions
-			{
-				AlphaCompositionMode = PixelAlphaCompositionMode.Clear
-			};
+			if (CachedImage != null)
+				return;
 
-			Target.Mutate(context => context.Fill(options, new SolidBrush(new Color(new Rgba32(0, 0, 0, 0)))));
+			var result = new Image<Rgba32>(Width, Height);
+			
+            // Clear the image with the background color
+			result.Clear(BackgroundColor);
 
-
-			Target.Mutate(image => image.BackgroundColor(BackgroundColor));
+			CachedImage = result;
 		}
+
+		[NotifyPropertyChangedInvocator]
+		protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			switch (propertyName)
+			{
+				case nameof(Width):
+				case nameof(Height):
+				case nameof(BackgroundColor):
+					CachedImage = null;
+					break;
+				default:
+					break;
+			}
+
+			base.OnPropertyChanged(propertyName);
+		}
+
 	}
 }

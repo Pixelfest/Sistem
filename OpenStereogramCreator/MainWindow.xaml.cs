@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Win32;
 using OpenStereogramCreator.Tools;
@@ -12,7 +10,6 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using Color = SixLabors.ImageSharp.Color;
-using Image = System.Windows.Controls.Image;
 
 namespace OpenStereogramCreator
 {
@@ -20,12 +17,13 @@ namespace OpenStereogramCreator
 	{
 		private bool _drawing = false;
 		private bool _drawRequested = false;
-		private Image<Rgba32> _image;
 
 		public delegate void UpdateImageCallback(Image<Rgba32> image);
 
 		public LayersViewModel Layers  { get; set; }
 		public DocumentLayer DocumentLayer { get; set; }
+
+        private Image<Rgba32> _image;
 		public Image<Rgba32> Image { 
 			get => _image;
 			set
@@ -43,9 +41,9 @@ namespace OpenStereogramCreator
 			
 			LayersListBox.DataContext = Layers;
 			
-			Image = new Image<Rgba32>(800, 600);
+			Image = new Image<Rgba32>(1920, 1080);
 
-			DocumentLayer = new DocumentLayer(Image)
+			DocumentLayer = new DocumentLayer
 			{
 				Name = "Document", 
 				Visible = true, 
@@ -53,7 +51,6 @@ namespace OpenStereogramCreator
 				Width = 1920,
 				Height = 1080,
 				Dpi = 100,
-				Target = Image
 			};
 
 			DocumentLayer.AutoSize += DocumentLayerAutoSize;
@@ -103,173 +100,13 @@ namespace OpenStereogramCreator
 					break;
 				}
 			}
-		}
 
-		private void AddImageLayerMenuClick(object sender, RoutedEventArgs e)
-		{
-			var layer = new ImageLayer(Image)
-			{
-				Name = $"Image Layer {Layers.Count}",
-				Dpi = DocumentLayer.Dpi,
-				Visible = true
-			};
-
-			Layers.Insert(0, layer);
-			layer.DrawPreview();
-			Layers.Draw();
-		}
-
-		private void AddRandomDotStereogramLayerMenuClick(object sender, RoutedEventArgs e)
-		{
-			var layer = new RandomDotStereogramLayer(Image)
-			{
-				Name = $"Random Dot Layer {Layers.Count}", 
-				Dpi = DocumentLayer.Dpi,
-				Visible = true
-			};
-
-			Layers.Insert(0, layer);
-			layer.DrawPreview();
-			Layers.Draw();
-		}
-
-		private void AddPatternStereogramLayerMenuClick(object sender, RoutedEventArgs e)
-		{
-			var layer = new PatternStereogramLayer(Image)
-			{
-				Name = $"Pattern Layer {Layers.Count}",
-				Dpi = DocumentLayer.Dpi,
-				Visible = true
-
-			};
-
-			Layers.Insert(0, layer);
-			layer.DrawPreview();
-			Layers.Draw();
-		}
-
-		private void AddFullImageStereogramLayerMenuClick(object sender, RoutedEventArgs e)
-		{
-			var layer = new FullImageStereogramLayer(Image)
-			{
-				Name = $"Full Image Layer {Layers.Count}",
-				Dpi = DocumentLayer.Dpi,
-				Origin = 0,
-				Visible = true
-
-			};
-
-			Layers.Insert(0, layer);
-			layer.DrawPreview();
-			Layers.Draw();
-		}
-
-		// Layer events
-
-		private void DeleteLayerClick(object sender, RoutedEventArgs e)
-		{
-			var layer = LayersListBox.SelectedItem as LayerBase;
-
-			if(layer == null)
-				return;
-
-			Layers.Remove(layer);
 			Draw();
 		}
-
-		private void LayerUpClick(object sender, RoutedEventArgs e)
-		{
-			var layer = LayersListBox.SelectedItem as LayerBase;
-
-			if (layer == null)
-				return;
-
-			var layerIndex = Layers.IndexOf(layer);
-
-			if(layerIndex > 0)
-				Layers.Swap(layerIndex, layerIndex - 1);
-		}
-
-		private void LayerDownClick(object sender, RoutedEventArgs e)
-		{
-			var layer = LayersListBox.SelectedItem as LayerBase;
-
-			if (layer == null)
-				return;
-
-			var layerIndex = Layers.IndexOf(layer);
-
-			if (layerIndex < Layers.Count - 1)
-				Layers.Swap(layerIndex, layerIndex + 1);
-		}
-
-		private void LayersListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			var selectedItem = LayersListBox.SelectedItem;
-
-			foreach (UIElement child in LayersStackPanel.Children)
-			{
-				child.Visibility = Visibility.Collapsed;
-			}
-
-			switch (selectedItem)
-			{
-				case ImageLayer imageLayer:
-					ImageLayerProperties.Visibility = Visibility.Visible;
-					ImageLayerProperties.DataContext = imageLayer;
-					break;
-				case RandomDotStereogramLayer randomDotStereogramLayer:
-					RandomDotStereogramLayerProperties.Visibility = Visibility.Visible;
-					RandomDotStereogramLayerProperties.DataContext = randomDotStereogramLayer;
-					break;
-				case FullImageStereogramLayer fullImageStereogramLayer:
-					FullImageStereogramLayerProperties.Visibility = Visibility.Visible;
-					FullImageStereogramLayerProperties.DataContext = fullImageStereogramLayer;
-					break;
-				case PatternStereogramLayer patternStereogramLayer:
-					PatternStereogramLayerProperties.Visibility = Visibility.Visible;
-					PatternStereogramLayerProperties.DataContext = patternStereogramLayer;
-					break;
-			}
-		}
-
-		// Drawing
-
-		private void DrawClick(object sender, RoutedEventArgs e)
+		
+		private void LayerPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			Draw();
-		}
-
-		private void Draw()
-		{
-			if (_drawing)
-			{
-				_drawRequested = true;
-				return;
-			}
-			
-			_drawing = true;
-			var thread = new Thread(() =>
-			{
-				// Clear the image first
-				DocumentLayer.Draw();
-				Layers.Draw();
-
-				//PreviewImage.Source = new ImageSharpImageSource<Rgba32>(Image);
-				PreviewImage.Dispatcher.Invoke(
-					new UpdateImageCallback(this.UpdateImage),
-					new object[] {Image});
-
-				_drawing = false;
-
-				if (_drawRequested)
-				{
-					_drawRequested = false;
-					Draw();
-				}
-			});
-
-			thread.Start();
 		}
 
 		private void UpdateImage(Image<Rgba32> image)
@@ -277,26 +114,33 @@ namespace OpenStereogramCreator
 			PreviewImage.Source = new ImageSharpImageSource<Rgba32>(image);
 		}
 
-		// Zoom buttons
+        private void SaveButtonClick(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Title = "Save image",
+                Filter = "Image File|*.png"
+            };
 
-		private void ResetZoom(object sender, RoutedEventArgs e)
-		{
-			ZoomBorder.Reset();
-		}
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    using (var stream = new FileStream(saveFileDialog.FileName, FileMode.Create, FileAccess.ReadWrite))
+                    {
+                        Image.SaveAsPng(stream);
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Something went wrong");
+                }
+            }
+        }
 
-		private void SetPixelPerfect(object sender, RoutedEventArgs e)
-		{
-			ZoomBorder.Reset100();
-		}
+		// Fine tuning
 
-		private void ResetActualSize(object sender, RoutedEventArgs e)
-		{
-			ZoomBorder.SetActualSize((int)DocumentLayer.Dpi, (int)DocumentLayer.WidthInch);
-		}
-
-		// Fumbling
-
-		private new void KeyDownEvent(object sender, KeyEventArgs e)
+        private new void KeyDownEvent(object sender, KeyEventArgs e)
 		{
 			if (!(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
 				return;
@@ -350,30 +194,6 @@ namespace OpenStereogramCreator
 			}
 
 			Draw();
-		}
-
-		private void SaveButtonClick(object sender, RoutedEventArgs e)
-		{
-			var saveFileDialog = new SaveFileDialog
-			{
-				Title = "Open image",
-				Filter = "Image File|*.png"
-			};
-
-			if (saveFileDialog.ShowDialog() == true)
-			{
-				try
-				{
-					using(var stream = new FileStream(saveFileDialog.FileName, FileMode.Create, FileAccess.ReadWrite))
-					{ 
-						Image.SaveAsPng(stream);
-					}
-				}
-				catch
-				{
-					MessageBox.Show("Something went wrong");
-				}
-			}
 		}
 	}
 }

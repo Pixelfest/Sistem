@@ -1,4 +1,8 @@
-﻿namespace OpenStereogramCreator.Tools
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using OpenStereogramCreator.Annotations;
+
+namespace OpenStereogramCreator.Tools
 {
 	using System.Linq;
 	using System.Reflection;
@@ -7,11 +11,28 @@
 	using System.Windows.Input;
 	using System.Windows.Media;
 
-	public class ZoomBorder : Border
+	public class ZoomBorder : Border, INotifyPropertyChanged
 	{
 		private UIElement _child;
 		private Point _origin;
 		private Point _start;
+		private double? _windowsScaling;
+
+		protected double WindowsScaling => _windowsScaling ?? LoadWindowsScaling() ?? 1;
+
+		public Point Start => _start;
+
+		private double? LoadWindowsScaling()
+		{
+			PresentationSource source = PresentationSource.FromVisual(this);
+			if (source != null)
+			{
+				_windowsScaling = source.CompositionTarget.TransformToDevice.M11;
+				return _windowsScaling;
+			}
+
+			return null;
+		}
 
 		private TranslateTransform GetTranslateTransform(UIElement element)
 		{
@@ -23,6 +44,21 @@
 		{
 			return (ScaleTransform)((TransformGroup)element.RenderTransform)
 			  .Children.First(tr => tr is ScaleTransform);
+		}
+
+		public string Scale
+		{
+			get
+			{
+				var st = GetScaleTransform(_child);
+				var image = _child as Image;
+				var imageWidth = image.Source.Width;
+				var renderWidth = image.RenderSize.Width;
+
+				var scale = renderWidth / imageWidth * WindowsScaling * st.ScaleX;
+
+				return $"{100 * scale:0}%";
+			}
 		}
 
 		public override UIElement Child
@@ -39,6 +75,7 @@
 		public void Initialize(UIElement element)
 		{
 			this._child = element;
+
 			if (_child != null)
 			{
 				var group = new TransformGroup();
@@ -56,94 +93,59 @@
 			}
 		}
 
-		public void Reset()
+		public void SetFitToWindow()
 		{
-			if (_child != null)
-			{
-				// reset zoom
-				var st = GetScaleTransform(_child);
-				st.ScaleX = 1.0;
-				st.ScaleY = 1.0;
+			if (_child == null)
+				return;
 
-				// reset pan
-				var tt = GetTranslateTransform(_child);
-				tt.X = 0.0;
-				tt.Y = 0.0;
-			}
+			SetScale(1);
+			ResetPanning();
 		}
 
-		public void Reset100()
+		public void SetPerPixel()
 		{
-			if (_child != null)
-			{
-				var image = _child as Image;
-				var width = image.Source.Width;
-				var height = image.Source.Height;
+			var viewPortFactor = GetViewPortFactor();
 
-				var renderWidth = _child.RenderSize.Width;
-
-				var scale = width / renderWidth;
-
-				// reset zoom
-				var st = GetScaleTransform(_child);
-				st.ScaleX = scale;
-				st.ScaleY = scale;
-
-				// reset pan
-				var tt = GetTranslateTransform(_child);
-				tt.X = 0.0;
-				tt.Y = 0.0;
-			}
+			SetScale(viewPortFactor / WindowsScaling);
+			ResetPanning();
 		}
 
-		public void SetActualSize(int dpiTarget, int targetWidthInch)
+		public void SetActualSize(int dpiImage, int dpiMonitor, int targetWidthInch)
 		{
-			if (_child != null)
-			{
-				var dpiProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
-				var dpiMonitor = (int)dpiProperty.GetValue(null, null);
+			var viewPortFactor = GetViewPortFactor();
 
-				// Width of the viewport
-				var actualWidthViewPortInch = _child.RenderSize.Width / (float)dpiMonitor;
+			var dpiFactor = dpiMonitor / (double)dpiImage;
 
-				var scale = targetWidthInch / actualWidthViewPortInch;
-
-				// reset zoom
-				var st = GetScaleTransform(_child);
-				st.ScaleX = scale;
-				st.ScaleY = scale;
-
-				// reset pan
-				var tt = GetTranslateTransform(_child);
-				tt.X = 0.0;
-				tt.Y = 0.0;
-			}
+			SetScale(viewPortFactor * dpiFactor / WindowsScaling);
+			ResetPanning();
 		}
 
 		private void ChildMouseWheel(object sender, MouseWheelEventArgs e)
 		{
+			double zoomInterval = 0.20000000000000;
+			zoomInterval *= GetViewPortFactor();
+
 			if (_child != null)
 			{
 				var st = GetScaleTransform(_child);
 				var tt = GetTranslateTransform(_child);
 
-				var zoom = e.Delta > 0 ? .2 : -.2;
+				var zoom = e.Delta > 0 ? zoomInterval : -zoomInterval;
 				if (!(e.Delta > 0) && (st.ScaleX < .4 || st.ScaleY < .4))
 					return;
 
 				var relative = e.GetPosition(_child);
-				double absoluteX;
-				double absoluteY;
 
-				absoluteX = relative.X * st.ScaleX + tt.X;
-				absoluteY = relative.Y * st.ScaleY + tt.Y;
+				var absoluteX = relative.X * st.ScaleX + tt.X;
+				var absoluteY = relative.Y * st.ScaleY + tt.Y;
 
-				st.ScaleX += zoom;
-				st.ScaleY += zoom;
+				SetScale(st.ScaleX + zoom);
 
 				tt.X = absoluteX - relative.X * st.ScaleX;
 				tt.Y = absoluteY - relative.Y * st.ScaleY;
 			}
+
+			OnPropertyChanged(nameof(Scale));
 		}
 
 		private void ChildMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -169,7 +171,7 @@
 
 		void ChildPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			this.Reset();
+			this.SetFitToWindow();
 		}
 
 		private void ChildMouseMove(object sender, MouseEventArgs e)
@@ -184,6 +186,61 @@
 					tt.Y = _origin.Y - v.Y;
 				}
 			}
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		[NotifyPropertyChangedInvocator]
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+		private void SetScale(double scale)
+		{
+			var st = GetScaleTransform(_child);
+			st.ScaleX = scale;
+			st.ScaleY = scale;
+
+			OnPropertyChanged(nameof(Scale));
+		}
+
+		private void ResetPanning()
+		{
+			// reset pan
+			var tt = GetTranslateTransform(_child);
+
+			if (_child is FrameworkElement element)
+			{
+				var st = GetScaleTransform(_child);
+
+				var imageWidth = element.ActualWidth * st.ScaleX;
+				var renderWidth = element.RenderSize.Width;
+
+				var imageHeight = element.ActualHeight * st.ScaleY;
+				var renderHeight = element.RenderSize.Height;
+
+				tt.X = (renderWidth - imageWidth) / 2;
+				tt.Y = (renderHeight - imageHeight) / 2;
+
+				return;
+			}
+
+			tt.X = 0.0;
+			tt.Y = 0.0;
+		}
+
+		private double GetViewPortFactor()
+		{
+			var image = _child as Image;
+			if (image == null)
+				return 1;
+
+			var imageWidth = image.Source.Width;
+			var actualWidthViewPort = _child.RenderSize.Width;
+			var viewPortFactor = imageWidth / actualWidthViewPort;
+
+			return viewPortFactor;
 		}
 	}
 }

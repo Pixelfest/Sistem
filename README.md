@@ -1,4 +1,6 @@
-# Sistem - A Stereogram generator
+# Sistem - A Stereogram generator and expiremtal UI
+
+Latest changes are mainly a backup for my new work so far. I'm trying to create a new GUI with more options than Sistem, built on .NET Core. I'll try to update it to .NET 5 most likely.
 
 ## How to build
 
@@ -36,5 +38,5 @@ Use the -? parameter to see options I've included already.
 
 ## Sistem UI
 
-This is currently using a slightly older implementation of the Stereogram.cs class, I will try to include the net .NET Core implementation here. Once done I'll add it to the solution.
+This is currently using a slightly older implementation of the Stereogram.cs class. This application will eventuall be replaced with OpenStereogramCreator, which is still work in progress.
 

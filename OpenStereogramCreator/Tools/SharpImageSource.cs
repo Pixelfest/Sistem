@@ -14,7 +14,7 @@ namespace OpenStereogramCreator.Tools
 	/// </summary>
 	/// <typeparam name="TPixel"></typeparam>
 	public sealed class ImageSharpImageSource<TPixel> : BitmapSource
-		where TPixel : struct, IPixel<TPixel>
+		where TPixel : unmanaged, IPixel<TPixel>
 	{
 		private readonly Image<TPixel> source;
 
