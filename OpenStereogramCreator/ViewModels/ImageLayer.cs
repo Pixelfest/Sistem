@@ -3,7 +3,6 @@ using OpenStereogramCreator.Annotations;
 using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 
 namespace OpenStereogramCreator.ViewModels
 {
@@ -21,8 +20,6 @@ namespace OpenStereogramCreator.ViewModels
 
 				Width = value.Width;
 				Height = value.Height;
-
-				DrawPreview();
 
 				OnPropertyChanged(nameof(Image));  
 				OnPropertyChanged(nameof(ImageSource));  
@@ -50,16 +47,6 @@ namespace OpenStereogramCreator.ViewModels
 			}
 		}
 
-		public override void DrawPreview()
-		{
-			if (Image == null)
-				return;
-
-			var preview = Image.Clone(context => context.Resize(150, 150));
-			Preview = new ImageSharpImageSource<Rgba32>(preview);
-			OnPropertyChanged(nameof(Preview));  
-		}
-		
 		public override void Render()
 		{
 			if (Image == null)
@@ -78,8 +65,6 @@ namespace OpenStereogramCreator.ViewModels
 			{
 				case nameof(Image):
 					CachedImage = null;
-					break;
-				default:
 					break;
 			}
 

@@ -15,8 +15,8 @@ namespace OpenStereogramCreator
 {
 	public partial class MainWindow
 	{
-		private bool _drawing = false;
-		private bool _drawRequested = false;
+		private bool _drawing;
+		private bool _drawRequested;
 
 		public delegate void UpdateImageCallback(Image<Rgba32> image);
 

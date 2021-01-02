@@ -1,20 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using OpenStereogramCreator.ViewModels;
 
 namespace OpenStereogramCreator
 {
-	public partial class DocumentLayerProperties : UserControl
+	public partial class DocumentLayerProperties
 	{
-		private DocumentLayer _documentLayer => DataContext as DocumentLayer;
-
-		readonly Dictionary<string, Measurements> _measurements = new Dictionary<string, Measurements>
-		{
-			{ "Pixels", Measurements.Pixels },
-			{ "Centimeters", Measurements.Centimeters },
-			{ "Inches", Measurements.Inches },
-		}; 
+		private DocumentLayer DocumentLayer => DataContext as DocumentLayer;
 
 		public DocumentLayerProperties()
 		{
@@ -33,7 +25,7 @@ namespace OpenStereogramCreator
 
 		private void AutoSizeClick(object sender, RoutedEventArgs e)
 		{
-			_documentLayer.OnAutoSize();
+			DocumentLayer.OnAutoSize();
 		}
 	}
 }

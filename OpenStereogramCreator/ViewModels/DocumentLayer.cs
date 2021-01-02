@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using OpenStereogramCreator.Annotations;
 using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Processing.Processors.Drawing;
 
 namespace OpenStereogramCreator.ViewModels
 {
@@ -28,22 +27,15 @@ namespace OpenStereogramCreator.ViewModels
 				{
 					BackgroundColor = Color.ParseHex(value);
 
-					DrawPreview();
-
 					OnPropertyChanged(nameof(BackgroundColor));
 				}
-				catch {}
+				catch
+				{
+					MessageBox.Show("Could not parse background color use rgba Hex codes.");
+				}
 			}
 		}
 		
-		public override void DrawPreview()
-		{
-			var preview = new Image<Rgba32>(150, 150).Clone(context => context.BackgroundColor(BackgroundColor));
-			Preview = new ImageSharpImageSource<Rgba32>(preview);
-
-			OnPropertyChanged(nameof(Preview));  
-		}
-
 		public override void Render()
 		{
 			if (CachedImage != null)
@@ -66,8 +58,6 @@ namespace OpenStereogramCreator.ViewModels
 				case nameof(Height):
 				case nameof(BackgroundColor):
 					CachedImage = null;
-					break;
-				default:
 					break;
 			}
 

@@ -57,11 +57,8 @@ namespace OpenStereogramCreator.ViewModels
 			{
 				_patternImage = value;
 
-				// SetFitToWindow these to use the complete pattern
 				PatternStart = 0;
 				PatternEnd = _patternImage.Width;
-
-				DrawPreview();
 
 				OnPropertyChanged(nameof(PatternImage));
 				OnPropertyChanged(nameof(PatternImageSource));
@@ -135,7 +132,7 @@ namespace OpenStereogramCreator.ViewModels
 				patternWidth = PatternImage.Width;
 			}
 
-			var factor = MaximumSeparation / (float) patternWidth;
+			var factor = MaximumSeparation / patternWidth;
 
 			factor *= Zoom;
 			
@@ -157,8 +154,6 @@ namespace OpenStereogramCreator.ViewModels
 				case nameof(PatternImage):
 				case nameof(Zoom):
 					CachedImage = null;
-					break;
-				default:
 					break;
 			}
 

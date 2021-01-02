@@ -1,14 +1,13 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using Microsoft.Win32;
 using OpenStereogramCreator.ViewModels;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace OpenStereogramCreator
 {
-	public partial class PatternProperties : UserControl
+	public partial class PatternProperties 
 	{
-		private IHaveAPattern _dataContext => DataContext as IHaveAPattern;
+		private IHaveAPattern Pattern => DataContext as IHaveAPattern;
 
 		public PatternProperties()
 		{
@@ -19,7 +18,7 @@ namespace OpenStereogramCreator
 		{
 			var openFileDialog = new OpenFileDialog
 			{
-				Title = "Open image",
+				Title = Text.OpenImage,
 				Filter = "Image File|*.bmp; *.gif; *.jpg; *.jpeg; *.png;"
 			};
 
@@ -27,11 +26,12 @@ namespace OpenStereogramCreator
 			{
 				try
 				{
-					_dataContext.PatternImage = SixLabors.ImageSharp.Image.Load<Rgba32>(openFileDialog.FileName);
-					_dataContext.PatternImageFileName = openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf('\\') + 1);
+					Pattern.PatternImage = SixLabors.ImageSharp.Image.Load<Rgba32>(openFileDialog.FileName);
+					Pattern.PatternImageFileName = openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf('\\') + 1);
 				}
 				catch
 				{
+					MessageBox.Show(Text.ErrorLoadingImage);
 				}
 			}
 		}

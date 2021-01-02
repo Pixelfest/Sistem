@@ -6,7 +6,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace OpenStereogramCreator
 {
-	public partial class ImageLayerProperties : UserControl
+	public partial class ImageLayerProperties
 	{
 		public ImageLayerProperties()
 		{
@@ -20,7 +20,7 @@ namespace OpenStereogramCreator
 
 			var openFileDialog = new OpenFileDialog
 			{
-				Title = "Open image",
+				Title = Text.OpenImage,
 				Filter = "Image File|*.bmp; *.gif; *.jpg; *.jpeg; *.png;"
 			};
 
@@ -33,6 +33,7 @@ namespace OpenStereogramCreator
 				}
 				catch
 				{
+					MessageBox.Show(Text.ErrorLoadingImage);
 				}
 			}
 		}

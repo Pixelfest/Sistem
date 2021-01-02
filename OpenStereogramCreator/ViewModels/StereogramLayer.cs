@@ -4,7 +4,6 @@ using Sistem.Core;
 using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 
 namespace OpenStereogramCreator.ViewModels
 {
@@ -44,8 +43,6 @@ namespace OpenStereogramCreator.ViewModels
 
 				if (this is PatternStereogramLayer || this is RandomDotStereogramLayer)
 					Origin = (value.Width - MaximumSeparation) / 2;
-
-				DrawPreview();
 
 				OnPropertyChanged(nameof(DepthImage));
 				OnPropertyChanged(nameof(DepthImageSource));
@@ -158,17 +155,6 @@ namespace OpenStereogramCreator.ViewModels
 			EyeDistanceCentimeter = 50f;
 		}
 
-		public override void DrawPreview()
-		{
-			if (DepthImage == null)
-				return;
-
-			var preview48 = DepthImage.CloneAs<Rgba32>();
-			var preview = preview48.Clone(context => context.Resize(200, 150));
-			Preview = new ImageSharpImageSource<Rgba32>(preview);
-			OnPropertyChanged(nameof(Preview));
-		}
-
 		public Stereogram CreateStereogram()
 		{
 			var stereogram = new Stereogram
@@ -176,7 +162,7 @@ namespace OpenStereogramCreator.ViewModels
 				DepthMap = DepthImage
 			};
 
-			//Don't use object initializer
+			// Don't use object initializer, constructor initializes values that are otherwise overwritten.
 			stereogram.MinSeparation = (int)MinimumSeparation;
 			stereogram.MaxSeparation = (int)MaximumSeparation;
 			stereogram.Origin = (int)Origin;
@@ -195,8 +181,6 @@ namespace OpenStereogramCreator.ViewModels
 				case nameof(DrawDepthImage):
 				case nameof(DepthImage):
 					CachedImage = null;
-					break;
-				default:
 					break;
 			}
 

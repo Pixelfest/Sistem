@@ -3,9 +3,9 @@ using OpenStereogramCreator.ViewModels;
 
 namespace OpenStereogramCreator
 {
-	public partial class RandomDotStereogramLayerProperties : UserControl
+	public partial class RandomDotStereogramLayerProperties
 	{
-		private RandomDotStereogramLayer _randomDotStereogramLayer => DataContext as RandomDotStereogramLayer;
+		private RandomDotStereogramLayer RandomDotStereogramLayer => DataContext as RandomDotStereogramLayer;
 
 		public RandomDotStereogramLayerProperties()
 		{

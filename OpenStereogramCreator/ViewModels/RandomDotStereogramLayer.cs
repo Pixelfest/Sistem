@@ -1,6 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
 using OpenStereogramCreator.Annotations;
-using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace OpenStereogramCreator.ViewModels
@@ -63,8 +62,6 @@ namespace OpenStereogramCreator.ViewModels
 				case nameof(Density):
 				case nameof(ColoredNoise):
 					CachedImage = null;
-					break;
-				default:
 					break;
 			}
 

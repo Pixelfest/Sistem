@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using Microsoft.Win32;
 using OpenStereogramCreator.ViewModels;
 using SixLabors.ImageSharp.PixelFormats;
@@ -7,9 +6,9 @@ using SixLabors.ImageSharp.Processing;
 
 namespace OpenStereogramCreator
 {
-	public partial class DepthMapProperties : UserControl
+	public partial class DepthMapProperties
 	{
-		private IHaveADepthImage _dataContext => DataContext as IHaveADepthImage;
+		private IHaveADepthImage DepthMap => DataContext as IHaveADepthImage;
 
 		public DepthMapProperties()
 		{
@@ -20,7 +19,7 @@ namespace OpenStereogramCreator
 		{
 			var openFileDialog = new OpenFileDialog
 			{
-				Title = "Open image",
+				Title = Text.OpenImage,
 				Filter = "Image File|*.bmp; *.gif; *.jpg; *.jpeg; *.png;"
 			};
 
@@ -30,20 +29,19 @@ namespace OpenStereogramCreator
 				{
 					var image = SixLabors.ImageSharp.Image.Load<Rgb48>(openFileDialog.FileName);
 
-					_dataContext.DepthImage = image;
-					_dataContext.DepthImageFileName = openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf('\\') + 1);
-					
-					
+					DepthMap.DepthImage = image;
+					DepthMap.DepthImageFileName = openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf('\\') + 1);
 				}
 				catch
 				{
+					MessageBox.Show(Text.ErrorLoadingImage);
 				}
 			}
 		}
 
 		private void InvertButtonClick(object sender, RoutedEventArgs e)
 		{
-			_dataContext.DepthImage = _dataContext.DepthImage.Clone(context => context.Invert());
+			DepthMap.DepthImage = DepthMap.DepthImage.Clone(context => context.Invert());
 		}
 	}
 }

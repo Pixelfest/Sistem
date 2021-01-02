@@ -16,7 +16,7 @@ namespace OpenStereogramCreator.ViewModels
 					layer.Render();
 
 				if(layer.CachedImage != null)
-					image.Mutate(t => t.DrawImage(layer.CachedImage, new Point(0, 0), layer.Opacity));
+					image.Mutate(t => t.DrawImage(layer.CachedImage, layer.Location, layer.Opacity));
 			}
 		}
 	}

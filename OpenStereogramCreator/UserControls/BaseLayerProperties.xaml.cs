@@ -1,13 +1,7 @@
-﻿using System;
-using System.Windows.Controls;
-using OpenStereogramCreator.ViewModels;
-
-namespace OpenStereogramCreator
+﻿namespace OpenStereogramCreator
 {
-	public partial class BaseLayerProperties : UserControl
+	public partial class BaseLayerProperties
 	{
-		private LayerBase _baseLayer => DataContext as LayerBase;
-
 		public BaseLayerProperties()
 		{
 			InitializeComponent();

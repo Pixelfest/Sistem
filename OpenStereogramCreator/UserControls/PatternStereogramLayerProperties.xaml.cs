@@ -4,9 +4,9 @@ using OpenStereogramCreator.ViewModels;
 
 namespace OpenStereogramCreator
 {
-	public partial class PatternStereogramLayerProperties : UserControl
+	public partial class PatternStereogramLayerProperties
 	{
-		private PatternStereogramLayer _patternStereogramLayer => DataContext as PatternStereogramLayer;
+		private PatternStereogramLayer PatternStereogramLayer => DataContext as PatternStereogramLayer;
 
 		public PatternStereogramLayerProperties()
 		{
@@ -20,8 +20,8 @@ namespace OpenStereogramCreator
 			if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
 				multiplier = 10;
 
-			_patternStereogramLayer.PatternStart += e.Delta < 0 ? -1 * multiplier : 1 * multiplier;
-			_patternStereogramLayer.MaximumSeparation = _patternStereogramLayer.PatternEnd - _patternStereogramLayer.PatternStart;
+			PatternStereogramLayer.PatternStart += e.Delta < 0 ? -1 * multiplier : 1 * multiplier;
+			PatternStereogramLayer.MaximumSeparation = PatternStereogramLayer.PatternEnd - PatternStereogramLayer.PatternStart;
 		}
 
 		private void PatternEndMouseWheel(object sender, MouseWheelEventArgs e)
@@ -31,8 +31,8 @@ namespace OpenStereogramCreator
 			if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
 				multiplier = 10;
 
-			_patternStereogramLayer.PatternEnd += e.Delta < 0 ? -1 * multiplier : 1 * multiplier;
-			_patternStereogramLayer.MaximumSeparation = _patternStereogramLayer.PatternEnd - _patternStereogramLayer.PatternStart;
+			PatternStereogramLayer.PatternEnd += e.Delta < 0 ? -1 * multiplier : 1 * multiplier;
+			PatternStereogramLayer.MaximumSeparation = PatternStereogramLayer.PatternEnd - PatternStereogramLayer.PatternStart;
 		}
 
 		private void OriginMouseWheel(object sender, MouseWheelEventArgs e)
@@ -42,7 +42,7 @@ namespace OpenStereogramCreator
 			if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
 				multiplier = 10;
 
-			_patternStereogramLayer.Origin += e.Delta < 0 ? -1 * multiplier : 1 * multiplier;
+			PatternStereogramLayer.Origin += e.Delta < 0 ? -1 * multiplier : 1 * multiplier;
 		}
 	}
 }

@@ -18,7 +18,6 @@ namespace OpenStereogramCreator.ViewModels
 		private float _dpi;
 		private float _opacity;
 		private int _oversampling;
-		private Measurements _measurements;
 		private int _measurementsTabIndex;
 		private string _name;
 		private bool _visible;
@@ -27,12 +26,6 @@ namespace OpenStereogramCreator.ViewModels
 		{
 			get => _measurementsTabIndex;
 			set { _measurementsTabIndex = value; OnPropertyChanged(nameof(MeasurementsTabIndex)); }
-		}
-
-		public Measurements Measurements
-		{
-			get => _measurements;
-			set { _measurements = value; OnPropertyChanged(nameof(Measurements)); }
 		}
 
 		public float Opacity
@@ -52,6 +45,8 @@ namespace OpenStereogramCreator.ViewModels
 			get => _left;
 			set { _left = value; OnPropertyChanged(nameof(Left));}
 		}
+
+		public Point Location => new Point(Left, Top);
 
 		public int Width
 		{
@@ -164,8 +159,6 @@ namespace OpenStereogramCreator.ViewModels
 			set => Height = (int) (value * Dpc);
 		}
 
-		public ImageSharpImageSource<Rgba32> Preview { get; set; }
-
 		public string Name 
 		{ 
 			get => _name; 
@@ -182,12 +175,9 @@ namespace OpenStereogramCreator.ViewModels
 		{
 			CachedImage = null;
 			Opacity = 1;
-			Preview = new ImageSharpImageSource<Rgba32>(150,150);
 		}
 
 		public abstract void Render();
-
-		public abstract void DrawPreview();
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -202,8 +192,6 @@ namespace OpenStereogramCreator.ViewModels
 					break;
 				case nameof(Opacity):
 					// Trigger update, don't clear the cached image.
-					break;
-				default:
 					break;
 			}
 

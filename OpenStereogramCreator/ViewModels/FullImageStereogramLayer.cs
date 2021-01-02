@@ -18,8 +18,6 @@ namespace OpenStereogramCreator.ViewModels
 			{
 				_shift = value;
 
-				DrawPreview();
-
 				OnPropertyChanged(nameof(Shift));
 			}
 		}
@@ -28,17 +26,13 @@ namespace OpenStereogramCreator.ViewModels
 		{
 			if (DepthImage == null || PatternImage == null || DepthImage.Width > PatternImage.Width)
 				return;
-
-			var location = new Point(0, 0);
-			
-
+		
 			if (CachedImage != null)
 				return;
 
 			if (DrawDepthImage)
 			{
 				CachedImage = DepthImage.CloneAs<Rgba32>();
-
 				return;
 			}
 
@@ -56,7 +50,7 @@ namespace OpenStereogramCreator.ViewModels
 
 				if (stereogram.Generate() && stereogram.Result != null)
 				{
-					result.Mutate(t => t.DrawImage(stereogram.Result, location, Opacity));
+					result.Mutate(t => t.DrawImage(stereogram.Result, new Point(0,0), Opacity));
 				}
 
 				start += (int)MaximumSeparation;
@@ -82,8 +76,6 @@ namespace OpenStereogramCreator.ViewModels
 			{
 				case nameof(Shift):
 					CachedImage = null;
-					break;
-				default:
 					break;
 			}
 

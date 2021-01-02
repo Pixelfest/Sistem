@@ -1,12 +1,11 @@
-﻿using System.Windows.Controls;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using OpenStereogramCreator.ViewModels;
 
 namespace OpenStereogramCreator
 {
-	public partial class FullImageStereogramLayerProperties : UserControl
+	public partial class FullImageStereogramLayerProperties
 	{
-		private FullImageStereogramLayer _fullImageStereogramLayer => DataContext as FullImageStereogramLayer;
+		private FullImageStereogramLayer FullImageStereogramLayer => DataContext as FullImageStereogramLayer;
 
 		public FullImageStereogramLayerProperties()
 		{
@@ -20,7 +19,7 @@ namespace OpenStereogramCreator
 			if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
 				multiplier = 10;
 
-			_fullImageStereogramLayer.Shift += e.Delta < 0 ? -1 * multiplier : 1 * multiplier;
+			FullImageStereogramLayer.Shift += e.Delta < 0 ? -1 * multiplier : 1 * multiplier;
 		}
 	}
 }
