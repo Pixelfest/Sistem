@@ -64,10 +64,10 @@
                                     <DataTemplate>
                                         <StackPanel>
                                             <StackPanel Orientation="Horizontal">
-                                                <Border BorderThickness="1" BorderBrush="Black">
-                                                    <Image Source="{Binding Path=Preview}" Width="25" Height="25" />
-                                                </Border>
-                                                <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center"></TextBlock>
+                                        <Border BorderThickness="1" BorderBrush="Black">
+                                            <Image Source="{Binding Path=Preview}" Width="25" Height="25" />
+                                        </Border>
+                                        <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center"></TextBlock>
                                             </StackPanel>
                                         </StackPanel>
                                     </DataTemplate>

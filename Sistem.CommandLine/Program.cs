@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Sistem.CommandLine
 {
-	[Command(Name = "sis", Description = "Generate singe image stereograms", ThrowOnUnexpectedArgument = false)]
+	[Command(Name = "sis", Description = "Generate singe image stereograms")]
 	[HelpOption("-?|-h|--help")]
 	class Program
 	{
