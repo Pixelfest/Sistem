@@ -123,4 +123,10 @@
   <data name="OpenImage" xml:space="preserve">
 	  <value>Open image</value>
   </data>
+  <data name="SaveImage" xml:space="preserve">
+	  <value>Save image</value>
+  </data>
+  <data name="ErrorSavingImage" xml:space="preserve">
+	  <value>There was an error when trying to save the image.</value>
+  </data>
 </root>

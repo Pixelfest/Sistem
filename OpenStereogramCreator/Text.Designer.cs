@@ -70,11 +70,29 @@ namespace OpenStereogramCreator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was an error when trying to save the image..
+        /// </summary>
+        internal static string ErrorSavingImage {
+            get {
+                return ResourceManager.GetString("ErrorSavingImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open image.
         /// </summary>
         internal static string OpenImage {
             get {
                 return ResourceManager.GetString("OpenImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save image.
+        /// </summary>
+        internal static string SaveImage {
+            get {
+                return ResourceManager.GetString("SaveImage", resourceCulture);
             }
         }
     }

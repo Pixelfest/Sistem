@@ -118,7 +118,7 @@ namespace OpenStereogramCreator
         {
             var saveFileDialog = new SaveFileDialog
             {
-                Title = "Save image",
+                Title = Text.SaveImage,
                 Filter = "Image File|*.png"
             };
 
@@ -133,7 +133,7 @@ namespace OpenStereogramCreator
                 }
                 catch
                 {
-                    MessageBox.Show("Something went wrong");
+                    MessageBox.Show(Text.ErrorSavingImage);
                 }
             }
         }

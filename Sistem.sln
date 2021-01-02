@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{024A4E40-09CE-4DA7-B3CF-0970E8589ED7}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenStereogramCreator", "OpenStereogramCreator\OpenStereogramCreator.csproj", "{B4468087-E02E-4481-8823-07D74D524F33}"

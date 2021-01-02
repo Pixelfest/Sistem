@@ -10,8 +10,11 @@
         Title="Open Stereogram Creator" Height="800" Width="1280" WindowState="Maximized" KeyDown="KeyDownEvent" Icon="Logo.ico">
 	<DockPanel LastChildFill="True">
 		<StackPanel DockPanel.Dock="Left" Width="300">
+            <!--
             <Button Click="DrawClick" Margin="3">RENDER</Button>
-            <Button Click="SaveButtonClick" Margin="3">SAVE</Button>
+            -->
+            
+            <Button Click="SaveButtonClick" Margin="3">Save result</Button>
 
                     <Expander IsExpanded="True">
                         <Expander.Header>
@@ -64,9 +67,9 @@
                                     <DataTemplate>
                                         <StackPanel>
                                             <StackPanel Orientation="Horizontal">
-                                        <Border BorderThickness="1" BorderBrush="Black">
+                                       <!-- <Border BorderThickness="1" BorderBrush="Black">
                                             <Image Source="{Binding Path=Preview}" Width="25" Height="25" />
-                                        </Border>
+                                        </Border>-->
                                         <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center"></TextBlock>
                                             </StackPanel>
                                         </StackPanel>
@@ -89,12 +92,17 @@
                         </Grid>
                     </Expander>
                 </StackPanel>
-		<StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Margin="{StaticResource ControlMargin}">
-			<Button Click="ResetZoom" Margin="0,0,4,0">Fit</Button>
-			<Button Click="SetPixelPerfect" Margin="0,0,4,0">1:1</Button>
-            <Button Click="ResetActualSize" Margin="0,0,4,0">Actual size</Button>
-            <Label x:Name="CurrentZoom" Content="{Binding ElementName=ZoomBorder, Path=Scale}"></Label>
-		</StackPanel>
+        <DockPanel DockPanel.Dock="Bottom" Margin="{StaticResource ControlMargin}">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                <Button Click="ResetZoom" Margin="0,0,4,0">Fit</Button>
+                <Button Click="SetPixelPerfect" Margin="0,0,4,0">1:1</Button>
+                <Button Click="ResetActualSize" Margin="0,0,4,0">Actual size</Button>
+                <Label x:Name="CurrentZoom" Content="{Binding ElementName=ZoomBorder, Path=Scale}"></Label>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
+                 <Label x:Name="MonitorDpi" Content="Actual size assumes a 109dpi monitor for now"></Label>
+           </StackPanel>
+        </DockPanel>
       
 		<tools:ZoomBorder x:Name="ZoomBorder" ClipToBounds="True" Background="Gray">
 			<Image Margin="0,0,0,0" x:Name="PreviewImage" />

@@ -8,6 +8,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace OpenStereogramCreator.Tools
 {
+	/// <summary>
 	/// reference article: http://www.i-programmer.info/programming/wpf-workings/822
 	/// reference to what needs to be implemented: https://blogs.msdn.microsoft.com/dwayneneed/2008/06/20/implementing-a-custom-bitmapsource/
 	///https://github.com/jongleur1983/SharpImageSource/blob/master/ImageSharp.WpfImageSource/ImageSharpImageSource.cs
@@ -227,9 +228,11 @@ namespace OpenStereogramCreator.Tools
 
 							// Write sRGB (non-linear) since it is implied by
 							// the pixel format we chose.
+
+							// Windows uses Bgr or something, I dunno but this works
 							pPixel->G = dest.G;
-							pPixel->R = dest.R;
-							pPixel->B = dest.B;
+							pPixel->R = dest.B;
+							pPixel->B = dest.R;
 							pPixel->A = dest.A;
 
 							pPixel++;
