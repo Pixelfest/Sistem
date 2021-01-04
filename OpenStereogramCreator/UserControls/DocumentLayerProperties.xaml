@@ -15,13 +15,13 @@
 				<StackPanel>
 					<DockPanel>
 						<Label>Width</Label>
-						<TextBox Text="{Binding Path=Width}" Style="{StaticResource TextBoxRight}"></TextBox>
+						<TextBox Text="{Binding Path=Width}" Style="{StaticResource TextBoxRight}" IsReadOnly="True"></TextBox>
 					</DockPanel>
 					<DockPanel>
 						<Label>Height</Label>
-						<TextBox Text="{Binding Path=Height}" Style="{StaticResource TextBoxRight}"></TextBox>
+                        <TextBox Text="{Binding Path=Height}" Style="{StaticResource TextBoxRight}" IsReadOnly="True"></TextBox>
 					</DockPanel>
-					<Button Click="AutoSizeClick">Auto size</Button>
+					<!--<Button Click="AutoSizeClick">Auto size</Button>-->
 				</StackPanel>
 
 			</TabItem>

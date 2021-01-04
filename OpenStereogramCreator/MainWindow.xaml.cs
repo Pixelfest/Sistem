@@ -21,7 +21,6 @@ namespace OpenStereogramCreator
 		public delegate void UpdateImageCallback(Image<Rgba32> image);
 
 		public LayersViewModel Layers  { get; set; }
-		public DocumentLayer DocumentLayer { get; set; }
 
         private Image<Rgba32> _image;
 		public Image<Rgba32> Image { 
@@ -43,31 +42,8 @@ namespace OpenStereogramCreator
 			
 			Image = new Image<Rgba32>(1920, 1080);
 
-			DocumentLayer = new DocumentLayer
-			{
-				Name = "Document", 
-				Visible = true, 
-				BackgroundColor = Color.Black, 
-				Width = 1920,
-				Height = 1080,
-				Dpi = 100,
-			};
-
-			DocumentLayer.AutoSize += DocumentLayerAutoSize;
-			DocumentLayer.PropertyChanged += DocumentPropertyChanged;
-			BackgroundLayerProperties.DataContext = DocumentLayer;
-		}
-
-		private void DocumentLayerAutoSize(object sender, System.EventArgs e)
-		{
-			if (!Layers.Any())
-				return;
-
-			var width = Layers.OrderByDescending(item => item.Width).FirstOrDefault()?.Width ?? 1920;
-			var height = Layers.OrderByDescending(item => item.Height).FirstOrDefault()?.Height ?? 1080;
-
-			DocumentLayer.Width = width;
-			DocumentLayer.Height = height;
+			Layers.Document.PropertyChanged += DocumentPropertyChanged;
+			BackgroundLayerProperties.DataContext = Layers.Document;
 		}
 
 		private void DocumentPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -76,26 +52,26 @@ namespace OpenStereogramCreator
 			{
 				case nameof(DocumentLayer.Width):
 				case nameof(DocumentLayer.Height):
-					Image.Mutate(context => context.Resize(DocumentLayer.Width, DocumentLayer.Height));
+					Image.Mutate(context => context.Resize(Layers.Document.Width, Layers.Document.Height));
 					break;
 				case nameof(DocumentLayer.Dpi):
 				{
 					foreach (var layer in Layers)
-						layer.Dpi = DocumentLayer.Dpi;
+						layer.Dpi = Layers.Document.Dpi;
 
 					break;
 				}
 				case nameof(DocumentLayer.MeasurementsTabIndex):
 				{
 					foreach (var layer in Layers)
-						layer.MeasurementsTabIndex = DocumentLayer.MeasurementsTabIndex;
+						layer.MeasurementsTabIndex = Layers.Document.MeasurementsTabIndex;
 
 					break;
 				}
 				case nameof(DocumentLayer.Oversampling):
 				{
 					foreach (var layer in Layers)
-						layer.Oversampling = DocumentLayer.Oversampling;
+						layer.Oversampling = Layers.Document.Oversampling;
 
 					break;
 				}
@@ -106,6 +82,8 @@ namespace OpenStereogramCreator
 		
 		private void LayerPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
+			DocumentAutoSize();
+
 			Draw();
 		}
 
@@ -142,7 +120,7 @@ namespace OpenStereogramCreator
 
         private new void KeyDownEvent(object sender, KeyEventArgs e)
 		{
-			if (!(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
+			if (!(Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl)))
 				return;
 
 			var layer = LayersListBox.SelectedItem as PatternStereogramLayer;
@@ -195,5 +173,20 @@ namespace OpenStereogramCreator
 
 			Draw();
 		}
+
+        private void DocumentAutoSize()
+        {
+	        if (!Layers.Any())
+		        return;
+
+	        var width = Layers.Select(item => item.Width + item.Left).Max();
+	        var height = Layers.Select(item => item.Height + item.Top).Max();
+
+	        if (Layers.Document.Width != width)
+		        Layers.Document.Width = width;
+
+	        if (Layers.Document.Height != height)
+		        Layers.Document.Height = height;
+        }
 	}
 }

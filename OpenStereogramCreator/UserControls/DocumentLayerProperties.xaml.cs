@@ -22,10 +22,5 @@ namespace OpenStereogramCreator
 
 			backgroundLayer.MeasurementsTabIndex = MeasurementsTab.SelectedIndex;
 		}
-
-		private void AutoSizeClick(object sender, RoutedEventArgs e)
-		{
-			DocumentLayer.OnAutoSize();
-		}
 	}
 }

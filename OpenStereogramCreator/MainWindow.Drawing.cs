@@ -1,65 +1,58 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Windows;
 using OpenStereogramCreator.Tools;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace OpenStereogramCreator
 {
-    public partial class MainWindow
-    {
-        // Drawing
+	public partial class MainWindow
+	{
+		// Drawing
 
-        private void DrawClick(object sender, RoutedEventArgs e)
-        {
-            Draw();
-        }
+		private void DrawClick(object sender, RoutedEventArgs e)
+		{
+			Draw();
+		}
 
-        private void Draw()
-        {
-            if (_drawing)
-            {
-                _drawRequested = true;
-                return;
-            }
+		private void Draw()
+		{
+			if (_drawing)
+			{
+				_drawRequested = true;
+				return;
+			}
 
-            //if (Layers.Any(layer => layer.CachedImage == null) || force)
-            //{
-	            _drawing = true;
-	            var thread = new Thread(() =>
-	            {
-		            // Clear the image first
-		            //DocumentLayer.Draw(Image);
+			_drawing = true;
 
-                    //Layers.Draw(Image);
+			var thread = new Thread(() =>
+			{
+				Layers.Document.Render();
 
-                    DocumentLayer.Render();
-                    var result = DocumentLayer.CachedImage.Clone();
+				if (Layers.Document.CachedImage != null)
+				{
+					var result = Layers.Document.CachedImage.Clone();
 
-                    Layers.Draw(result);
+					Layers.Draw(result);
 
-                    Image.Replace(result);
+					Image.Replace(result);
 
-                    //Image.Mutate(t => t.DrawImage(result, ));
+					PreviewImage.Dispatcher.Invoke(
+						new UpdateImageCallback(this.UpdateImage),
+						new object[] {Image});
+				}
 
-                    //PreviewImage.Source = new ImageSharpImageSource<Rgba32>(Image);
-                    PreviewImage.Dispatcher.Invoke(
-			            new UpdateImageCallback(this.UpdateImage),
-			            new object[] {Image});
+				_drawing = false;
 
-		            _drawing = false;
+				if (_drawRequested)
+				{
+					_drawRequested = false;
+					Draw();
+				}
+			});
 
-		            if (_drawRequested)
-		            {
-			            _drawRequested = false;
-			            Draw();
-		            }
-	            });
-
-	            thread.Start();
-            //}
-            //else
-            //{
-	       //     _drawRequested = false;
-           //}
-        }
-    }
+			thread.Start();
+		}
+	}
 }

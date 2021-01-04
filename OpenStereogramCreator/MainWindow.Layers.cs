@@ -14,7 +14,7 @@ namespace OpenStereogramCreator
 			var layer = new ImageLayer
 			{
 				Name = $"Image Layer {Layers.Count}",
-				Dpi = DocumentLayer.Dpi,
+				Dpi = Layers.Document.Dpi,
 				Visible = true
 			};
 
@@ -28,7 +28,7 @@ namespace OpenStereogramCreator
 			var layer = new RandomDotStereogramLayer
 			{
 				Name = $"Random Dot Layer {Layers.Count}",
-				Dpi = DocumentLayer.Dpi,
+				Dpi = Layers.Document.Dpi,
 				Visible = true
 			};
 
@@ -42,7 +42,7 @@ namespace OpenStereogramCreator
 			var layer = new PatternStereogramLayer
 			{
 				Name = $"Pattern Layer {Layers.Count}",
-				Dpi = DocumentLayer.Dpi,
+				Dpi = Layers.Document.Dpi,
 				Visible = true
 			};
 
@@ -56,7 +56,7 @@ namespace OpenStereogramCreator
 			var layer = new FullImageStereogramLayer
 			{
 				Name = $"Full Image Layer {Layers.Count}",
-				Dpi = DocumentLayer.Dpi,
+				Dpi = Layers.Document.Dpi,
 				Origin = 0,
 				Visible = true
 			};

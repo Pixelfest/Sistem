@@ -10,13 +10,6 @@ namespace OpenStereogramCreator.ViewModels
 {
 	public class DocumentLayer : LayerBase
 	{
-		public event EventHandler AutoSize;
-
-		public void OnAutoSize()
-		{
-			AutoSize?.Invoke(this, EventArgs.Empty);
-		}
-
 		public Color BackgroundColor { get; set; }
 
 		public string BackgroundColorText {
@@ -39,6 +32,9 @@ namespace OpenStereogramCreator.ViewModels
 		public override void Render()
 		{
 			if (CachedImage != null)
+				return;
+
+			if (Width == 0 || Height == 0)
 				return;
 
 			var result = new Image<Rgba32>(Width, Height);

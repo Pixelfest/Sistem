@@ -8,6 +8,19 @@ namespace OpenStereogramCreator.ViewModels
 {
 	public class LayersViewModel : ObservableCollection<LayerBase>
 	{
+		public DocumentLayer Document { get; set; }
+
+		public LayersViewModel() : base()
+		{
+			Document = new DocumentLayer
+			{
+				Name = "Document",
+				Visible = true,
+				BackgroundColor = Color.Black,
+				Dpi = 100,
+			};
+		}
+
 		public void Draw(Image<Rgba32> image)
 		{
 			foreach (var layer in this.Where(layer => layer.Visible && layer.Opacity > 0).Reverse())

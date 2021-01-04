@@ -16,8 +16,8 @@ namespace OpenStereogramCreator.Tools
 
 		public static void Replace(this Image<Rgba32> source, Image<Rgba32> replace)
 		{
-			if(source.Width != replace.Width || source.Height != replace.Height)
-				throw new System.Exception("Source and replace images must have the same dimensions.");
+			if (source.Width != replace.Width || source.Height != replace.Height)
+				return;
 			
 			int width = source.Width;
 
