@@ -52,7 +52,8 @@ namespace OpenStereogramCreator
 			{
 				case nameof(DocumentLayer.Width):
 				case nameof(DocumentLayer.Height):
-					Image.Mutate(context => context.Resize(Layers.Document.Width, Layers.Document.Height));
+					if(Layers.Document.Width != 0 && Layers.Document.Height != 0)
+						Image.Mutate(context => context.Resize(Layers.Document.Width, Layers.Document.Height));
 					break;
 				case nameof(DocumentLayer.Dpi):
 				{
@@ -91,30 +92,6 @@ namespace OpenStereogramCreator
 		{
 			PreviewImage.Source = new ImageSharpImageSource<Rgba32>(image);
 		}
-
-        private void SaveButtonClick(object sender, RoutedEventArgs e)
-        {
-            var saveFileDialog = new SaveFileDialog
-            {
-                Title = Text.SaveImage,
-                Filter = "Image File|*.png"
-            };
-
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                try
-                {
-                    using (var stream = new FileStream(saveFileDialog.FileName, FileMode.Create, FileAccess.ReadWrite))
-                    {
-                        Image.SaveAsPng(stream);
-                    }
-                }
-                catch
-                {
-                    MessageBox.Show(Text.ErrorSavingImage);
-                }
-            }
-        }
 
 		// Fine tuning
 

@@ -21,6 +21,23 @@ namespace OpenStereogramCreator
 			layer.PropertyChanged += LayerPropertyChanged;
 
 			Layers.Insert(0, layer);
+			LayersListBox.SelectedItem = layer;
+		}
+
+		private void AddReversePatternLayerMenuClick(object sender, RoutedEventArgs e)
+		{
+			var layer = new ReversePatternLayer()
+			{
+				Name = $"Reverse Columns Layer {Layers.Count}",
+				Dpi = Layers.Document.Dpi,
+				NumberOfColumns = 8,
+				Visible = true
+			};
+
+			layer.PropertyChanged += LayerPropertyChanged;
+
+			Layers.Insert(0, layer);
+			LayersListBox.SelectedItem = layer;
 		}
 
 		private void AddRandomDotStereogramLayerMenuClick(object sender, RoutedEventArgs e)
@@ -35,6 +52,7 @@ namespace OpenStereogramCreator
 			layer.PropertyChanged += LayerPropertyChanged;
 
 			Layers.Insert(0, layer);
+			LayersListBox.SelectedItem = layer;
 		}
 
 		private void AddPatternStereogramLayerMenuClick(object sender, RoutedEventArgs e)
@@ -49,6 +67,7 @@ namespace OpenStereogramCreator
 			layer.PropertyChanged += LayerPropertyChanged;
 
 			Layers.Insert(0, layer);
+			LayersListBox.SelectedItem = layer;
 		}
 
 		private void AddFullImageStereogramLayerMenuClick(object sender, RoutedEventArgs e)
@@ -64,6 +83,7 @@ namespace OpenStereogramCreator
 			layer.PropertyChanged += LayerPropertyChanged;
 
 			Layers.Insert(0, layer);
+			LayersListBox.SelectedItem = layer;
 		}
 
 		private void DeleteLayerClick(object sender, RoutedEventArgs e)
@@ -125,21 +145,25 @@ namespace OpenStereogramCreator
 
 			switch (selectedItem)
 			{
-				case ImageLayer imageLayer:
+				case ReversePatternLayer layer:
+					ReversePatternLayerProperties.Visibility = Visibility.Visible;
+					ReversePatternLayerProperties.DataContext = layer;
+					break;
+				case ImageLayer layer:
 					ImageLayerProperties.Visibility = Visibility.Visible;
-					ImageLayerProperties.DataContext = imageLayer;
+					ImageLayerProperties.DataContext = layer;
 					break;
-				case RandomDotStereogramLayer randomDotStereogramLayer:
+				case RandomDotStereogramLayer layer:
 					RandomDotStereogramLayerProperties.Visibility = Visibility.Visible;
-					RandomDotStereogramLayerProperties.DataContext = randomDotStereogramLayer;
+					RandomDotStereogramLayerProperties.DataContext = layer;
 					break;
-				case FullImageStereogramLayer fullImageStereogramLayer:
+				case FullImageStereogramLayer layer:
 					FullImageStereogramLayerProperties.Visibility = Visibility.Visible;
-					FullImageStereogramLayerProperties.DataContext = fullImageStereogramLayer;
+					FullImageStereogramLayerProperties.DataContext = layer;
 					break;
-				case PatternStereogramLayer patternStereogramLayer:
+				case PatternStereogramLayer layer:
 					PatternStereogramLayerProperties.Visibility = Visibility.Visible;
-					PatternStereogramLayerProperties.DataContext = patternStereogramLayer;
+					PatternStereogramLayerProperties.DataContext = layer;
 					break;
 			}
 		}

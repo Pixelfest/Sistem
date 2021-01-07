@@ -9,7 +9,6 @@ namespace OpenStereogramCreator.ViewModels
 	public class ImageLayer : LayerBase
 	{
 		private Image<Rgba32> _image;
-		private string _fileName;
 
 		public Image<Rgba32> Image
 		{
@@ -23,16 +22,6 @@ namespace OpenStereogramCreator.ViewModels
 
 				OnPropertyChanged(nameof(Image));  
 				OnPropertyChanged(nameof(ImageSource));  
-			}
-		}
-
-		public string FileName
-		{
-			get => _fileName;
-			set
-			{
-				_fileName = value;
-				OnPropertyChanged(nameof(FileName));  
 			}
 		}
 
@@ -70,6 +59,5 @@ namespace OpenStereogramCreator.ViewModels
 
 			base.OnPropertyChanged(propertyName);
 		}
-
 	}
 }

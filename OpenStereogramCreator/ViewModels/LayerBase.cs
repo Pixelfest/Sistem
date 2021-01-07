@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.IO.Compression;
 using System.Runtime.CompilerServices;
 using OpenStereogramCreator.Annotations;
 using OpenStereogramCreator.Tools;
@@ -21,29 +23,46 @@ namespace OpenStereogramCreator.ViewModels
 		private int _measurementsTabIndex;
 		private string _name;
 		private bool _visible;
+		protected bool _importing;
 
 		public int MeasurementsTabIndex
 		{
 			get => _measurementsTabIndex;
-			set { _measurementsTabIndex = value; OnPropertyChanged(nameof(MeasurementsTabIndex)); }
+			set
+			{
+				_measurementsTabIndex = value;
+				OnPropertyChanged(nameof(MeasurementsTabIndex));
+			}
 		}
 
 		public float Opacity
 		{
 			get => _opacity;
-			set { _opacity = value; OnPropertyChanged(nameof(Opacity)); }
+			set
+			{
+				_opacity = value;
+				OnPropertyChanged(nameof(Opacity));
+			}
 		}
 
 		public int Top
 		{
 			get => _top;
-			set { _top = value; OnPropertyChanged(nameof(Top));}
+			set
+			{
+				_top = value;
+				OnPropertyChanged(nameof(Top));
+			}
 		}
 
 		public int Left
 		{
 			get => _left;
-			set { _left = value; OnPropertyChanged(nameof(Left));}
+			set
+			{
+				_left = value;
+				OnPropertyChanged(nameof(Left));
+			}
 		}
 
 		public Point Location => new Point(Left, Top);
@@ -65,7 +84,7 @@ namespace OpenStereogramCreator.ViewModels
 			get => _height;
 			set
 			{
-				_height = value; 
+				_height = value;
 				OnPropertyChanged(nameof(Height));
 				OnPropertyChanged(nameof(HeightInch));
 				OnPropertyChanged(nameof(HeightCentimeter));
@@ -75,8 +94,8 @@ namespace OpenStereogramCreator.ViewModels
 		public float Dpi
 		{
 			get => _dpi;
-			set 
-			{ 
+			set
+			{
 				_dpi = value;
 				OnPropertyChanged(nameof(Dpi));
 				OnPropertyChanged(nameof(Dpc));
@@ -128,7 +147,7 @@ namespace OpenStereogramCreator.ViewModels
 			get => Height / Dpi;
 			set => Height = (int) (value * Dpi);
 		}
-		
+
 		public float Dpc
 		{
 			get => Utilities.CMToInch(Dpi);
@@ -141,7 +160,7 @@ namespace OpenStereogramCreator.ViewModels
 			set => Top = (int) (value * Dpc);
 		}
 
-        public float LeftCentimeter
+		public float LeftCentimeter
 		{
 			get => Left / Dpc;
 			set => Left = (int) (value * Dpc);
@@ -159,16 +178,24 @@ namespace OpenStereogramCreator.ViewModels
 			set => Height = (int) (value * Dpc);
 		}
 
-		public string Name 
-		{ 
-			get => _name; 
-			set	{ _name = value; OnPropertyChanged(nameof(Name));}
+		public string Name
+		{
+			get => _name;
+			set
+			{
+				_name = value;
+				OnPropertyChanged(nameof(Name));
+			}
 		}
 
-		public bool Visible 
-		{ 
-			get => _visible; 
-			set { _visible = value; OnPropertyChanged(nameof(Visible)); } 
+		public bool Visible
+		{
+			get => _visible;
+			set
+			{
+				_visible = value;
+				OnPropertyChanged(nameof(Visible));
+			}
 		}
 
 		protected LayerBase()
@@ -184,18 +211,44 @@ namespace OpenStereogramCreator.ViewModels
 		[NotifyPropertyChangedInvocator]
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
-			switch (propertyName)
+			if (!_importing)
 			{
-				case nameof(Visible):
-				case nameof(Oversampling):
-					CachedImage = null;
-					break;
-				case nameof(Opacity):
-					// Trigger update, don't clear the cached image.
-					break;
-			}
+				switch (propertyName)
+				{
+					case nameof(Visible):
+					case nameof(Oversampling):
+						CachedImage = null;
+						break;
+					case nameof(Opacity):
+						// Trigger update, don't clear the cached image.
+						break;
+				}
 
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
-    }
+
+		public void Import(int top, int left, int width, int height, float dpi, float opacity, int oversampling, int measurementsTabIndex, string name, bool visible)
+		{
+			_importing = true;
+
+			try
+			{
+				Top = top;
+				Left = left;
+				Width = width;
+				Height = height;
+				Dpi = dpi;
+				Opacity = opacity;
+				Oversampling = oversampling;
+				MeasurementsTabIndex = measurementsTabIndex;
+				Name = name;
+				Visible = visible;
+			}
+			finally
+			{
+				_importing = false;
+			}
+		}
+	}
 }

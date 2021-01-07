@@ -8,90 +8,97 @@
         xmlns:tools="clr-namespace:OpenStereogramCreator.Tools"
         mc:Ignorable="d"
         Title="Open Stereogram Creator" Height="800" Width="1280" WindowState="Maximized" KeyDown="KeyDownEvent" Icon="Logo.ico">
-	<DockPanel LastChildFill="True">
-		<StackPanel DockPanel.Dock="Left" Width="300">
-            <!--
-            <Button Click="DrawClick" Margin="3">RENDER</Button>
-            -->
-            
-            <Button Click="SaveButtonClick" Margin="3">Save result</Button>
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="{x:Static OpenStereogramCreator:Text.MenuFile}">
+                <MenuItem Header="{x:Static OpenStereogramCreator:Text.MenuNew}" Click="MenuClickNew"></MenuItem>
+                <MenuItem Header="{x:Static OpenStereogramCreator:Text.MenuOpen}" Click="MenuClickOpen" IsEnabled="False"></MenuItem>
+                <MenuItem Header="{x:Static OpenStereogramCreator:Text.MenuSave}" Click="MenuClickSave" IsEnabled="False"></MenuItem>
+                <MenuItem Header="{x:Static OpenStereogramCreator:Text.MenuExport}" Click="MenuClickExportToPng"></MenuItem>
+                <MenuItem Header="{x:Static OpenStereogramCreator:Text.MenuExit}" Click="MenuClickExit"></MenuItem>
+            </MenuItem>
+        </Menu>
+<ScrollViewer DockPanel.Dock="Left" Width="300">
+        <StackPanel>
+            <Expander IsExpanded="True">
+                <Expander.Header>
+                    <TextBlock FontWeight="Bold">Document Properties</TextBlock>
+                </Expander.Header>
 
-                    <Expander IsExpanded="True">
-                        <Expander.Header>
-                            <TextBlock FontWeight="Bold">Document Properties</TextBlock>
-                        </Expander.Header>
-
-                        <OpenStereogramCreator:DocumentLayerProperties x:Name="BackgroundLayerProperties" />
-                    </Expander>
-                    <Expander IsExpanded="True">
-                        <Expander.Header>
-                            <TextBlock FontWeight="Bold">Layers</TextBlock>
-                        </Expander.Header>
-                        <DockPanel LastChildFill="True">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Bottom">
-                                <Button FontFamily="{StaticResource FontAwesomeRegular}" Style="{StaticResource IconButton}" Click="DeleteLayerClick">
-                                    <TextBlock Margin="0" Padding="3">&#xf1f8;</TextBlock>
-                                </Button>
-                                <Button FontFamily="{StaticResource FontAwesomeRegular}" Style="{StaticResource IconButton}" Click="LayerUpClick" >
-                                    <TextBlock Margin="0" Padding="3">&#xf151;</TextBlock>
-                                </Button>
-                                <Button FontFamily="{StaticResource FontAwesomeRegular}" Style="{StaticResource IconButton}" Click="LayerDownClick">
-                                    <TextBlock Margin="0" Padding="3">&#xf150;</TextBlock>
-                                </Button>
-                                <Menu BorderThickness="0" Background="Transparent" Margin="0" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Center" ToolTip="Add layer">
-                                    <MenuItem Header="&#xf055;" FontFamily="{StaticResource FontAwesomeRegular}" FontSize="16" Margin="0" Padding="0" >
-                                        <MenuItem FontSize="12" Header="Add _Image layer" Click="AddImageLayerMenuClick"/>
-                                        <MenuItem FontSize="12" Header="Add _Random Dot Stereogram layer" Click="AddRandomDotStereogramLayerMenuClick"/>
-                                        <MenuItem FontSize="12" Header="Add _Pattern Stereogram layer" Click="AddPatternStereogramLayerMenuClick"/>
-                                        <MenuItem FontSize="12" Header="Add _Full Image Stereogram layer" Click="AddFullImageStereogramLayerMenuClick"/>
-                                    </MenuItem>
-                                </Menu>
-                            </StackPanel>
-                            <ListBox Name="LayersListBox" ItemsSource="{Binding}" SelectionChanged="LayersListBoxSelectionChanged" d:DataContext="{d:DesignInstance viewModels:LayerBase}">
-                                <ListBox.Style>
-                                    <Style TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
-                                        <Style.Triggers>
-                                            <Trigger Property="HasItems" Value="False">
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate>
-                                                            <TextBlock TextWrapping="Wrap">No layers, create a layer by using the + in the bottom right corner of this section.</TextBlock>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ListBox.Style>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                       <!-- <Border BorderThickness="1" BorderBrush="Black">
+                <OpenStereogramCreator:DocumentLayerProperties x:Name="BackgroundLayerProperties" />
+            </Expander>
+            <Expander IsExpanded="True">
+                <Expander.Header>
+                    <TextBlock FontWeight="Bold">Layers</TextBlock>
+                </Expander.Header>
+                <DockPanel LastChildFill="True">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Bottom">
+                        <Button FontFamily="{StaticResource FontAwesomeRegular}" Style="{StaticResource IconButton}" Click="DeleteLayerClick">
+                            <TextBlock Margin="0" Padding="3">&#xf1f8;</TextBlock>
+                        </Button>
+                        <Button FontFamily="{StaticResource FontAwesomeRegular}" Style="{StaticResource IconButton}" Click="LayerUpClick" >
+                            <TextBlock Margin="0" Padding="3">&#xf151;</TextBlock>
+                        </Button>
+                        <Button FontFamily="{StaticResource FontAwesomeRegular}" Style="{StaticResource IconButton}" Click="LayerDownClick">
+                            <TextBlock Margin="0" Padding="3">&#xf150;</TextBlock>
+                        </Button>
+                        <Menu BorderThickness="0" Background="Transparent" Margin="0" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Center" ToolTip="Add layer">
+                            <MenuItem Header="&#xf055;" FontFamily="{StaticResource FontAwesomeRegular}" FontSize="16" Margin="0" Padding="0" >
+                                <MenuItem FontSize="12" Header="Add _Image layer" Click="AddImageLayerMenuClick"/>
+                                <MenuItem FontSize="12" Header="Add _Random Dot Stereogram layer" Click="AddRandomDotStereogramLayerMenuClick"/>
+                                <MenuItem FontSize="12" Header="Add _Pattern Stereogram layer" Click="AddPatternStereogramLayerMenuClick"/>
+                                <MenuItem FontSize="12" Header="Add _Full Image Stereogram layer" Click="AddFullImageStereogramLayerMenuClick"/>
+                                <MenuItem FontSize="12" Header="Add Re_verse Pattern layer" Click="AddReversePatternLayerMenuClick"/>
+                            </MenuItem>
+                        </Menu>
+                    </StackPanel>
+                    <ListBox Name="LayersListBox" ItemsSource="{Binding}" SelectionChanged="LayersListBoxSelectionChanged" d:DataContext="{d:DesignInstance viewModels:LayerBase}">
+                        <ListBox.Style>
+                            <Style TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
+                                <Style.Triggers>
+                                    <Trigger Property="HasItems" Value="False">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <TextBlock TextWrapping="Wrap">No layers, create a layer by using the + in the bottom right corner of this section.</TextBlock>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.Style>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <!-- <Border BorderThickness="1" BorderBrush="Black">
                                             <Image Source="{Binding Path=Preview}" Width="25" Height="25" />
                                         </Border>-->
                                         <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center"></TextBlock>
-                                            </StackPanel>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
-                        </DockPanel>
-                    </Expander>
-                    <Expander IsExpanded="True">
-                        <Expander.Header>
-                            <TextBlock FontWeight="Bold">Current Layer Properties</TextBlock>
-                        </Expander.Header>
-                        <Grid x:Name="LayersStackPanel">
-                            <TextBlock x:Name="NoLayerSelected">Select a layer first</TextBlock>
-                            <OpenStereogramCreator:ImageLayerProperties x:Name="ImageLayerProperties" Visibility="Collapsed" />
-                            <OpenStereogramCreator:RandomDotStereogramLayerProperties x:Name="RandomDotStereogramLayerProperties" Visibility="Collapsed" />
-                            <OpenStereogramCreator:PatternStereogramLayerProperties x:Name="PatternStereogramLayerProperties" Visibility="Collapsed" />
-                            <OpenStereogramCreator:FullImageStereogramLayerProperties x:Name="FullImageStereogramLayerProperties" Visibility="Collapsed" />
-                        </Grid>
-                    </Expander>
-                </StackPanel>
+                </DockPanel>
+            </Expander>
+            <Expander IsExpanded="True">
+                <Expander.Header>
+                    <TextBlock FontWeight="Bold">Current Layer Properties</TextBlock>
+                </Expander.Header>
+                <Grid x:Name="LayersStackPanel">
+                    <TextBlock x:Name="NoLayerSelected">Select a layer first</TextBlock>
+                    <OpenStereogramCreator:ImageLayerProperties x:Name="ImageLayerProperties" Visibility="Collapsed" />
+                    <OpenStereogramCreator:RandomDotStereogramLayerProperties x:Name="RandomDotStereogramLayerProperties" Visibility="Collapsed" />
+                    <OpenStereogramCreator:PatternStereogramLayerProperties x:Name="PatternStereogramLayerProperties" Visibility="Collapsed" />
+                    <OpenStereogramCreator:FullImageStereogramLayerProperties x:Name="FullImageStereogramLayerProperties" Visibility="Collapsed" />
+                        <OpenStereogramCreator:ReversePatternLayerProperties x:Name="ReversePatternLayerProperties" Visibility="Collapsed" />
+                </Grid>
+            </Expander>
+        </StackPanel>
+        </ScrollViewer>
         <DockPanel DockPanel.Dock="Bottom" Margin="{StaticResource ControlMargin}">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
                 <Button Click="ResetZoom" Margin="0,0,4,0">Fit</Button>
@@ -100,13 +107,13 @@
                 <Label x:Name="CurrentZoom" Content="{Binding ElementName=ZoomBorder, Path=Scale}"></Label>
             </StackPanel>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
-                 <Label x:Name="MonitorDpi" Content="Actual size assumes a 109dpi monitor for now"></Label>
-           </StackPanel>
+                <Label x:Name="MonitorDpi" Content="Actual size assumes a 109dpi monitor for now"></Label>
+            </StackPanel>
         </DockPanel>
-      
-		<tools:ZoomBorder x:Name="ZoomBorder" ClipToBounds="True" Background="Gray">
-			<Image Margin="0,0,0,0" x:Name="PreviewImage" />
+
+        <tools:ZoomBorder x:Name="ZoomBorder" ClipToBounds="True" Background="Gray">
+            <Image Margin="0,0,0,0" x:Name="PreviewImage" />
         </tools:ZoomBorder>
 
-	</DockPanel>
+    </DockPanel>
 </Window>

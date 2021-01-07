@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -10,15 +11,12 @@ namespace OpenStereogramCreator.ViewModels
 	{
 		public DocumentLayer Document { get; set; }
 
+		//public Dictionary<string, byte[]> Assets;
+
 		public LayersViewModel() : base()
 		{
-			Document = new DocumentLayer
-			{
-				Name = "Document",
-				Visible = true,
-				BackgroundColor = Color.Black,
-				Dpi = 100,
-			};
+			InitializeDocument();
+			//Assets = new Dictionary<string, byte[]>();
 		}
 
 		public void Draw(Image<Rgba32> image)
@@ -31,6 +29,27 @@ namespace OpenStereogramCreator.ViewModels
 				if(layer.CachedImage != null)
 					image.Mutate(t => t.DrawImage(layer.CachedImage, layer.Location, layer.Opacity));
 			}
+		}
+
+		public void Reset()
+		{
+			this.Clear();
+
+			InitializeDocument();
+		}
+
+		private void InitializeDocument()
+		{
+			if (Document == null)
+				Document = new DocumentLayer();
+
+			Document.Name = "Document";
+			Document.BackgroundColor = Color.Black;
+			Document.Visible = true;
+			Document.Dpi = 100;
+			Document.Width = 0;
+			Document.Height = 0;
+			Document.Oversampling = 0;
 		}
 	}
 }

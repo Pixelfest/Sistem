@@ -1,14 +1,13 @@
-﻿using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using Microsoft.Win32;
 using OpenStereogramCreator.ViewModels;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace OpenStereogramCreator
 {
-	public partial class ImageLayerProperties
+	public partial class ReversePatternLayerProperties
 	{
-		public ImageLayerProperties()
+		public ReversePatternLayerProperties()
 		{
 			InitializeComponent();
 		}
@@ -21,7 +20,7 @@ namespace OpenStereogramCreator
 			var openFileDialog = new OpenFileDialog
 			{
 				Title = Text.OpenImage,
-				Filter = "Image File|*.bmp; *.gif; *.jpg; *.jpeg; *.png;"
+				Filter = Text.FilterImageFile
 			};
 
 			if (openFileDialog.ShowDialog() == true)

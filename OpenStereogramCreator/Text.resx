@@ -121,12 +121,45 @@
     <value>The was an error loading the image</value>
   </data>
   <data name="OpenImage" xml:space="preserve">
-	  <value>Open image</value>
-  </data>
-  <data name="SaveImage" xml:space="preserve">
-	  <value>Save image</value>
+    <value>Open image</value>
   </data>
   <data name="ErrorSavingImage" xml:space="preserve">
-	  <value>There was an error when trying to save the image.</value>
+    <value>There was an error when trying to save the image.</value>
+  </data>
+  <data name="ExportPng" xml:space="preserve">
+    <value>Export your project as a PNG file</value>
+  </data>
+  <data name="FilterProjectFile" xml:space="preserve">
+    <value>Open Stereogram Creator Project|*.stereo</value>
+  </data>
+  <data name="FunctionalityNotAvailable" xml:space="preserve">
+    <value>This functionality is not yet available</value>
+  </data>
+  <data name="MenuExit" xml:space="preserve">
+    <value>E_xit</value>
+  </data>
+  <data name="MenuExport" xml:space="preserve">
+    <value>_Export to PNG</value>
+  </data>
+  <data name="MenuFile" xml:space="preserve">
+    <value>_File</value>
+  </data>
+  <data name="MenuNew" xml:space="preserve">
+    <value>_New</value>
+  </data>
+  <data name="MenuOpen" xml:space="preserve">
+    <value>_Open</value>
+  </data>
+  <data name="MenuSave" xml:space="preserve">
+    <value>_Save</value>
+  </data>
+  <data name="OpenFile" xml:space="preserve">
+    <value>Open a Stereo project file</value>
+  </data>
+  <data name="SaveFile" xml:space="preserve">
+    <value>Save your project to a Stereo file</value>
+  </data>
+  <data name="FilterImageFile" xml:space="preserve">
+    <value>Image File|*.bmp; *.gif; *.jpg; *.jpeg; *.png;</value>
   </data>
 </root>

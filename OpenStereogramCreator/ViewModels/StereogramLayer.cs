@@ -150,7 +150,7 @@ namespace OpenStereogramCreator.ViewModels
 			}
 		}
 
-		protected StereogramLayer()
+		protected StereogramLayer() : base()
 		{
 			EyeDistanceCentimeter = 50f;
 		}

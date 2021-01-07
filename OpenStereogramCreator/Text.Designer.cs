@@ -22,7 +22,7 @@ namespace OpenStereogramCreator {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Text {
+    public class Text {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace OpenStereogramCreator {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenStereogramCreator.Text", typeof(Text).Assembly);
@@ -51,7 +51,7 @@ namespace OpenStereogramCreator {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace OpenStereogramCreator {
         /// <summary>
         ///   Looks up a localized string similar to The was an error loading the image.
         /// </summary>
-        internal static string ErrorLoadingImage {
+        public static string ErrorLoadingImage {
             get {
                 return ResourceManager.GetString("ErrorLoadingImage", resourceCulture);
             }
@@ -72,27 +72,126 @@ namespace OpenStereogramCreator {
         /// <summary>
         ///   Looks up a localized string similar to There was an error when trying to save the image..
         /// </summary>
-        internal static string ErrorSavingImage {
+        public static string ErrorSavingImage {
             get {
                 return ResourceManager.GetString("ErrorSavingImage", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export your project as a PNG file.
+        /// </summary>
+        public static string ExportPng {
+            get {
+                return ResourceManager.GetString("ExportPng", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image File|*.bmp; *.gif; *.jpg; *.jpeg; *.png;.
+        /// </summary>
+        public static string FilterImageFile {
+            get {
+                return ResourceManager.GetString("FilterImageFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Stereogram Creator Project|*.stereo.
+        /// </summary>
+        public static string FilterProjectFile {
+            get {
+                return ResourceManager.GetString("FilterProjectFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This functionality is not yet available.
+        /// </summary>
+        public static string FunctionalityNotAvailable {
+            get {
+                return ResourceManager.GetString("FunctionalityNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E_xit.
+        /// </summary>
+        public static string MenuExit {
+            get {
+                return ResourceManager.GetString("MenuExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Export to PNG.
+        /// </summary>
+        public static string MenuExport {
+            get {
+                return ResourceManager.GetString("MenuExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _File.
+        /// </summary>
+        public static string MenuFile {
+            get {
+                return ResourceManager.GetString("MenuFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _New.
+        /// </summary>
+        public static string MenuNew {
+            get {
+                return ResourceManager.GetString("MenuNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Open.
+        /// </summary>
+        public static string MenuOpen {
+            get {
+                return ResourceManager.GetString("MenuOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Save.
+        /// </summary>
+        public static string MenuSave {
+            get {
+                return ResourceManager.GetString("MenuSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open a Stereo project file.
+        /// </summary>
+        public static string OpenFile {
+            get {
+                return ResourceManager.GetString("OpenFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open image.
         /// </summary>
-        internal static string OpenImage {
+        public static string OpenImage {
             get {
                 return ResourceManager.GetString("OpenImage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save image.
+        ///   Looks up a localized string similar to Save your project to a Stereo file.
         /// </summary>
-        internal static string SaveImage {
+        public static string SaveFile {
             get {
-                return ResourceManager.GetString("SaveImage", resourceCulture);
+                return ResourceManager.GetString("SaveFile", resourceCulture);
             }
         }
     }
