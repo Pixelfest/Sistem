@@ -10,6 +10,8 @@ namespace OpenStereogramCreator.ViewModels
 	public class FullImageStereogramLayer : PatternStereogramLayer
 	{
 		private int _shift;
+		private int _start;
+		private int _end;
 
 		public int Shift
 		{
@@ -21,6 +23,28 @@ namespace OpenStereogramCreator.ViewModels
 				OnPropertyChanged(nameof(Shift));
 			}
 		}
+
+        public int Start
+        {
+            get => _start;
+            set
+            {
+                _start = value;
+
+                OnPropertyChanged(nameof(Start));
+            }
+        }
+
+        public int End
+        {
+            get => _end;
+            set
+            {
+                _end = value;
+
+                OnPropertyChanged(nameof(End));
+            }
+        }
 
 		public override void Render()
 		{
@@ -36,11 +60,11 @@ namespace OpenStereogramCreator.ViewModels
 				return;
 			}
 
-			var start = 0;
+			var start = Start;
 
-			var result = new Image<Rgba32>(DepthImage.Width, DepthImage.Height);
+            var result = new Image<Rgba32>(DepthImage.Width, DepthImage.Height);
 
-			while (start < DepthImage.Width - MaximumSeparation)
+			while (start < DepthImage.Width - MaximumSeparation && start < End)
 			{
 				var stereogram = CreateStereogram();
 
@@ -75,8 +99,15 @@ namespace OpenStereogramCreator.ViewModels
 			switch (propertyName)
 			{
 				case nameof(Shift):
+				case nameof(Start):
+				case nameof(End):
 					CachedImage = null;
 					break;
+				case nameof(DepthImage):
+				case nameof(PatternImage):
+                    Start = 0;
+                    End = DepthImage?.Width ?? PatternImage?.Width ?? 0;
+                    break;
 			}
 
 			base.OnPropertyChanged(propertyName);

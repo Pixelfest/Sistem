@@ -1,5 +1,4 @@
-﻿using OpenStereogramCreator.Tools;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace OpenStereogramCreator.ViewModels

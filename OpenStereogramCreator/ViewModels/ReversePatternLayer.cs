@@ -1,7 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using OpenStereogramCreator.Annotations;
-using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 

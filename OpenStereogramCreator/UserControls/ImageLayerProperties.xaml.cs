@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using Microsoft.Win32;
 using OpenStereogramCreator.ViewModels;
 using SixLabors.ImageSharp.PixelFormats;

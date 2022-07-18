@@ -1,15 +1,11 @@
 ﻿using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
-using Microsoft.Win32;
 using OpenStereogramCreator.Tools;
 using OpenStereogramCreator.ViewModels;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using Color = SixLabors.ImageSharp.Color;
 
 namespace OpenStereogramCreator
 {

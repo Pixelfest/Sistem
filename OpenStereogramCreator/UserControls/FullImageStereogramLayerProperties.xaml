@@ -19,6 +19,13 @@
 			<Label>Shift origin</Label>
 			<TextBox Text="{Binding Path=Shift, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="ShiftMouseWheel"></TextBox>
 		</DockPanel>
-
-	</StackPanel>
+        <DockPanel>
+            <Label>Start</Label>
+            <TextBox Text="{Binding Path=Start, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="ShiftMouseWheel"></TextBox>
+        </DockPanel>
+        <DockPanel>
+            <Label>End</Label>
+            <TextBox Text="{Binding Path=End, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="ShiftMouseWheel"></TextBox>
+        </DockPanel>
+    </StackPanel>
 </UserControl>

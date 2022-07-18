@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.IO.Compression;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using OpenStereogramCreator.Annotations;
 using OpenStereogramCreator.Tools;

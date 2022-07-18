@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>sis</AssemblyName>
     <SignAssembly>false</SignAssembly>
     <Platforms>x64</Platforms>
@@ -54,8 +54,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.0.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.2" />
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
   </ItemGroup>
 
   <ItemGroup>

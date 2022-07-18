@@ -1,5 +1,4 @@
-﻿using System.Windows.Controls;
-using OpenStereogramCreator.ViewModels;
+﻿using OpenStereogramCreator.ViewModels;
 
 namespace OpenStereogramCreator
 {

@@ -31,6 +31,7 @@ namespace Sistem.Core
 		private int _currentHeight;
 		private int _currentWidth;
 		private int _currentYShift;
+		private bool _currentIgnoreGaps;
 		private int _currentNoiseReductionThreshold;
 		private int _currentNoiseDensity;
 		private int _currentOversampling;
@@ -76,6 +77,9 @@ namespace Sistem.Core
 
 				// Set YShift to a fraction of the height
 				YShift = height / 32;
+
+				if(IgnoreGaps)
+                    YShift = 0;
 
 				_depthMap = value;
 			}
@@ -189,6 +193,12 @@ namespace Sistem.Core
 			}
 		}
 
+        /// <summary>
+        /// Ignore gaps that need to be filled, YShift will be 0.
+        /// Default = false
+        /// </summary>
+        public bool IgnoreGaps { get; set; } = false;
+		
 		/// <summary>
 		/// Gets or sets parallel processing
 		/// Default = true
@@ -346,6 +356,7 @@ namespace Sistem.Core
 			_currentOversampling = Oversampling;
 			_currentParallelProcessing = ParallelProcessing;
 			_currentYShift = YShift;
+            _currentIgnoreGaps = IgnoreGaps;
 			_currentNoiseDensity = NoiseDensity;
 			_currentNoiseReductionThreshold = NoiseReductionThreshold;
 			_currentPostProcessingOversampling = PostProcessingOversampling;
@@ -594,7 +605,12 @@ namespace Sistem.Core
 						colors[x] = _directPattern[locationX, locationY];
 					}
 				}
-				else
+				else if (lookLeft[x] == Int32.MinValue)
+                {
+                    colors[x] = Rgba32.ParseHex("00000000");
+					//lastLinked
+                }
+                else
 				{
 					colors[x] = colors[lookLeft[x]];
 					lastLinked = x;
@@ -628,6 +644,11 @@ namespace Sistem.Core
 						colors[x] = _directPattern[locationX, locationY];
 					}
 				}
+                else if (lookRight[x] == Int32.MinValue)
+                {
+                    colors[x] = Rgba32.ParseHex("00000000");
+                    //lastLinked
+                }
 				else
 				{
 					colors[x] = colors[lookRight[x]];
@@ -721,7 +742,7 @@ namespace Sistem.Core
 				if (setLeft[x] == 1 && setRight[x] == 1 && startLeft == 0 && startRight == 0)
 					continue;
 
-				if (setLeft[x] == 0 && startLeft == 0)
+                if (setLeft[x] == 0 && startLeft == 0)
 				{
 					startLeft = x;
 				}
@@ -765,7 +786,12 @@ namespace Sistem.Core
 
 			for (var x = start + 1; x < end; x++)
 			{
-				array[x] = (int)Math.Round(startValue + count * delta);
+
+                if (_currentIgnoreGaps)
+                    array[x] = Int32.MinValue;
+				else
+                    array[x] = (int)Math.Round(startValue + count * delta);
+
 				count++;
 			}
 		}

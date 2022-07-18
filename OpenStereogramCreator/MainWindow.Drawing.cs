@@ -1,9 +1,6 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Windows;
 using OpenStereogramCreator.Tools;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace OpenStereogramCreator
 {

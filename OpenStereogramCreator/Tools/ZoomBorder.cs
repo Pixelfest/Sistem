@@ -5,8 +5,7 @@ using OpenStereogramCreator.Annotations;
 namespace OpenStereogramCreator.Tools
 {
 	using System.Linq;
-	using System.Reflection;
-	using System.Windows;
+    using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Input;
 	using System.Windows.Media;
@@ -24,7 +23,7 @@ namespace OpenStereogramCreator.Tools
 
 		private double? LoadWindowsScaling()
 		{
-			PresentationSource source = PresentationSource.FromVisual(this);
+			var source = PresentationSource.FromVisual(this);
 			if (source != null)
 			{
 				_windowsScaling = source.CompositionTarget.TransformToDevice.M11;
@@ -122,7 +121,7 @@ namespace OpenStereogramCreator.Tools
 
 		private void ChildMouseWheel(object sender, MouseWheelEventArgs e)
 		{
-			double zoomInterval = 0.20000000000000;
+			var zoomInterval = 0.20000000000000;
 			zoomInterval *= GetViewPortFactor();
 
 			if (_child != null)
