@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
 using Microsoft.Win32;
 using SixLabors.ImageSharp;
@@ -45,6 +46,7 @@ namespace OpenStereogramCreator
 
 			if (saveFileDialog.ShowDialog() == true)
 			{
+                
 			}
 		}
 

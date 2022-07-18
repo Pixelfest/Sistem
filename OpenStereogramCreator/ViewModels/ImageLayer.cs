@@ -6,7 +6,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace OpenStereogramCreator.ViewModels
 {
-	public class ImageLayer : LayerBase
+    public class ImageLayer : LayerBase
 	{
 		private Image<Rgba32> _image;
 

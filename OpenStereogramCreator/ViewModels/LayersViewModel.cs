@@ -10,12 +10,9 @@ namespace OpenStereogramCreator.ViewModels
 	{
 		public DocumentLayer Document { get; set; }
 
-		//public Dictionary<string, byte[]> Assets;
-
 		public LayersViewModel() : base()
 		{
 			InitializeDocument();
-			//Assets = new Dictionary<string, byte[]>();
 		}
 
 		public void Draw(Image<Rgba32> image)

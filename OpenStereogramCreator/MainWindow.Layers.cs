@@ -86,6 +86,22 @@ namespace OpenStereogramCreator
 			LayersListBox.SelectedItem = layer;
 		}
 
+        private void AddRepeaterLayerMenuClick(object sender, RoutedEventArgs e)
+        {
+            var layer = new RepeaterLayer()
+            {
+                Name = $"Repeater Layer {Layers.Count}",
+                Dpi = Layers.Document.Dpi,
+                Y = 0,
+                Visible = true
+            };
+
+            layer.PropertyChanged += LayerPropertyChanged;
+
+            Layers.Insert(0, layer);
+            LayersListBox.SelectedItem = layer;
+        }
+
 		private void DeleteLayerClick(object sender, RoutedEventArgs e)
 		{
 			var layer = LayersListBox.SelectedItem as LayerBase;
@@ -165,6 +181,10 @@ namespace OpenStereogramCreator
 					PatternStereogramLayerProperties.Visibility = Visibility.Visible;
 					PatternStereogramLayerProperties.DataContext = layer;
 					break;
+                case RepeaterLayer layer:
+                    RepeaterLayerProperties.Visibility = Visibility.Visible;
+                    RepeaterLayerProperties.DataContext = layer;
+                    break;
 			}
 		}
 

@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="OpenStereogramCreator.RepeaterLayerProperties"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OpenStereogramCreator"
+             xmlns:viewModels="clr-namespace:OpenStereogramCreator.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="200"
+             d:DataContext="{d:DesignInstance viewModels:RepeaterLayer}">
+    <StackPanel Margin="0">
+        <local:BaseLayerProperties x:Name="BaseLayerProperties" />
+
+        <GroupBox Header="Image layer" Margin="{StaticResource ControlMargin}">
+            <StackPanel>
+                <Image Source="{Binding Path=ImageSource}" Width="auto" Height="100" />
+                <TextBlock Text="{Binding Path=FileName}"></TextBlock>
+                <Button Content="Load image" Click="LoadImageButtonClick" />
+                <StackPanel Orientation="Horizontal">
+                    <Label Width="75">Start</Label>
+                    <TextBox  Width="75" Text="{Binding Path=Start}"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Width="75">Zoom</Label>
+                    <TextBox Width="75" Text="{Binding Path=Zoom}"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Width="75">Y</Label>
+                    <TextBox Width="75" Text="{Binding Path=Y}"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Width="75">Width</Label>
+                    <TextBox Width="75" Text="{Binding Path=TotalWidth}"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Width="75">Pattern</Label>
+                    <TextBox Width="75" Text="{Binding Path=RepeatPattern}"></TextBox>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+    </StackPanel>
+</UserControl>
