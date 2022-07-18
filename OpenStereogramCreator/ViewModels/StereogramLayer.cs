@@ -16,7 +16,6 @@ namespace OpenStereogramCreator.ViewModels
 		private float _origin;
 		private bool _drawDepthImage;
 
-		private float _eyeDistanceCentimeter;
 
 		public float Origin
 		{
@@ -77,8 +76,6 @@ namespace OpenStereogramCreator.ViewModels
 			{
 				_minimumSeparation = value;
 				OnPropertyChanged(nameof(MinimumSeparation));
-				OnPropertyChanged(nameof(MinimumDepthCentimeter));
-				OnPropertyChanged(nameof(MinimumDepthInch));
 			}
 		}
 
@@ -89,55 +86,7 @@ namespace OpenStereogramCreator.ViewModels
 			{
 				_maximumSeparation = value;
 				OnPropertyChanged(nameof(MaximumSeparation));
-				OnPropertyChanged(nameof(MaximumDepthCentimeter));
-				OnPropertyChanged(nameof(MaximumDepthInch));
 			}
-		}
-
-		public float EyeDistanceCentimeter
-		{
-			get => _eyeDistanceCentimeter;
-			set
-			{
-				_eyeDistanceCentimeter = value;
-				OnPropertyChanged(nameof(EyeDistanceCentimeter));
-				OnPropertyChanged(nameof(MinimumSeparation));
-				OnPropertyChanged(nameof(MaximumSeparation));
-				OnPropertyChanged(nameof(MinimumDepthCentimeter));
-				OnPropertyChanged(nameof(MaximumDepthCentimeter));
-				OnPropertyChanged(nameof(MinimumDepthInch));
-				OnPropertyChanged(nameof(MaximumDepthInch));
-			}
-		}
-
-		public float MinimumDepthCentimeter
-		{
-			get => Utilities.EyeDistance * Dpc * EyeDistanceCentimeter / (Utilities.EyeDistance * Dpc - MinimumSeparation);
-			set => MinimumSeparation = Utilities.EyeDistance * Dpc * ((value - EyeDistanceCentimeter) / value);
-		}
-
-		public float MaximumDepthCentimeter
-		{
-			get => Utilities.EyeDistance * Dpc * EyeDistanceCentimeter / (Utilities.EyeDistance * Dpc - MaximumSeparation);
-			set => MaximumSeparation = Utilities.EyeDistance * Dpc * ((value - EyeDistanceCentimeter) / value);
-		}
-
-		public float EyeDistanceInch
-		{
-			get => Utilities.CMToInch(EyeDistanceCentimeter);
-			set => EyeDistanceCentimeter = Utilities.InchToCM(value);
-		}
-
-		public float MinimumDepthInch
-		{
-			get => Utilities.CMToInch(MinimumDepthCentimeter);
-			set => MinimumDepthCentimeter = Utilities.InchToCM(value);
-		}
-
-		public float MaximumDepthInch
-		{
-			get => Utilities.CMToInch(MaximumDepthCentimeter);
-			set => MaximumDepthCentimeter = Utilities.InchToCM(value);
 		}
 
 		public bool DrawDepthImage
@@ -148,11 +97,6 @@ namespace OpenStereogramCreator.ViewModels
 				_drawDepthImage = value;
 				OnPropertyChanged(nameof(DrawDepthImage));
 			}
-		}
-
-		protected StereogramLayer() : base()
-		{
-			EyeDistanceCentimeter = 50f;
 		}
 
 		public Stereogram CreateStereogram()

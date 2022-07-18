@@ -13,10 +13,5 @@ namespace OpenStereogramCreator
         {
             ZoomBorder.SetPerPixel();
         }
-
-        private void ResetActualSize(object sender, RoutedEventArgs e)
-        {
-            ZoomBorder.SetActualSize((int)Layers.Document.Dpi, 109, (int)Layers.Document.WidthInch);
-        }
     }
 }

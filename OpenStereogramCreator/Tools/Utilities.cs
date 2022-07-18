@@ -4,19 +4,6 @@
 
 	public static class Utilities
 	{
-		public const float Factor = 2.54f;
-		public const float EyeDistance = 6.5f;
-
-		public static float InchToCM(float inches)
-		{
-			return inches * Factor;
-		}
-
-		public static float CMToInch(float centimeters)
-		{
-			return centimeters / Factor;
-		}
-
 		public static void Swap<T>(this IList<T> list, int indexA, int indexB)
 		{
 			var temporary = list[indexA];

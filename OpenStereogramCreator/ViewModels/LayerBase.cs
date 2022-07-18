@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using OpenStereogramCreator.Annotations;
-using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -15,7 +14,6 @@ namespace OpenStereogramCreator.ViewModels
 		private int _left;
 		private int _width;
 		private int _height;
-		private float _dpi;
 		private float _opacity;
 		private int _oversampling;
 		private int _measurementsTabIndex;
@@ -72,8 +70,6 @@ namespace OpenStereogramCreator.ViewModels
 			{
 				_width = value;
 				OnPropertyChanged(nameof(Width));
-				OnPropertyChanged(nameof(WidthInch));
-				OnPropertyChanged(nameof(WidthCentimeter));
 			}
 		}
 
@@ -84,25 +80,6 @@ namespace OpenStereogramCreator.ViewModels
 			{
 				_height = value;
 				OnPropertyChanged(nameof(Height));
-				OnPropertyChanged(nameof(HeightInch));
-				OnPropertyChanged(nameof(HeightCentimeter));
-			}
-		}
-
-		public float Dpi
-		{
-			get => _dpi;
-			set
-			{
-				_dpi = value;
-				OnPropertyChanged(nameof(Dpi));
-				OnPropertyChanged(nameof(Dpc));
-				OnPropertyChanged(nameof(Width));
-				OnPropertyChanged(nameof(WidthInch));
-				OnPropertyChanged(nameof(WidthCentimeter));
-				OnPropertyChanged(nameof(Height));
-				OnPropertyChanged(nameof(HeightInch));
-				OnPropertyChanged(nameof(HeightCentimeter));
 			}
 		}
 
@@ -120,60 +97,6 @@ namespace OpenStereogramCreator.ViewModels
 
 				OnPropertyChanged(nameof(Oversampling));
 			}
-		}
-
-		public float TopInch
-		{
-			get => Top / Dpi;
-			set => Top = (int) (value * Dpi);
-		}
-
-		public float LeftInch
-		{
-			get => Left / Dpi;
-			set => Left = (int) (value * Dpi);
-		}
-
-		public float WidthInch
-		{
-			get => Width / Dpi;
-			set => Width = (int) (value * Dpi);
-		}
-
-		public float HeightInch
-		{
-			get => Height / Dpi;
-			set => Height = (int) (value * Dpi);
-		}
-
-		public float Dpc
-		{
-			get => Utilities.CMToInch(Dpi);
-			set => Dpi = Utilities.InchToCM(value);
-		}
-
-		public float TopCentimeter
-		{
-			get => Top / Dpc;
-			set => Top = (int) (value * Dpc);
-		}
-
-		public float LeftCentimeter
-		{
-			get => Left / Dpc;
-			set => Left = (int) (value * Dpc);
-		}
-
-		public float WidthCentimeter
-		{
-			get => Width / Dpc;
-			set => Width = (int) (value * Dpc);
-		}
-
-		public float HeightCentimeter
-		{
-			get => Height / Dpc;
-			set => Height = (int) (value * Dpc);
 		}
 
 		public string Name
@@ -236,7 +159,6 @@ namespace OpenStereogramCreator.ViewModels
 				Left = left;
 				Width = width;
 				Height = height;
-				Dpi = dpi;
 				Opacity = opacity;
 				Oversampling = oversampling;
 				MeasurementsTabIndex = measurementsTabIndex;

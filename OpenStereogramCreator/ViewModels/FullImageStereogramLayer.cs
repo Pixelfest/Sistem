@@ -105,6 +105,7 @@ namespace OpenStereogramCreator.ViewModels
 					break;
 				case nameof(DepthImage):
 				case nameof(PatternImage):
+                    CachedImage = null;
                     Start = 0;
                     End = DepthImage?.Width ?? PatternImage?.Width ?? 0;
                     break;

@@ -42,7 +42,6 @@ namespace OpenStereogramCreator.ViewModels
 			Document.Name = "Document";
 			Document.BackgroundColor = Color.Black;
 			Document.Visible = true;
-			Document.Dpi = 100;
 			Document.Width = 0;
 			Document.Height = 0;
 			Document.Oversampling = 0;

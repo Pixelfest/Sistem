@@ -105,7 +105,6 @@
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
                 <Button Click="ResetZoom" Margin="0,0,4,0">Fit</Button>
                 <Button Click="SetPixelPerfect" Margin="0,0,4,0">1:1</Button>
-                <Button Click="ResetActualSize" Margin="0,0,4,0">Actual size</Button>
                 <Label x:Name="CurrentZoom" Content="{Binding ElementName=ZoomBorder, Path=Scale}"></Label>
             </StackPanel>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">

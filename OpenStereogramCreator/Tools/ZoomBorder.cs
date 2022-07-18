@@ -109,16 +109,6 @@ namespace OpenStereogramCreator.Tools
 			ResetPanning();
 		}
 
-		public void SetActualSize(int dpiImage, int dpiMonitor, int targetWidthInch)
-		{
-			var viewPortFactor = GetViewPortFactor();
-
-			var dpiFactor = dpiMonitor / (double)dpiImage;
-
-			SetScale(viewPortFactor * dpiFactor / WindowsScaling);
-			ResetPanning();
-		}
-
 		private void ChildMouseWheel(object sender, MouseWheelEventArgs e)
 		{
 			var zoomInterval = 0.20000000000000;

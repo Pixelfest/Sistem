@@ -7,7 +7,7 @@ namespace OpenStereogramCreator.ViewModels
 	public class RandomDotStereogramLayer : StereogramLayer
 	{
 		private bool _coloredNoise;
-		private int _density;
+		private int _density = 50;
 
 		public bool ColoredNoise
 		{
