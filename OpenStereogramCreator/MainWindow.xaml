@@ -12,8 +12,8 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="{x:Static OpenStereogramCreator:Text.MenuFile}">
                 <MenuItem Header="{x:Static OpenStereogramCreator:Text.MenuNew}" Click="MenuClickNew"></MenuItem>
-                <MenuItem Header="{x:Static OpenStereogramCreator:Text.MenuOpen}" Click="MenuClickOpen" IsEnabled="False"></MenuItem>
-                <MenuItem Header="{x:Static OpenStereogramCreator:Text.MenuSave}" Click="MenuClickSave" IsEnabled="False"></MenuItem>
+                <MenuItem Header="{x:Static OpenStereogramCreator:Text.MenuOpen}" Click="MenuClickOpen"></MenuItem>
+                <MenuItem Header="{x:Static OpenStereogramCreator:Text.MenuSave}" Click="MenuClickSave"></MenuItem>
                 <MenuItem Header="{x:Static OpenStereogramCreator:Text.MenuExport}" Click="MenuClickExportToPng"></MenuItem>
                 <MenuItem Header="{x:Static OpenStereogramCreator:Text.MenuExit}" Click="MenuClickExit"></MenuItem>
             </MenuItem>

@@ -51,13 +51,6 @@ namespace OpenStereogramCreator
 					if(Layers.Document.Width != 0 && Layers.Document.Height != 0)
 						Image.Mutate(context => context.Resize(Layers.Document.Width, Layers.Document.Height));
 					break;
-				case nameof(DocumentLayer.MeasurementsTabIndex):
-				{
-					foreach (var layer in Layers)
-						layer.MeasurementsTabIndex = Layers.Document.MeasurementsTabIndex;
-
-					break;
-				}
 				case nameof(DocumentLayer.Oversampling):
 				{
 					foreach (var layer in Layers)

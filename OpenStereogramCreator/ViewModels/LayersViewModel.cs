@@ -1,5 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.CodeDom;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using OpenStereogramCreator.Dtos;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -46,5 +50,48 @@ namespace OpenStereogramCreator.ViewModels
 			Document.Height = 0;
 			Document.Oversampling = 0;
 		}
+
+        public LayersDto Export()
+        {
+            var result = new LayersDto();
+
+            result.Document = Document.Export();
+            result.Layers = new List<string>();
+            
+            foreach (var layerBase in Items)
+            {
+                switch (layerBase)
+                {
+					case RandomDotStereogramLayer l:
+						result.Layers.Add($"{nameof(RandomDotStereogramLayerDto)}|{Convert.ToBase64String(l.Export())}");
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        public void Import(LayersDto layersDto)
+        {
+            this.Document = DocumentLayer.Import(layersDto.Document);
+
+            foreach (var dto in layersDto.Layers)
+            {
+                var data = dto.Split("|", StringSplitOptions.RemoveEmptyEntries);
+
+                switch (data[0])
+                {
+					case nameof(RandomDotStereogramLayerDto):
+						Items.Add(RandomDotStereogramLayer.Import(Convert.FromBase64String(data[1])));
+                        break;
+                }
+            }
+
+            foreach (var layer in Items)
+            {
+				layer.PropertyChanged
+            }
+
+        }
 	}
 }

@@ -1,6 +1,11 @@
 ﻿using System.IO;
+using System.IO.Compression;
+using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Win32;
+using OpenStereogramCreator.Dtos;
+using OpenStereogramCreator.ViewModels;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -16,9 +21,9 @@ namespace OpenStereogramCreator
 
 		private void MenuClickOpen(object sender, RoutedEventArgs e)
 		{
-				MessageBox.Show(Text.FunctionalityNotAvailable);
+			//MessageBox.Show(Text.FunctionalityNotAvailable);
 
-				return;
+			//return;
 
 			var openFileDialog = new OpenFileDialog
 			{
@@ -28,14 +33,22 @@ namespace OpenStereogramCreator
 
 			if (openFileDialog.ShowDialog() == true)
 			{
+                string fileName = openFileDialog.FileName;
+
+                using (FileStream createFileStream = File.OpenRead(fileName))
+                {
+                    var dto = JsonSerializer.Deserialize<LayersDto>(createFileStream);
+
+					Layers.Import(dto);
+                }
 			}
 		}
 
 		private void MenuClickSave(object sender, RoutedEventArgs e)
 		{
-			MessageBox.Show(Text.FunctionalityNotAvailable);
+			//MessageBox.Show(Text.FunctionalityNotAvailable);
 
-			return;
+			//return;
 
 			var saveFileDialog = new SaveFileDialog
 			{
@@ -44,9 +57,16 @@ namespace OpenStereogramCreator
 			};
 
 			if (saveFileDialog.ShowDialog() == true)
-			{
-                
-			}
+            {
+                string fileName = saveFileDialog.FileName;
+
+                var dto = Layers.Export();
+
+                using (FileStream createFileStream = File.Create(fileName))
+                {
+                    JsonSerializer.Serialize(createFileStream, dto);
+                }
+            }
 		}
 
 

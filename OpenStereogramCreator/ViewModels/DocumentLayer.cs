@@ -1,9 +1,11 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Windows;
 using OpenStereogramCreator.Annotations;
+using OpenStereogramCreator.Dtos;
 using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using static OpenStereogramCreator.ViewModels.LayerBase;
 
 namespace OpenStereogramCreator.ViewModels
 {
@@ -59,5 +61,24 @@ namespace OpenStereogramCreator.ViewModels
 			base.OnPropertyChanged(propertyName);
 		}
 
-	}
+        public new DocumentLayerDto Export()
+        {
+            var export = base.Export<DocumentLayerDto>();
+
+            export.BackgroundColorText = BackgroundColorText;
+
+            return export;
+        }
+
+        public static DocumentLayer Import(DocumentLayerDto dto)
+        {
+            var target = new DocumentLayer();
+
+            var targetNew = Import<DocumentLayerDto, DocumentLayer>(dto);
+
+            targetNew.BackgroundColorText = dto.BackgroundColorText;
+
+            return targetNew;
+        }
+    }
 }

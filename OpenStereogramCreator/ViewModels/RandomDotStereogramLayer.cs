@@ -1,9 +1,14 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
+using System.Text.Json;
 using OpenStereogramCreator.Annotations;
+using OpenStereogramCreator.Dtos;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace OpenStereogramCreator.ViewModels
 {
+    [Serializable]
 	public class RandomDotStereogramLayer : StereogramLayer
 	{
 		private bool _coloredNoise;
@@ -67,5 +72,29 @@ namespace OpenStereogramCreator.ViewModels
 
 			base.OnPropertyChanged(propertyName);
 		}
+
+        public byte[] Export()
+        {
+            var export = base.Export<RandomDotStereogramLayerDto>();
+
+            export.ColoredNoise = ColoredNoise;
+            export.Density = Density;
+
+            return JsonSerializer.SerializeToUtf8Bytes(export);
+        }
+
+        public static RandomDotStereogramLayer Import(byte[] import)
+        {
+            var bla = new Utf8JsonReader(import);
+
+            var dto =  JsonSerializer.Deserialize<RandomDotStereogramLayerDto>(ref bla);
+
+            var result = Import<RandomDotStereogramLayerDto, RandomDotStereogramLayer>(dto);
+
+            result.ColoredNoise = dto.ColoredNoise;
+            result.Density = dto.Density;
+
+            return result;
+        }
 	}
 }

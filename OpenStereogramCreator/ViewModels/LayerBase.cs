@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using OpenStereogramCreator.Annotations;
+using OpenStereogramCreator.Dtos;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -16,20 +18,9 @@ namespace OpenStereogramCreator.ViewModels
 		private int _height;
 		private float _opacity;
 		private int _oversampling;
-		private int _measurementsTabIndex;
 		private string _name;
 		private bool _visible;
 		protected bool _importing;
-
-		public int MeasurementsTabIndex
-		{
-			get => _measurementsTabIndex;
-			set
-			{
-				_measurementsTabIndex = value;
-				OnPropertyChanged(nameof(MeasurementsTabIndex));
-			}
-		}
 
 		public float Opacity
 		{
@@ -127,7 +118,7 @@ namespace OpenStereogramCreator.ViewModels
 
 		public abstract void Render();
 
-		public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
 		[NotifyPropertyChangedInvocator]
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -149,26 +140,37 @@ namespace OpenStereogramCreator.ViewModels
 			}
 		}
 
-		public void Import(int top, int left, int width, int height, float dpi, float opacity, int oversampling, int measurementsTabIndex, string name, bool visible)
-		{
-			_importing = true;
+        public T Export<T>() where T : LayerBaseDto, new()
+        {
+            return new T
+            {
+                Width = Width,
+                Height = Height,
+                Left = Left,
+                Top = Top,
+                Name = Name,
+                Opacity = Opacity,
+                Oversampling = Oversampling,
+                Visible = Visible
+            };
+        }
 
-			try
-			{
-				Top = top;
-				Left = left;
-				Width = width;
-				Height = height;
-				Opacity = opacity;
-				Oversampling = oversampling;
-				MeasurementsTabIndex = measurementsTabIndex;
-				Name = name;
-				Visible = visible;
-			}
-			finally
-			{
-				_importing = false;
-			}
-		}
+        public static TResult Import<TSource, TResult>(TSource dto)
+		    where TSource : LayerBaseDto
+		    where TResult : LayerBase, new()
+        {
+            var target = new TResult();
+
+            target.Width = dto.Width;
+            target.Height = dto.Height;
+            target.Left = dto.Left;
+            target.Top = dto.Top;
+            target.Name = dto.Name;
+            target.Opacity = dto.Opacity;
+            target.Oversampling = dto.Oversampling;
+            target.Visible = dto.Visible;
+
+            return target;
+        }
 	}
 }

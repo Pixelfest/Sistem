@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using OpenStereogramCreator.Annotations;
 using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
