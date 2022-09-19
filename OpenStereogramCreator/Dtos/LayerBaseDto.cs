@@ -59,3 +59,22 @@ public class LayersDto
     
     public List<string> Layers { get; set; }
 }
+
+[Serializable]
+public class PatternStereogramLayerDto : StereogramLayerDto
+{
+	public int PatternStart { get; set; }
+	public int PatternEnd { get; set; }
+	public int PatternImageBase64 { get; set; }
+	public string PatternImageFileName { get; set; }
+	public float Zoom { get; set; }
+	public int PatternYShift { get; set; }
+}
+
+[Serializable]
+public class FullImageStereogramLayerDto : PatternStereogramLayerDto
+{
+	public int Shift { get; set; }
+	public int Start { get; set; }
+	public int End { get; set; }
+}

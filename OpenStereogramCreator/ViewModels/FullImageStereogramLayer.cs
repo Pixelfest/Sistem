@@ -94,7 +94,7 @@ namespace OpenStereogramCreator.ViewModels
 		}
 
 		[NotifyPropertyChangedInvocator]
-		protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		public override void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			switch (propertyName)
 			{

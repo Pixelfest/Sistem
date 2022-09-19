@@ -60,7 +60,7 @@ namespace OpenStereogramCreator.ViewModels
 		}
 
 		[NotifyPropertyChangedInvocator]
-		protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		public override void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			switch (propertyName)
 			{
@@ -83,11 +83,20 @@ namespace OpenStereogramCreator.ViewModels
             return JsonSerializer.SerializeToUtf8Bytes(export);
         }
 
-        public static RandomDotStereogramLayer Import(byte[] import)
-        {
-            var bla = new Utf8JsonReader(import);
+		public new void Import2<TSource>(TSource source)
+			where TSource : RandomDotStereogramLayerDto, new()
+		{
+			base.Import2(source);
 
-            var dto =  JsonSerializer.Deserialize<RandomDotStereogramLayerDto>(ref bla);
+			this.ColoredNoise = source.ColoredNoise;
+			this.Density = source.Density;
+		}
+
+		public static RandomDotStereogramLayer Import(byte[] import)
+        {
+			var reader = new Utf8JsonReader(import);
+
+            var dto =  JsonSerializer.Deserialize<RandomDotStereogramLayerDto>(ref reader);
 
             var result = Import<RandomDotStereogramLayerDto, RandomDotStereogramLayer>(dto);
 

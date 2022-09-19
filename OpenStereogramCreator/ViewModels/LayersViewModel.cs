@@ -2,7 +2,9 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Text.Json;
 using OpenStereogramCreator.Dtos;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -23,10 +25,10 @@ namespace OpenStereogramCreator.ViewModels
 		{
 			foreach (var layer in this.Where(layer => layer.Visible && layer.Opacity > 0).Reverse())
 			{
-				if(layer.CachedImage == null)
+				if (layer.CachedImage == null)
 					layer.Render();
 
-				if(layer.CachedImage != null)
+				if (layer.CachedImage != null)
 					image.Mutate(t => t.DrawImage(layer.CachedImage, layer.Location, layer.Opacity));
 			}
 		}
@@ -48,50 +50,72 @@ namespace OpenStereogramCreator.ViewModels
 			Document.Visible = true;
 			Document.Width = 0;
 			Document.Height = 0;
-			Document.Oversampling = 0;
+			Document.Oversampling = 1;
 		}
 
-        public LayersDto Export()
-        {
-            var result = new LayersDto();
+		public LayersDto Export()
+		{
+			var result = new LayersDto();
 
-            result.Document = Document.Export();
-            result.Layers = new List<string>();
-            
-            foreach (var layerBase in Items)
-            {
-                switch (layerBase)
-                {
+			result.Document = Document.Export();
+			result.Layers = new List<string>();
+
+			foreach (var layerBase in Items)
+			{
+				switch (layerBase)
+				{
 					case RandomDotStereogramLayer l:
 						result.Layers.Add($"{nameof(RandomDotStereogramLayerDto)}|{Convert.ToBase64String(l.Export())}");
-                        break;
-                }
-            }
+						break;
+				}
+			}
 
-            return result;
-        }
+			return result;
+		}
 
-        public void Import(LayersDto layersDto)
-        {
-            this.Document = DocumentLayer.Import(layersDto.Document);
+		public void Import(LayersDto layersDto)
+		{
+			Reset();
 
-            foreach (var dto in layersDto.Layers)
-            {
-                var data = dto.Split("|", StringSplitOptions.RemoveEmptyEntries);
+			this.Document.Import2(layersDto.Document);
 
-                switch (data[0])
-                {
+			//this.Document = DocumentLayer.Import(layersDto.Document);
+			
+			foreach (var dto in layersDto.Layers)
+			{
+				var data = dto.Split("|", StringSplitOptions.RemoveEmptyEntries);
+				
+				switch (data[0])
+				{
 					case nameof(RandomDotStereogramLayerDto):
-						Items.Add(RandomDotStereogramLayer.Import(Convert.FromBase64String(data[1])));
-                        break;
-                }
-            }
+						Insert(0, new RandomDotStereogramLayer());
+						(this[0] as RandomDotStereogramLayer).Import2(Read<RandomDotStereogramLayerDto>(data[1]));
+						break;
+					case nameof(FullImageStereogramLayerDto):
 
-            foreach (var layer in Items)
-            {
-				layer.PropertyChanged
-            }
+				}
+			}
 
-        }
+			this.Document.OnPropertyChanged(LayerBase.ImportName);
+
+			foreach (var layer in Items)
+			{
+				layer.OnPropertyChanged(LayerBase.ImportName);
+				//layer.PropertyChanged
+				//var handler = layer.PropertyChanged;
+				//if (handler != null) handler(this, new PropertyChangedEventArgs("TimeStamp"));
+			}
+
+		}
+
+		private TDto Read<TDto>(string importString)
+			where TDto : new()
+		{
+			var import = Convert.FromBase64String(importString);
+			var reader = new Utf8JsonReader(import);
+			var deserializedDto = JsonSerializer.Deserialize<TDto>(ref reader);
+
+			return deserializedDto;
+		}
 	}
 }

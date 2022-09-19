@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 using OpenStereogramCreator.Annotations;
 using OpenStereogramCreator.Dtos;
 using SixLabors.ImageSharp;
@@ -10,6 +9,8 @@ namespace OpenStereogramCreator.ViewModels
 {
 	public abstract class LayerBase : INotifyPropertyChanged
 	{
+		public const string ImportName = "Import";
+
 		public Image<Rgba32> CachedImage { get; set; }
 
 		private int _top;
@@ -79,8 +80,8 @@ namespace OpenStereogramCreator.ViewModels
 			get => _oversampling;
 			set
 			{
-				if (value < 0)
-					_oversampling = 0;
+				if (value < 1)
+					_oversampling = 1;
 				else if (value > 8)
 					_oversampling = 8;
 				else
@@ -121,26 +122,39 @@ namespace OpenStereogramCreator.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
 		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
-			if (!_importing)
+			switch (propertyName)
 			{
-				switch (propertyName)
-				{
-					case nameof(Visible):
-					case nameof(Oversampling):
-						CachedImage = null;
-						break;
-					case nameof(Opacity):
-						// Trigger update, don't clear the cached image.
-						break;
-				}
-
-				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+				case ImportName:
+				case nameof(Visible):
+				case nameof(Oversampling):
+					CachedImage = null;
+					break;
+				case nameof(Opacity):
+					// Trigger update, don't clear the cached image.
+					break;
 			}
+
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-        public T Export<T>() where T : LayerBaseDto, new()
+		public void Import2<TSource>(TSource dto)
+			where TSource : LayerBaseDto, new()
+		{
+			this.Width = dto.Width;
+			this.Height = dto.Height;
+			this.Left = dto.Left;
+			this.Top = dto.Top;
+			this.Name = dto.Name;
+			this.Opacity = dto.Opacity;
+			this.Oversampling = dto.Oversampling;
+			this.Visible = dto.Visible;
+
+			this.OnPropertyChanged(nameof(Visible));
+		}
+
+		public T Export<T>() where T : LayerBaseDto, new()
         {
             return new T
             {
@@ -169,6 +183,8 @@ namespace OpenStereogramCreator.ViewModels
             target.Opacity = dto.Opacity;
             target.Oversampling = dto.Oversampling;
             target.Visible = dto.Visible;
+
+			target.OnPropertyChanged(nameof(Visible));
 
             return target;
         }

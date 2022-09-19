@@ -47,7 +47,7 @@ namespace OpenStereogramCreator.ViewModels
 		}
 
 		[NotifyPropertyChangedInvocator]
-		protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		public override void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			switch (propertyName)
 			{
@@ -72,13 +72,25 @@ namespace OpenStereogramCreator.ViewModels
 
         public static DocumentLayer Import(DocumentLayerDto dto)
         {
-            var target = new DocumentLayer();
-
             var targetNew = Import<DocumentLayerDto, DocumentLayer>(dto);
 
             targetNew.BackgroundColorText = dto.BackgroundColorText;
 
             return targetNew;
         }
-    }
+
+		public void Import2(DocumentLayerDto dto)
+		{
+			this.Width = dto.Width;
+			this.Height = dto.Height;
+			this.Left = dto.Left;
+			this.Top = dto.Top;
+			this.Name = dto.Name;
+			this.Opacity = dto.Opacity;
+			this.Oversampling = dto.Oversampling;
+			this.Visible = dto.Visible;
+
+			this.OnPropertyChanged(nameof(Visible));
+		}
+	}
 }

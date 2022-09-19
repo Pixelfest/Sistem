@@ -11,7 +11,7 @@ using SixLabors.ImageSharp.Processing;
 namespace OpenStereogramCreator.ViewModels;
 
 public class RepeaterLayer : LayerBase
-{
+{    
     private Image<Rgba32> _image;
     private float _zoom = 1;
     private int _start = 0;
@@ -132,11 +132,11 @@ public class RepeaterLayer : LayerBase
     }
 
     [NotifyPropertyChangedInvocator]
-    protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+	public override void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
         switch (propertyName)
         {
-            case nameof(Image):
+			case nameof(Image):
             case nameof(TotalWidth):
             case nameof(Start):
             case nameof(RepeatPattern):

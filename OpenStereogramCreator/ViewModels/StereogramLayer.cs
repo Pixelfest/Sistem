@@ -132,7 +132,7 @@ namespace OpenStereogramCreator.ViewModels
 		}
 
 		[NotifyPropertyChangedInvocator]
-		protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		public override void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			switch (propertyName)
 			{
@@ -165,6 +165,23 @@ namespace OpenStereogramCreator.ViewModels
 
             return export;
         }
+
+		public new void Import2<TSource>(TSource source)
+			where TSource : StereogramLayerDto, new()
+		{
+			if (!string.IsNullOrEmpty(source.DepthImageBase64))
+			{
+				var bytes = Convert.FromBase64String(source.DepthImageBase64.Split(",")[1]);
+				this.DepthImage = Image.Load<Rgb48>(bytes);
+				this.DepthImageFileName = source.DepthImageFileName;
+			}
+
+			this.DrawDepthImage = source.DrawDepthImage;
+			this.MaximumSeparation = source.MaximumSeparation;
+			this.MinimumSeparation = source.MinimumSeparation;
+			this.Origin = source.Origin;
+			base.Import2(source);
+		}
 
 		public static TResult Import<TSource, TResult>(TSource dto)
             where TSource : StereogramLayerDto 

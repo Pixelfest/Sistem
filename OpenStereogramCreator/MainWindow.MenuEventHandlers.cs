@@ -33,13 +33,18 @@ namespace OpenStereogramCreator
 
 			if (openFileDialog.ShowDialog() == true)
 			{
-                string fileName = openFileDialog.FileName;
+				Layers.Reset();
+				Image = new Image<Rgba32>(1920, 1080);
+
+				string fileName = openFileDialog.FileName;
 
                 using (FileStream createFileStream = File.OpenRead(fileName))
                 {
                     var dto = JsonSerializer.Deserialize<LayersDto>(createFileStream);
 
 					Layers.Import(dto);
+
+					LayerPropertyChanged(null, null);
                 }
 			}
 		}

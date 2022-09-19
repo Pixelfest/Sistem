@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using OpenStereogramCreator.Annotations;
 using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
@@ -48,6 +49,16 @@ namespace OpenStereogramCreator.ViewModels
 				}
 
 				OnPropertyChanged(nameof(PatternEnd));
+			}
+		}
+
+		public string PatternImageExport
+		{
+			get => PatternImage.ToBase64String(PngFormat.Instance);
+			set
+			{
+				var bytes = Convert.FromBase64String(value);
+				PatternImage = Image.Load<Rgba32>(bytes);
 			}
 		}
 
@@ -145,7 +156,7 @@ namespace OpenStereogramCreator.ViewModels
 		}
 
 		[NotifyPropertyChangedInvocator]
-		protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		public override void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			switch (propertyName)
 			{
