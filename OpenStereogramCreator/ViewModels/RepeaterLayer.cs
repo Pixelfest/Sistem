@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using OpenStereogramCreator.Annotations;
-using OpenStereogramCreator.Tools;
+using OpenStereogramCreator.Dtos;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
 namespace OpenStereogramCreator.ViewModels;
 
-public class RepeaterLayer : LayerBase
+public class RepeaterLayer : ImageLayer
 {    
-    private Image<Rgba32> _image;
+    //private Image<Rgba32> _image;
+    //private string _imageFileName;
     private float _zoom = 1;
     private int _start = 0;
     private int _width;
@@ -28,7 +29,7 @@ public class RepeaterLayer : LayerBase
         {
             _zoom = value;
 
-            OnPropertyChanged(nameof(Zoom));
+            OnPropertyChanged();
         }
     }
 
@@ -50,7 +51,7 @@ public class RepeaterLayer : LayerBase
         {
             _start = value;
 
-            OnPropertyChanged(nameof(Start));
+            OnPropertyChanged();
         }
     }
 
@@ -61,7 +62,7 @@ public class RepeaterLayer : LayerBase
         {
             _y = value;
 
-            OnPropertyChanged(nameof(Y));
+            OnPropertyChanged();
         }
     }
 
@@ -79,39 +80,13 @@ public class RepeaterLayer : LayerBase
                 _repeatPattern = new List<int>();
             }
 
-            OnPropertyChanged(nameof(RepeatPattern));
-        }
-    }
-
-    public Image<Rgba32> Image
-    {
-        get => _image;
-        set
-        {
-            _image = value;
-
-            Width = value.Width;
-            Height = value.Height;
-
-            OnPropertyChanged(nameof(Image));
-            OnPropertyChanged(nameof(ImageSource));
-        }
-    }
-
-    public ImageSharpImageSource<Rgba32> ImageSource
-    {
-        get
-        {
-            if (Image != null)
-                return new ImageSharpImageSource<Rgba32>(Image);
-
-            return null;
+            OnPropertyChanged();
         }
     }
 
     public override void Render()
     {
-        if (_image == null || _width == 0 || _zoom == 0 || _repeatPattern.Count == 0)
+        if (Image == null || _width == 0 || _zoom == 0 || _repeatPattern.Count == 0)
             return;
 
         CachedImage = new Image<Rgba32>(_width, _height);
@@ -152,4 +127,28 @@ public class RepeaterLayer : LayerBase
 
         base.OnPropertyChanged(propertyName);
     }
+
+	public new T Export<T>() where T : RepeaterLayerDto, new()
+	{
+		var export = base.Export<T>();
+
+		export.Zoom = Zoom;
+		export.TotalWidth = TotalWidth;
+		export.Start = Start;
+		export.Y = Y;
+		export.RepeatPattern = RepeatPattern;
+
+		return export;
+	}
+
+	public new void Import<TSource>(TSource source)
+		where TSource : RepeaterLayerDto, new()
+	{
+		this.Zoom = source.Zoom;
+		this.TotalWidth = source.TotalWidth;
+		this.Start = source.Start;
+		this.Y = source.Y;
+		this.RepeatPattern = source.RepeatPattern;
+		base.Import(source);
+	}
 }

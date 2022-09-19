@@ -4,6 +4,7 @@ using SixLabors.ImageSharp.Processing;
 using System;
 using System.Runtime.CompilerServices;
 using OpenStereogramCreator.Annotations;
+using OpenStereogramCreator.Dtos;
 
 namespace OpenStereogramCreator.ViewModels
 {
@@ -20,7 +21,7 @@ namespace OpenStereogramCreator.ViewModels
 			{
 				_shift = value;
 
-				OnPropertyChanged(nameof(Shift));
+				OnPropertyChanged();
 			}
 		}
 
@@ -31,7 +32,7 @@ namespace OpenStereogramCreator.ViewModels
             {
                 _start = value;
 
-                OnPropertyChanged(nameof(Start));
+                OnPropertyChanged();
             }
         }
 
@@ -42,7 +43,7 @@ namespace OpenStereogramCreator.ViewModels
             {
                 _end = value;
 
-                OnPropertyChanged(nameof(End));
+                OnPropertyChanged();
             }
         }
 
@@ -53,12 +54,6 @@ namespace OpenStereogramCreator.ViewModels
 		
 			if (CachedImage != null)
 				return;
-
-			if (DrawDepthImage)
-			{
-				CachedImage = DepthImage.CloneAs<Rgba32>();
-				return;
-			}
 
 			var start = Start;
 
@@ -112,6 +107,26 @@ namespace OpenStereogramCreator.ViewModels
 			}
 
 			base.OnPropertyChanged(propertyName);
+		}
+
+		public new T Export<T>() where T : FullImageStereogramLayerDto, new()
+		{
+			var export = base.Export<T>();
+
+			export.Shift = Shift;
+			export.Start = Start;
+			export.End = End;
+
+			return export;
+		}
+
+		public new void Import<TSource>(TSource source)
+			where TSource : FullImageStereogramLayerDto, new()
+		{
+			this.Shift = source.Shift;
+			this.Start = source.Start;
+			this.End = source.End;
+			base.Import(source);
 		}
 	}
 }

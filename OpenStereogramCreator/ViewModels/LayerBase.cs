@@ -29,7 +29,7 @@ namespace OpenStereogramCreator.ViewModels
 			set
 			{
 				_opacity = value;
-				OnPropertyChanged(nameof(Opacity));
+				OnPropertyChanged();
 			}
 		}
 
@@ -39,7 +39,7 @@ namespace OpenStereogramCreator.ViewModels
 			set
 			{
 				_top = value;
-				OnPropertyChanged(nameof(Top));
+				OnPropertyChanged();
 			}
 		}
 
@@ -49,7 +49,7 @@ namespace OpenStereogramCreator.ViewModels
 			set
 			{
 				_left = value;
-				OnPropertyChanged(nameof(Left));
+				OnPropertyChanged();
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace OpenStereogramCreator.ViewModels
 			set
 			{
 				_width = value;
-				OnPropertyChanged(nameof(Width));
+				OnPropertyChanged();
 			}
 		}
 
@@ -71,7 +71,7 @@ namespace OpenStereogramCreator.ViewModels
 			set
 			{
 				_height = value;
-				OnPropertyChanged(nameof(Height));
+				OnPropertyChanged();
 			}
 		}
 
@@ -87,7 +87,7 @@ namespace OpenStereogramCreator.ViewModels
 				else
 					_oversampling = value;
 
-				OnPropertyChanged(nameof(Oversampling));
+				OnPropertyChanged();
 			}
 		}
 
@@ -97,7 +97,7 @@ namespace OpenStereogramCreator.ViewModels
 			set
 			{
 				_name = value;
-				OnPropertyChanged(nameof(Name));
+				OnPropertyChanged();
 			}
 		}
 
@@ -107,7 +107,7 @@ namespace OpenStereogramCreator.ViewModels
 			set
 			{
 				_visible = value;
-				OnPropertyChanged(nameof(Visible));
+				OnPropertyChanged();
 			}
 		}
 
@@ -139,7 +139,7 @@ namespace OpenStereogramCreator.ViewModels
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		public void Import2<TSource>(TSource dto)
+		public void Import<TSource>(TSource dto)
 			where TSource : LayerBaseDto, new()
 		{
 			this.Width = dto.Width;
@@ -167,26 +167,6 @@ namespace OpenStereogramCreator.ViewModels
                 Oversampling = Oversampling,
                 Visible = Visible
             };
-        }
-
-        public static TResult Import<TSource, TResult>(TSource dto)
-		    where TSource : LayerBaseDto
-		    where TResult : LayerBase, new()
-        {
-            var target = new TResult();
-
-            target.Width = dto.Width;
-            target.Height = dto.Height;
-            target.Left = dto.Left;
-            target.Top = dto.Top;
-            target.Name = dto.Name;
-            target.Opacity = dto.Opacity;
-            target.Oversampling = dto.Oversampling;
-            target.Visible = dto.Visible;
-
-			target.OnPropertyChanged(nameof(Visible));
-
-            return target;
         }
 	}
 }

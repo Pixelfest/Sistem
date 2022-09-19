@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
 using OpenStereogramCreator.Annotations;
 using OpenStereogramCreator.Dtos;
 using Sistem.Core;
@@ -12,7 +11,6 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace OpenStereogramCreator.ViewModels
 {
-	[Serializable]
 	public abstract class StereogramLayer : LayerBase, IHaveADepthImage
 	{
 		private Image<Rgb48> _depthImage;
@@ -20,25 +18,14 @@ namespace OpenStereogramCreator.ViewModels
 		private float _minimumSeparation;
 		private float _maximumSeparation;
 		private float _origin;
-		private bool _drawDepthImage;
 
-        public string DepthImageExport
-        {
-            get => DepthImage.ToBase64String(PngFormat.Instance);
-            set
-            {
-                var bytes = Convert.FromBase64String(value);
-                DepthImage = Image.Load<Rgb48>(bytes);
-            }
-        }
-
-        public float Origin
+		public float Origin
 		{
 			get => _origin;
 			set
 			{
 				_origin = value;
-				OnPropertyChanged(nameof(Origin));
+				OnPropertyChanged();
 			}
 		}
 
@@ -59,7 +46,7 @@ namespace OpenStereogramCreator.ViewModels
 				if (this is PatternStereogramLayer || this is RandomDotStereogramLayer)
 					Origin = (value.Width - MaximumSeparation) / 2;
 
-				OnPropertyChanged(nameof(DepthImage));
+				OnPropertyChanged();
 				OnPropertyChanged(nameof(DepthImageSource));
 			}
 		}
@@ -70,11 +57,11 @@ namespace OpenStereogramCreator.ViewModels
 			set
 			{
 				_depthImageFileName = value;
-				OnPropertyChanged(nameof(DepthImageFileName));
+				OnPropertyChanged();
 			}
 		}
 
-        [IgnoreDataMember]
+		[IgnoreDataMember]
 		public ImageSharpImageSource<Rgb48> DepthImageSource
 		{
 			get
@@ -92,7 +79,7 @@ namespace OpenStereogramCreator.ViewModels
 			set
 			{
 				_minimumSeparation = value;
-				OnPropertyChanged(nameof(MinimumSeparation));
+				OnPropertyChanged();
 			}
 		}
 
@@ -102,17 +89,7 @@ namespace OpenStereogramCreator.ViewModels
 			set
 			{
 				_maximumSeparation = value;
-				OnPropertyChanged(nameof(MaximumSeparation));
-			}
-		}
-
-		public bool DrawDepthImage
-		{
-			get => _drawDepthImage;
-			set
-			{
-				_drawDepthImage = value;
-				OnPropertyChanged(nameof(DrawDepthImage));
+				OnPropertyChanged();
 			}
 		}
 
@@ -139,7 +116,6 @@ namespace OpenStereogramCreator.ViewModels
 				case nameof(MinimumSeparation):
 				case nameof(MaximumSeparation):
 				case nameof(Origin):
-				case nameof(DrawDepthImage):
 				case nameof(DepthImage):
 					CachedImage = null;
 					break;
@@ -148,25 +124,24 @@ namespace OpenStereogramCreator.ViewModels
 			base.OnPropertyChanged(propertyName);
 		}
 
-        public new T Export<T>() where T : StereogramLayerDto, new()
-        {
-            var export = base.Export<T>();
+		public new T Export<T>() where T : StereogramLayerDto, new()
+		{
+			var export = base.Export<T>();
 
-            if (DepthImage != null)
-            {
-                export.DepthImageBase64 = DepthImage.ToBase64String(PngFormat.Instance);
-                export.DepthImageFileName = DepthImageFileName;
-            }
+			if (DepthImage != null)
+			{
+				export.DepthImageBase64 = DepthImage.ToBase64String(PngFormat.Instance);
+				export.DepthImageFileName = DepthImageFileName;
+			}
 
-            export.DrawDepthImage = DrawDepthImage;
-            export.MaximumSeparation = MaximumSeparation;
-            export.MinimumSeparation = MinimumSeparation;
-            export.Origin = Origin;
+			export.MaximumSeparation = MaximumSeparation;
+			export.MinimumSeparation = MinimumSeparation;
+			export.Origin = Origin;
 
-            return export;
-        }
+			return export;
+		}
 
-		public new void Import2<TSource>(TSource source)
+		public new void Import<TSource>(TSource source)
 			where TSource : StereogramLayerDto, new()
 		{
 			if (!string.IsNullOrEmpty(source.DepthImageBase64))
@@ -176,32 +151,10 @@ namespace OpenStereogramCreator.ViewModels
 				this.DepthImageFileName = source.DepthImageFileName;
 			}
 
-			this.DrawDepthImage = source.DrawDepthImage;
 			this.MaximumSeparation = source.MaximumSeparation;
 			this.MinimumSeparation = source.MinimumSeparation;
 			this.Origin = source.Origin;
-			base.Import2(source);
+			base.Import(source);
 		}
-
-		public static TResult Import<TSource, TResult>(TSource dto)
-            where TSource : StereogramLayerDto 
-            where TResult : StereogramLayer, new()
-        {
-            var targetNew = LayerBase.Import<TSource, TResult>(dto);
-
-            if (!string.IsNullOrEmpty(dto.DepthImageBase64))
-            {
-                var bytes = Convert.FromBase64String(dto.DepthImageBase64.Split(",")[1]);
-                targetNew.DepthImage = Image.Load<Rgb48>(bytes);
-                targetNew.DepthImageFileName = dto.DepthImageFileName;
-            }
-
-            targetNew.DrawDepthImage = dto.DrawDepthImage;
-            targetNew.MaximumSeparation = dto.MaximumSeparation;
-            targetNew.MinimumSeparation = dto.MinimumSeparation;
-			targetNew.Origin = dto.Origin;
-
-			return targetNew;
-        }
 	}
 }

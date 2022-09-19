@@ -7,7 +7,6 @@ namespace OpenStereogramCreator.ViewModels
 	{
 		Image<Rgba32> PatternImage { get; set; }
 		string PatternImageFileName { get; set; }
-		//ImageSharpImageSource<Rgba32> PatternImageSource { get; }
 	}
 
 }

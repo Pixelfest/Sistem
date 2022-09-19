@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using OpenStereogramCreator.Annotations;
+using OpenStereogramCreator.Dtos;
 using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
@@ -30,7 +31,7 @@ namespace OpenStereogramCreator.ViewModels
 					_patternStart = 0;
 				}
 
-				OnPropertyChanged(nameof(PatternStart));
+				OnPropertyChanged();
 			}
 		}
 
@@ -48,17 +49,7 @@ namespace OpenStereogramCreator.ViewModels
 					_patternEnd = PatternImage?.Width ?? 0;
 				}
 
-				OnPropertyChanged(nameof(PatternEnd));
-			}
-		}
-
-		public string PatternImageExport
-		{
-			get => PatternImage.ToBase64String(PngFormat.Instance);
-			set
-			{
-				var bytes = Convert.FromBase64String(value);
-				PatternImage = Image.Load<Rgba32>(bytes);
+				OnPropertyChanged();
 			}
 		}
 
@@ -72,7 +63,7 @@ namespace OpenStereogramCreator.ViewModels
 				PatternStart = 0;
 				PatternEnd = _patternImage.Width;
 
-				OnPropertyChanged(nameof(PatternImage));
+				OnPropertyChanged();
 				OnPropertyChanged(nameof(PatternImageSource));
 			}
 		}
@@ -83,7 +74,7 @@ namespace OpenStereogramCreator.ViewModels
 			set
 			{
 				_patternImageFileName = value;
-				OnPropertyChanged(nameof(PatternImageFileName));
+				OnPropertyChanged();
 			}
 		}
 
@@ -109,12 +100,6 @@ namespace OpenStereogramCreator.ViewModels
 
 			if (CachedImage != null)
 				return;
-
-			if (DrawDepthImage)
-			{
-				CachedImage = DepthImage.CloneAs<Rgba32>();
-				return;
-			}
 
 			var stereogram = CreateStereogram();
 
@@ -170,6 +155,41 @@ namespace OpenStereogramCreator.ViewModels
 			}
 
 			base.OnPropertyChanged(propertyName);
+		}
+		public new T Export<T>() where T : PatternStereogramLayerDto, new()
+		{
+			var export = base.Export<T>();
+
+			if (PatternImage != null)
+			{
+				export.PatternImageBase64 = PatternImage.ToBase64String(PngFormat.Instance);
+				export.PatternImageFileName = PatternImageFileName;
+			}
+
+			export.PatternStart = PatternStart;
+			export.PatternEnd = PatternEnd;
+			export.Zoom = Zoom;
+			export.PatternYShift = PatternYShift;
+
+			return export;
+		}
+
+		public new void Import<TSource>(TSource source)
+			where TSource : PatternStereogramLayerDto, new()
+		{
+			PatternStart = source.PatternStart;
+			PatternEnd = source.PatternEnd;
+			Zoom = source.Zoom;
+			PatternYShift = source.PatternYShift;
+			
+			if (!string.IsNullOrEmpty(source.PatternImageBase64))
+			{
+				var bytes = Convert.FromBase64String(source.PatternImageBase64.Split(",")[1]);
+				this.PatternImage = Image.Load<Rgba32>(bytes);
+				this.PatternImageFileName = source.PatternImageFileName;
+			}
+
+			base.Import(source);
 		}
 	}
 }

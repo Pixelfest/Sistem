@@ -7,6 +7,5 @@ namespace OpenStereogramCreator.ViewModels
 	{
 		Image<Rgb48> DepthImage { get; set; }
 		string DepthImageFileName { get; set; }
-		//ImageSharpImageSource<Rgb48> DepthImageSource { get; }
 	}
 }

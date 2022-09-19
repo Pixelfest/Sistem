@@ -155,6 +155,10 @@ namespace OpenStereogramCreator
 
 			switch (selectedItem)
 			{
+				case RepeaterLayer layer:
+					RepeaterLayerProperties.Visibility = Visibility.Visible;
+					RepeaterLayerProperties.DataContext = layer;
+					break;
 				case ReversePatternLayer layer:
 					ReversePatternLayerProperties.Visibility = Visibility.Visible;
 					ReversePatternLayerProperties.DataContext = layer;
@@ -175,10 +179,6 @@ namespace OpenStereogramCreator
 					PatternStereogramLayerProperties.Visibility = Visibility.Visible;
 					PatternStereogramLayerProperties.DataContext = layer;
 					break;
-                case RepeaterLayer layer:
-                    RepeaterLayerProperties.Visibility = Visibility.Visible;
-                    RepeaterLayerProperties.DataContext = layer;
-                    break;
 			}
 		}
 

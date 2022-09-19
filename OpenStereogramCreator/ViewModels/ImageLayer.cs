@@ -1,7 +1,10 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using OpenStereogramCreator.Annotations;
+using OpenStereogramCreator.Dtos;
 using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace OpenStereogramCreator.ViewModels
@@ -9,6 +12,7 @@ namespace OpenStereogramCreator.ViewModels
     public class ImageLayer : LayerBase
 	{
 		private Image<Rgba32> _image;
+		private string _imageFileName;
 
 		public Image<Rgba32> Image
 		{
@@ -20,8 +24,18 @@ namespace OpenStereogramCreator.ViewModels
 				Width = value.Width;
 				Height = value.Height;
 
-				OnPropertyChanged(nameof(Image));  
+				OnPropertyChanged();  
 				OnPropertyChanged(nameof(ImageSource));  
+			}
+		}
+
+		public string ImageFileName
+		{
+			get => _imageFileName;
+			set
+			{
+				_imageFileName = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -58,6 +72,30 @@ namespace OpenStereogramCreator.ViewModels
 			}
 
 			base.OnPropertyChanged(propertyName);
+		}
+		public new T Export<T>() where T : ImageLayerDto, new()
+		{
+			var export = base.Export<T>();
+
+			if (Image != null)
+			{
+				export.ImageBase64 = Image.ToBase64String(PngFormat.Instance);
+				export.ImageFileName = ImageFileName;
+			}
+
+			return export;
+		}
+
+		public new void Import<TSource>(TSource source)
+			where TSource : ImageLayerDto, new()
+		{
+			if (!string.IsNullOrEmpty(source.ImageBase64))
+			{
+				var bytes = Convert.FromBase64String(source.ImageBase64.Split(",")[1]);
+				this.Image = SixLabors.ImageSharp.Image.Load<Rgba32>(bytes);
+				this.ImageFileName = source.ImageFileName;
+			}
+			base.Import(source);
 		}
 	}
 }

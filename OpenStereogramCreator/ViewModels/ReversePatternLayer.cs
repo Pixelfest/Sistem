@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using OpenStereogramCreator.Annotations;
+using OpenStereogramCreator.Dtos;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -16,7 +17,7 @@ namespace OpenStereogramCreator.ViewModels
 			{
 				_numberOfColumns = value;
 
-				OnPropertyChanged(nameof(NumberOfColumns));
+				OnPropertyChanged();
 			}
 		}
 
@@ -44,6 +45,22 @@ namespace OpenStereogramCreator.ViewModels
 			base.OnPropertyChanged(propertyName);
 		}
 
+		public new T Export<T>() where T : ReversePatternLayerDto, new()
+		{
+			var export = base.Export<T>();
+
+			export.NumberOfColumns = NumberOfColumns;
+
+			return export;
+		}
+
+		public new void Import<TSource>(TSource source)
+			where TSource : ReversePatternLayerDto, new()
+		{
+			this.NumberOfColumns = source.NumberOfColumns;
+			base.Import(source);
+		}
+
 		private Image<Rgba32> ReverseColumns(Image<Rgba32> source)
 		{
 			var result = new Image<Rgba32>(source.Width, source.Height);
@@ -64,6 +81,5 @@ namespace OpenStereogramCreator.ViewModels
 
 			return result;
 		}
-
 	}
 }

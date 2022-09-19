@@ -1,11 +1,8 @@
 ﻿using System.IO;
-using System.IO.Compression;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Win32;
 using OpenStereogramCreator.Dtos;
-using OpenStereogramCreator.ViewModels;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -43,6 +40,8 @@ namespace OpenStereogramCreator
                     var dto = JsonSerializer.Deserialize<LayersDto>(createFileStream);
 
 					Layers.Import(dto);
+
+					LayersListBox.SelectedIndex = 0;
 
 					LayerPropertyChanged(null, null);
                 }

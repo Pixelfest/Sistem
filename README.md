@@ -29,11 +29,26 @@ This is the same as the pattern stereogram layer, but it uses a complete image o
 
 The main purpore of this layer is to emphasize parts of the stereogram either by showing part of the objects or outlines.
 
+**Usage**
+I'm still figuring this out and I've had some rather unexpected results. You'll want to use a semi-transparent image to show the pattern, or the image can be a full size image with just a detail of the objects you display in the depth-map. Then you have to find the correct settings to overlap the pattern with the depth-map.
+
+### Repeater layer
+An image that is repeated across the image. It can add an extra layer of depth.
+
+**Usage**
+Load a (small) image and tell the application how to display it. The pattern will be repeated over and over, but can be as complicated as you want. Differences in distance will mean some instances of the image will look closer or further away.
+
+### Reverse layer
+When rendering a set of identical objects in a row, one can easily see them in 3d using cross-view. When using parallel view, however, the order of the objects must be reversed to get that same effect.
+
+**Usage**
+Basically just load the image and tell the application how many object there are. The image will be cut into that many columns and those columns will be shown reversed.
+
 # Sistem
 Stereogram generator core
 
 ## Stereogram.cs - Core logic
-This is the .NET Core implementation for the Stereogram Generator I called Sistem. (Sis stands for Single Image Stereogram, get it :P)
+This is the .NET Core implementation for the Stereogram Generator I called Sistem.
 
 If you're looking to port this to another coding language, this is where to start. This class handles all the logic. It only requires a Depthmap to generate a random dot stereogram. If you add a pattern it will use that. There's a lot of properties to control the output, but they will be set to default values if not set.
 

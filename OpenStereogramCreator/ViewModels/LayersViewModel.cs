@@ -1,14 +1,13 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Text.Json;
 using OpenStereogramCreator.Dtos;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using static OpenStereogramCreator.ViewModels.LayerBase;
 
 namespace OpenStereogramCreator.ViewModels
 {
@@ -16,7 +15,7 @@ namespace OpenStereogramCreator.ViewModels
 	{
 		public DocumentLayer Document { get; set; }
 
-		public LayersViewModel() : base()
+		public LayersViewModel()
 		{
 			InitializeDocument();
 		}
@@ -42,8 +41,7 @@ namespace OpenStereogramCreator.ViewModels
 
 		private void InitializeDocument()
 		{
-			if (Document == null)
-				Document = new DocumentLayer();
+			Document ??= new DocumentLayer();
 
 			Document.Name = "Document";
 			Document.BackgroundColor = Color.Black;
@@ -60,12 +58,27 @@ namespace OpenStereogramCreator.ViewModels
 			result.Document = Document.Export();
 			result.Layers = new List<string>();
 
-			foreach (var layerBase in Items)
+			foreach (var layerBase in Items.Reverse())
 			{
 				switch (layerBase)
 				{
 					case RandomDotStereogramLayer l:
-						result.Layers.Add($"{nameof(RandomDotStereogramLayerDto)}|{Convert.ToBase64String(l.Export())}");
+						result.Layers.Add($"{nameof(RandomDotStereogramLayerDto)}|{Convert.ToBase64String(JsonSerializer.SerializeToUtf8Bytes(l.Export<RandomDotStereogramLayerDto>()))}");
+						break;
+					case FullImageStereogramLayer l:
+						result.Layers.Add($"{nameof(FullImageStereogramLayerDto)}|{Convert.ToBase64String(JsonSerializer.SerializeToUtf8Bytes(l.Export<FullImageStereogramLayerDto>()))}");
+						break;
+					case PatternStereogramLayer l:
+						result.Layers.Add($"{nameof(PatternStereogramLayerDto)}|{Convert.ToBase64String(JsonSerializer.SerializeToUtf8Bytes(l.Export<PatternStereogramLayerDto>()))}");
+						break;
+					case RepeaterLayer l:
+						result.Layers.Add($"{nameof(RepeaterLayerDto)}|{Convert.ToBase64String(JsonSerializer.SerializeToUtf8Bytes(l.Export<RepeaterLayerDto>()))}");
+						break;
+					case ReversePatternLayer l:
+						result.Layers.Add($"{nameof(ReversePatternLayerDto)}|{Convert.ToBase64String(JsonSerializer.SerializeToUtf8Bytes(l.Export<ReversePatternLayerDto>()))}");
+						break;
+					case ImageLayer l:
+						result.Layers.Add($"{nameof(ImageLayerDto)}|{Convert.ToBase64String(JsonSerializer.SerializeToUtf8Bytes(l.Export<ImageLayerDto>()))}");
 						break;
 				}
 			}
@@ -77,38 +90,51 @@ namespace OpenStereogramCreator.ViewModels
 		{
 			Reset();
 
-			this.Document.Import2(layersDto.Document);
-
-			//this.Document = DocumentLayer.Import(layersDto.Document);
-			
+			this.Document.Import(layersDto.Document);
+		
 			foreach (var dto in layersDto.Layers)
 			{
 				var data = dto.Split("|", StringSplitOptions.RemoveEmptyEntries);
-				
+
 				switch (data[0])
 				{
 					case nameof(RandomDotStereogramLayerDto):
 						Insert(0, new RandomDotStereogramLayer());
-						(this[0] as RandomDotStereogramLayer).Import2(Read<RandomDotStereogramLayerDto>(data[1]));
+						(this[0] as RandomDotStereogramLayer).Import(Read<RandomDotStereogramLayerDto>(data[1]));
 						break;
 					case nameof(FullImageStereogramLayerDto):
-
+						Insert(0, new FullImageStereogramLayer());
+						(this[0] as FullImageStereogramLayer).Import(Read<FullImageStereogramLayerDto>(data[1]));
+						break;
+					case nameof(ImageLayerDto):
+						Insert(0, new ImageLayer());
+						(this[0] as ImageLayer).Import(Read<ImageLayerDto>(data[1]));
+						break;
+					case nameof(PatternStereogramLayerDto):
+						Insert(0, new PatternStereogramLayer());
+						(this[0] as PatternStereogramLayer).Import(Read<PatternStereogramLayerDto>(data[1]));
+						break;
+					case nameof(RepeaterLayerDto):
+						Insert(0, new RepeaterLayer());
+						(this[0] as RepeaterLayer).Import(Read<RepeaterLayerDto>(data[1]));
+						break;
+					case nameof(ReversePatternLayerDto):
+						Insert(0, new ReversePatternLayer());
+						(this[0] as ReversePatternLayer).Import(Read<ReversePatternLayerDto>(data[1]));
+						break;
 				}
 			}
 
-			this.Document.OnPropertyChanged(LayerBase.ImportName);
+			this.Document.OnPropertyChanged(ImportName);
 
 			foreach (var layer in Items)
 			{
-				layer.OnPropertyChanged(LayerBase.ImportName);
-				//layer.PropertyChanged
-				//var handler = layer.PropertyChanged;
-				//if (handler != null) handler(this, new PropertyChangedEventArgs("TimeStamp"));
+				layer.OnPropertyChanged(ImportName);
 			}
 
 		}
 
-		private TDto Read<TDto>(string importString)
+		private static TDto Read<TDto>(string importString)
 			where TDto : new()
 		{
 			var import = Convert.FromBase64String(importString);
