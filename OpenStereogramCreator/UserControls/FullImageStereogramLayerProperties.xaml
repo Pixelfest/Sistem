@@ -17,6 +17,8 @@
 	
 		<DockPanel>
 			<Label>Shift origin</Label>
+			<Button Padding="0" x:Name="LessButton" Click="LessButton_Click">&lt;</Button>
+			<Button Padding="0" x:Name="MoreButton" Click="MoreButton_Click">&gt;</Button>
 			<TextBox Text="{Binding Path=Shift, StringFormat=N0}" Style="{StaticResource TextBoxRight}" MouseWheel="ShiftMouseWheel"></TextBox>
 		</DockPanel>
         <DockPanel>

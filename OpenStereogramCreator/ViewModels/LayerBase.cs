@@ -20,8 +20,8 @@ namespace OpenStereogramCreator.ViewModels
 		private float _opacity;
 		private int _oversampling;
 		private string _name;
+		private PixelColorBlendingMode _blendingMode;
 		private bool _visible;
-		protected bool _importing;
 
 		public float Opacity
 		{
@@ -97,6 +97,16 @@ namespace OpenStereogramCreator.ViewModels
 			set
 			{
 				_name = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public PixelColorBlendingMode BlendingMode
+		{
+			get => _blendingMode;
+			set
+			{
+				_blendingMode = value;
 				OnPropertyChanged();
 			}
 		}

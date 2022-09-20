@@ -21,5 +21,15 @@ namespace OpenStereogramCreator
 
 			FullImageStereogramLayer.Shift += e.Delta < 0 ? -1 * multiplier : 1 * multiplier;
 		}
+
+		private void LessButton_Click(object sender, System.Windows.RoutedEventArgs e)
+		{
+			FullImageStereogramLayer.Shift--;
+		}
+
+		private void MoreButton_Click(object sender, System.Windows.RoutedEventArgs e)
+		{
+			FullImageStereogramLayer.Shift++;
+		}
 	}
 }
