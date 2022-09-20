@@ -13,4 +13,5 @@ public class LayerBaseDto : ILayerBaseDto
 	public int Oversampling { get; set; }
 	public string Name { get; set; }
 	public bool Visible { get; set; }
+	public int BlendingMode { get; set; }
 }

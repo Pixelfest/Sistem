@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using OpenStereogramCreator.Annotations;
 using OpenStereogramCreator.Dtos;
@@ -129,7 +130,7 @@ namespace OpenStereogramCreator.ViewModels
 
 		public abstract void Render();
 
-        public event PropertyChangedEventHandler PropertyChanged;
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		[NotifyPropertyChangedInvocator]
 		public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -161,22 +162,32 @@ namespace OpenStereogramCreator.ViewModels
 			this.Oversampling = dto.Oversampling;
 			this.Visible = dto.Visible;
 
+			try
+			{
+				this.BlendingMode = (PixelColorBlendingMode)dto.BlendingMode;
+			}
+			catch
+			{
+				this.BlendingMode = PixelColorBlendingMode.Normal;
+			}
+
 			this.OnPropertyChanged(nameof(Visible));
 		}
 
 		public T Export<T>() where T : LayerBaseDto, new()
-        {
-            return new T
-            {
-                Width = Width,
-                Height = Height,
-                Left = Left,
-                Top = Top,
-                Name = Name,
-                Opacity = Opacity,
-                Oversampling = Oversampling,
-                Visible = Visible
-            };
-        }
+		{
+			return new T
+			{
+				Width = Width,
+				Height = Height,
+				Left = Left,
+				Top = Top,
+				Name = Name,
+				Opacity = Opacity,
+				Oversampling = Oversampling,
+				Visible = Visible,
+				BlendingMode = (int)BlendingMode
+			};
+		}
 	}
 }
