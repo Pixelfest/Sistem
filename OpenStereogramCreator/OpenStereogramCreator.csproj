@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Platforms>AnyCPU;x64</Platforms>
     <AssemblyName>OpenStereogramCreator</AssemblyName>
     <RootNamespace>OpenStereogramCreator</RootNamespace>
     <StartupObject>OpenStereogramCreator.App</StartupObject>
+    <LangVersion>latest</LangVersion>
+    <TargetFrameworks>net6.0-windows;net7.0-windows</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
