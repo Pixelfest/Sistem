@@ -12,7 +12,7 @@
 		
 		<local:DepthMapProperties x:Name="DepthMapProperties" />
 		<local:PatternProperties x:Name="PatternProperties" />
-		
+		<Button Click="GeneratePattern_Click">Generate Pattern</Button>
 		<local:StereogramLayerProperties x:Name="StereogramLayerProperties" />
 	
 		<DockPanel>

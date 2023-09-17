@@ -1,5 +1,8 @@
-﻿using System.Windows.Input;
+﻿using System.Collections;
+using System.Windows;
+using System.Windows.Input;
 using OpenStereogramCreator.ViewModels;
+using Sistem.Core;
 
 namespace OpenStereogramCreator
 {
@@ -30,6 +33,11 @@ namespace OpenStereogramCreator
 		private void MoreButton_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
 			FullImageStereogramLayer.Shift++;
+		}
+
+		private void GeneratePattern_Click(object sender, RoutedEventArgs e)
+		{
+			FullImageStereogramLayer.PatternImage = ImageProcessing.GenerateShadows(FullImageStereogramLayer.DepthImage);
 		}
 	}
 }

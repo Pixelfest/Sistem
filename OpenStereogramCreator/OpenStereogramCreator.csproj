@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Platforms>AnyCPU;x64</Platforms>
     <AssemblyName>OpenStereogramCreator</AssemblyName>
     <RootNamespace>OpenStereogramCreator</RootNamespace>
     <StartupObject>OpenStereogramCreator.App</StartupObject>
+    <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta11" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>

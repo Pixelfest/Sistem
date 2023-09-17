@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latestmajor</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="SImpsons.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Sistem.Core\Sistem.Core.csproj" />
+    </ItemGroup>
+
+</Project>
