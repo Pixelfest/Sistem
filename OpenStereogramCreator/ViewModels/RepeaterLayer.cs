@@ -11,7 +11,7 @@ using SixLabors.ImageSharp.Processing;
 namespace OpenStereogramCreator.ViewModels;
 
 public class RepeaterLayer : ImageLayer
-{    
+{
     //private Image<Rgba32> _image;
     //private string _imageFileName;
     private float _zoom = 1;
@@ -19,7 +19,7 @@ public class RepeaterLayer : ImageLayer
     private int _width;
     private int _height;
     private List<int> _repeatPattern = new List<int>();
-        
+
     private int _y;
 
     public float Zoom
@@ -75,7 +75,7 @@ public class RepeaterLayer : ImageLayer
             {
                 _repeatPattern = value.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(v => int.Parse((string)v)).ToList();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _repeatPattern = new List<int>();
             }
