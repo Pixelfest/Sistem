@@ -36,7 +36,7 @@ jobs:
         run: dotnet restore Sistem.CommandLine/Sistem.CommandLine.csproj
 
       - name: Publish
-        run: dotnet publish Sistem.CommandLine/Sistem.CommandLine.csproj --configuration Release --framework net10.0 --runtime ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=false --output ${{ github.workspace }}/artifacts/${{ matrix.rid }}
+        run: dotnet publish Sistem.CommandLine/Sistem.CommandLine.csproj --configuration Release --framework net10.0 --runtime ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=false -p:PublishTrimmed=false --output ${{ github.workspace }}/artifacts/${{ matrix.rid }}
 
       - name: Package
         run: |
