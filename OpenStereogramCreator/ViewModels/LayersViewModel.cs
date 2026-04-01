@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -142,6 +142,19 @@ namespace OpenStereogramCreator.ViewModels
 			var deserializedDto = JsonSerializer.Deserialize<TDto>(ref reader);
 
 			return deserializedDto;
+		}
+
+		internal void Swap(int index1, int index2)
+		{
+			if (index1 < 0 || index1 >= Count || index2 < 0 || index2 >= Count)
+				throw new ArgumentOutOfRangeException(nameof(index1), "Index out of range");
+
+			if (index1 == index2)
+				return;
+
+			var temp = this[index1];
+			this[index1] = this[index2];
+			this[index2] = temp;
 		}
 	}
 }

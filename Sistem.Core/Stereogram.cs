@@ -1,4 +1,4 @@
-﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
@@ -78,8 +78,8 @@ namespace Sistem.Core
 				// Set YShift to a fraction of the height
 				YShift = height / 32;
 
-				if(IgnoreGaps)
-                    YShift = 0;
+				if (IgnoreGaps)
+					YShift = 0;
 
 				_depthMap = value;
 			}
@@ -193,12 +193,12 @@ namespace Sistem.Core
 			}
 		}
 
-        /// <summary>
-        /// Ignore gaps that need to be filled, YShift will be 0.
-        /// Default = false
-        /// </summary>
-        public bool IgnoreGaps { get; set; } = false;
-		
+		/// <summary>
+		/// Ignore gaps that need to be filled, YShift will be 0.
+		/// Default = false
+		/// </summary>
+		public bool IgnoreGaps { get; set; } = false;
+
 		/// <summary>
 		/// Gets or sets parallel processing
 		/// Default = true
@@ -356,7 +356,7 @@ namespace Sistem.Core
 			_currentOversampling = Oversampling;
 			_currentParallelProcessing = ParallelProcessing;
 			_currentYShift = YShift;
-            _currentIgnoreGaps = IgnoreGaps;
+			_currentIgnoreGaps = IgnoreGaps;
 			_currentNoiseDensity = NoiseDensity;
 			_currentNoiseReductionThreshold = NoiseReductionThreshold;
 			_currentPostProcessingOversampling = PostProcessingOversampling;
@@ -474,7 +474,7 @@ namespace Sistem.Core
 		/// <param name="y">The line to render</param>
 		private void MakeLineRandomDot(int y)
 		{
-			var random = new Random(Guid.NewGuid().GetHashCode());
+			var random = Random.Shared;
 
 			var lookLeft = new int[_currentWidth];
 
@@ -546,25 +546,12 @@ namespace Sistem.Core
 			var setLeft = new int[_virtualWidth];
 			var setRight = new int[_virtualWidth];
 
-			if (_currentParallelProcessing)
+			for (var x = 0; x < _virtualWidth; x++)
 			{
-				Parallel.For(0, _virtualWidth, x =>
-				{
-					lookLeft[x] = x;
-					lookRight[x] = x;
-					setLeft[x] = 0;
-					setRight[x] = 0;
-				});
-			}
-			else
-			{
-				for (var x = 0; x < _virtualWidth; x++)
-				{
-					lookLeft[x] = x;
-					lookRight[x] = x;
-					setLeft[x] = 0;
-					setRight[x] = 0;
-				}
+				lookLeft[x] = x;
+				lookRight[x] = x;
+				setLeft[x] = 0;
+				setRight[x] = 0;
 			}
 
 			// The separation in pixels
@@ -606,11 +593,11 @@ namespace Sistem.Core
 					}
 				}
 				else if (lookLeft[x] == Int32.MinValue)
-                {
-                    colors[x] = Rgba32.ParseHex("00000000");
+				{
+					colors[x] = Rgba32.ParseHex("00000000");
 					//lastLinked
-                }
-                else
+				}
+				else
 				{
 					colors[x] = colors[lookLeft[x]];
 					lastLinked = x;
@@ -644,11 +631,11 @@ namespace Sistem.Core
 						colors[x] = _directPattern[locationX, locationY];
 					}
 				}
-                else if (lookRight[x] == Int32.MinValue)
-                {
-                    colors[x] = Rgba32.ParseHex("00000000");
-                    //lastLinked
-                }
+				else if (lookRight[x] == Int32.MinValue)
+				{
+					colors[x] = Rgba32.ParseHex("00000000");
+					//lastLinked
+				}
 				else
 				{
 					colors[x] = colors[lookRight[x]];
@@ -734,15 +721,16 @@ namespace Sistem.Core
 		/// <param name="setRight">An array of set indexes for right</param>
 		private void FillUnsetGaps(int[] lookLeft, int[] setLeft, int[] lookRight, int[] setRight)
 		{
-			var startLeft = 0;
-			var startRight = 0;
+			const int unset = -1;
+			var startLeft = unset;
+			var startRight = unset;
 
 			for (var x = 0; x < _virtualWidth; x++)
 			{
-				if (setLeft[x] == 1 && setRight[x] == 1 && startLeft == 0 && startRight == 0)
+				if (setLeft[x] == 1 && setRight[x] == 1 && startLeft == unset && startRight == unset)
 					continue;
 
-                if (setLeft[x] == 0 && startLeft == 0)
+				if (setLeft[x] == 0 && startLeft == unset)
 				{
 					startLeft = x;
 				}
@@ -754,7 +742,7 @@ namespace Sistem.Core
 					startLeft = 0;
 				}
 
-				if (setRight[x] == 0 && startRight == 0)
+				if (setRight[x] == 0 && startRight == unset)
 				{
 					startRight = x;
 				}
@@ -787,10 +775,10 @@ namespace Sistem.Core
 			for (var x = start + 1; x < end; x++)
 			{
 
-                if (_currentIgnoreGaps)
-                    array[x] = Int32.MinValue;
+				if (_currentIgnoreGaps)
+					array[x] = Int32.MinValue;
 				else
-                    array[x] = (int)Math.Round(startValue + count * delta);
+					array[x] = (int)Math.Round(startValue + count * delta);
 
 				count++;
 			}
