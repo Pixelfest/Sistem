@@ -1,0 +1,100 @@
+name: Release CLI
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  publish-cli:
+    name: Publish ${{ matrix.asset_name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rid: linux-x64
+            asset_name: sis-linux-x64
+          - rid: osx-x64
+            asset_name: sis-osx-x64
+          - rid: win-x64
+            asset_name: sis-win-x64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore Sistem.CommandLine/Sistem.CommandLine.csproj
+
+      - name: Publish
+        run: dotnet publish Sistem.CommandLine/Sistem.CommandLine.csproj --configuration Release --framework net10.0 --runtime ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=false --output ${{ github.workspace }}/artifacts/${{ matrix.rid }}
+
+      - name: Package
+        run: |
+          cd "${{ github.workspace }}/artifacts"
+          zip -r "${{ matrix.asset_name }}.zip" "${{ matrix.rid }}"
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset_name }}
+          path: ${{ github.workspace }}/artifacts/${{ matrix.asset_name }}.zip
+
+  publish-openstereogramcreator:
+    name: Publish osc-win-x64
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore OpenStereogramCreator/OpenStereogramCreator.csproj
+
+      - name: Publish
+        run: dotnet publish OpenStereogramCreator/OpenStereogramCreator.csproj --configuration Release --framework net10.0-windows7.0 --runtime win-x64 --self-contained true -p:PublishSingleFile=false -p:PublishTrimmed=false --output ${{ github.workspace }}/artifacts/osc-win-x64
+
+      - name: Package
+        shell: pwsh
+        run: Compress-Archive -Path "$env:GITHUB_WORKSPACE/artifacts/osc-win-x64/*" -DestinationPath "$env:GITHUB_WORKSPACE/artifacts/osc-win-x64.zip" -Force
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: osc-win-x64
+          path: ${{ github.workspace }}/artifacts/osc-win-x64.zip
+
+  release:
+    name: Create GitHub release
+    runs-on: ubuntu-latest
+    needs:
+      - publish-cli
+      - publish-openstereogramcreator
+
+    steps:
+      - name: Download packages
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: '*'
+          merge-multiple: true
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*.zip
+          generate_release_notes: true
