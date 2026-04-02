@@ -31,7 +31,6 @@ namespace Sistem.Core
 		private int _currentHeight;
 		private int _currentWidth;
 		private int _currentYShift;
-		private bool _currentIgnoreGaps;
 		private int _currentNoiseReductionThreshold;
 		private int _currentNoiseDensity;
 		private int _currentOversampling;
@@ -43,8 +42,6 @@ namespace Sistem.Core
 		private int _virtualMaxSeparation;
 		private int _virtualMinSeparation;
 		private int _virtualStartingPoint;
-		private int _virtualPatternOffset;
-		private int _virtualGapFilling;
 		private int _virtualNoiseReductionRadius;
 
 		/// <summary>
@@ -72,7 +69,7 @@ namespace Sistem.Core
 				var height = value.Height;
 
 				MaxSeparation = width / 10;
-				MinSeparation = width / 16;
+				MinSeparation = width / 14;
 				PatternWidth = MaxSeparation;
 
 				// Set YShift to a fraction of the height
@@ -356,7 +353,6 @@ namespace Sistem.Core
 			_currentOversampling = Oversampling;
 			_currentParallelProcessing = ParallelProcessing;
 			_currentYShift = YShift;
-			_currentIgnoreGaps = IgnoreGaps;
 			_currentNoiseDensity = NoiseDensity;
 			_currentNoiseReductionThreshold = NoiseReductionThreshold;
 			_currentPostProcessingOversampling = PostProcessingOversampling;
@@ -407,8 +403,6 @@ namespace Sistem.Core
 				Origin = 0;
 
 			_virtualStartingPoint = Origin.Value * _currentOversampling;
-			_virtualPatternOffset = _virtualMaxSeparation - (_virtualStartingPoint % _virtualMaxSeparation);
-			_virtualGapFilling = GapFilling * _currentOversampling;
 			_virtualNoiseReductionRadius = NoiseReductionRadius * _currentOversampling;
 		}
 
@@ -545,6 +539,7 @@ namespace Sistem.Core
 			var lookRight = new int[_virtualWidth];
 			var setLeft = new int[_virtualWidth];
 			var setRight = new int[_virtualWidth];
+			var separations = new int[_virtualWidth];
 
 			for (var x = 0; x < _virtualWidth; x++)
 			{
@@ -560,47 +555,52 @@ namespace Sistem.Core
 			for (var x = 0; x < _virtualWidth; x++)
 			{
 				FillLookArrays(y, x, lookLeft, setLeft, lookRight, setRight, ref sep);
+				separations[x] = sep;
 			}
-
-			if (_virtualGapFilling > 0)
-				FillUnsetGaps(lookLeft, setLeft, lookRight, setRight);
 
 			if (_currentNoiseReductionThreshold > 0 && _virtualNoiseReductionRadius > 0)
 				ApplyNoiseReduction(lookLeft, lookRight);
 
+			// Track per-pixel phase so linked pixels can anchor unlinked pixels' pattern positions
+			var phases = new double[_virtualWidth];
+
 			// Everything from starting point to the right
-			var lastLinked = -10;
+			var phase = 0.0;
 			for (var x = _virtualStartingPoint; x < _virtualWidth; x++)
 			{
 				if (lookLeft[x] == x || lookLeft[x] < _virtualStartingPoint)
 				{
-					if (lastLinked == x - 1)
-						colors[x] = colors[x - 1];
-					else
-					{
-						var calculatedY = y;
+					// Unlinked pixel: advance phase smoothly based on local separation
+					if (x > _virtualStartingPoint)
+						phase += 1.0 / Math.Max(separations[x], 1);
+					phases[x] = phase;
 
-						if (YShift > 0)
-							calculatedY = (y + (x - _virtualStartingPoint) / _virtualMaxSeparation * _currentYShift) + _currentPatternHeight;
+					var calculatedY = y;
 
-						var locationX = (x + _virtualPatternOffset) % _virtualMaxSeparation / _currentOversampling;
-						var locationY = (calculatedY + _currentPatternHeight) % _currentPatternHeight;
+					if (YShift > 0)
+						calculatedY = (y + (x - _virtualStartingPoint) / _virtualMaxSeparation * _currentYShift) + _currentPatternHeight;
 
-						if (locationY < 0)
-							locationY = locationY + _currentPatternHeight;
+					var fractionalPhase = phase - Math.Floor(phase);
+					var locationX = (int)(fractionalPhase * _virtualMaxSeparation) / _currentOversampling;
+					var locationY = (calculatedY + _currentPatternHeight) % _currentPatternHeight;
 
-						colors[x] = _directPattern[locationX, locationY];
-					}
+					if (locationY < 0)
+						locationY = locationY + _currentPatternHeight;
+
+					colors[x] = _directPattern[locationX, locationY];
 				}
 				else if (lookLeft[x] == Int32.MinValue)
 				{
-					colors[x] = Rgba32.ParseHex("00000000");
-					//lastLinked
+					phase += 1.0 / Math.Max(separations[x], 1);
+					phases[x] = phase;
+					colors[x] = x > _virtualStartingPoint ? colors[x - 1] : default;
 				}
 				else
 				{
+					// Linked pixel: copy color and re-anchor phase to partner's phase
 					colors[x] = colors[lookLeft[x]];
-					lastLinked = x;
+					phase = phases[lookLeft[x]] + 1.0;
+					phases[x] = phase;
 				}
 
 				if (_currentPostProcessingOversampling)
@@ -608,38 +608,41 @@ namespace Sistem.Core
 			}
 
 			// Everything from starting point to the left
-			lastLinked = -10;
+			phase = 0.0;
 			for (var x = _virtualStartingPoint - 1; x >= 0; x--)
 			{
 				if (lookRight[x] == x)
 				{
-					if (lastLinked == x + 1)
-						colors[x] = colors[x + 1];
-					else
-					{
-						var calculatedY = y;
+					// Unlinked pixel: advance phase smoothly based on local separation
+					phase += 1.0 / Math.Max(separations[x], 1);
+					phases[x] = phase;
 
-						if (YShift > 0)
-							calculatedY = (y + (x - _virtualStartingPoint) / _virtualMaxSeparation * _currentYShift) + _currentPatternHeight;
+					var calculatedY = y;
 
-						var locationX = (x + _virtualPatternOffset) % _virtualMaxSeparation / _currentOversampling;
-						var locationY = (calculatedY + _currentPatternHeight) % _currentPatternHeight;
+					if (YShift > 0)
+						calculatedY = (y + (x - _virtualStartingPoint) / _virtualMaxSeparation * _currentYShift) + _currentPatternHeight;
 
-						if (locationY < 0)
-							locationY = locationY + _currentPatternHeight;
+					var fractionalPhase = phase - Math.Floor(phase);
+					var locationX = (_virtualMaxSeparation - (int)(fractionalPhase * _virtualMaxSeparation) % _virtualMaxSeparation) % _virtualMaxSeparation / _currentOversampling;
+					var locationY = (calculatedY + _currentPatternHeight) % _currentPatternHeight;
 
-						colors[x] = _directPattern[locationX, locationY];
-					}
+					if (locationY < 0)
+						locationY = locationY + _currentPatternHeight;
+
+					colors[x] = _directPattern[locationX, locationY];
 				}
 				else if (lookRight[x] == Int32.MinValue)
 				{
-					colors[x] = Rgba32.ParseHex("00000000");
-					//lastLinked
+					phase += 1.0 / Math.Max(separations[x], 1);
+					phases[x] = phase;
+					colors[x] = x < _virtualStartingPoint - 1 ? colors[x + 1] : default;
 				}
 				else
 				{
+					// Linked pixel: copy color and re-anchor phase to partner's phase
 					colors[x] = colors[lookRight[x]];
-					lastLinked = x;
+					phase = phases[lookRight[x]] + 1.0;
+					phases[x] = phase;
 				}
 
 
@@ -687,7 +690,6 @@ namespace Sistem.Core
 
 						if (Math.Abs(lookLeft[lookAhead] - lookLeft[x - 1]) < _currentNoiseReductionThreshold)
 						{
-							FillArrayGap(lookLeft, x - 1, lookAhead);
 							break;
 						}
 					}
@@ -704,83 +706,10 @@ namespace Sistem.Core
 
 						if (Math.Abs(lookRight[lookAhead] - lookRight[invertX + 1]) < _currentNoiseReductionThreshold)
 						{
-							FillArrayGap(lookRight, lookAhead, invertX + 1);
 							break;
 						}
 					}
 				}
-			}
-		}
-
-		/// <summary>
-		/// Fill unset gaps in the look arrays with averages looking at surrounding values
-		/// </summary>
-		/// <param name="lookLeft">The lookleft array</param>
-		/// <param name="setLeft">An array of set indexes for left</param>
-		/// <param name="lookRight">The lookright array</param>
-		/// <param name="setRight">An array of set indexes for right</param>
-		private void FillUnsetGaps(int[] lookLeft, int[] setLeft, int[] lookRight, int[] setRight)
-		{
-			const int unset = -1;
-			var startLeft = unset;
-			var startRight = unset;
-
-			for (var x = 0; x < _virtualWidth; x++)
-			{
-				if (setLeft[x] == 1 && setRight[x] == 1 && startLeft == unset && startRight == unset)
-					continue;
-
-				if (setLeft[x] == 0 && startLeft == unset)
-				{
-					startLeft = x;
-				}
-				else if (setLeft[x] == 1 && startLeft > 0)
-				{
-					if (x - startLeft < _virtualGapFilling)
-						FillArrayGap(lookLeft, startLeft - 1, x);
-
-					startLeft = 0;
-				}
-
-				if (setRight[x] == 0 && startRight == unset)
-				{
-					startRight = x;
-				}
-				else if (setRight[x] == 1 && startRight > 0)
-				{
-					if (x - startRight < _virtualGapFilling)
-						FillArrayGap(lookRight, startRight - 1, x);
-
-					startRight = 0;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Fill a gap in an array.
-		/// The start and end parameter are the indexes of the array where valid values are
-		/// Anything in between will be averaged out on these two values.
-		/// </summary>
-		/// <param name="array">The array to fill a gap for</param>
-		/// <param name="start">The starting index</param>
-		/// <param name="end">The end index</param>
-		private void FillArrayGap(int[] array, int start, int end)
-		{
-			var startValue = array[start];
-			var endValue = array[end];
-
-			var delta = (endValue - startValue) / (float)(end - start);
-			var count = 1;
-
-			for (var x = start + 1; x < end; x++)
-			{
-
-				if (_currentIgnoreGaps)
-					array[x] = Int32.MinValue;
-				else
-					array[x] = (int)Math.Round(startValue + count * delta);
-
-				count++;
 			}
 		}
 
