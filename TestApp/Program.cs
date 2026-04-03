@@ -1,6 +1,7 @@
 // See https://aka.ms/new-console-template for more information
 
 using Sistem.Core;
+using Sistem.Core.Generation;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -29,12 +30,26 @@ var tests = new List<(string, string, string)>
 
 foreach (var tuple in tests)
 {
-	var stereogram = new Stereogram();
+	var bla = new StereogramGenerator();
+	var options = new StereogramOptions { DepthMap = ImageIO.LoadDepthMap(tuple.Item2), Pattern = ImageIO.LoadPattern(tuple.Item3) };
+	var stereogramResult = bla.Generate(options);
+	ImageIO.SaveResult(stereogramResult.Image, OutputPath($"output-{tuple.Item1}-default.png"));
+
+	options = new StereogramOptions { DepthMap = ImageIO.LoadDepthMap(tuple.Item2), Pattern = ImageIO.LoadPattern(tuple.Item3), Oversampling = 2 };
+	stereogramResult = bla.Generate(options);
+	ImageIO.SaveResult(stereogramResult.Image, OutputPath($"output-{tuple.Item1}-over-2.png"));
+
+	options = new StereogramOptions { DepthMap = ImageIO.LoadDepthMap(tuple.Item2), Pattern = ImageIO.LoadPattern(tuple.Item3), Oversampling = 8 };
+	stereogramResult = bla.Generate(options);
+	stereogramResult = bla.Generate(options);
+	ImageIO.SaveResult(stereogramResult.Image, OutputPath($"output-{tuple.Item1}-over-8.png"));
+
+
+	/*var stereogram = new Stereogram();
 	stereogram.DepthMap = Image.Load<Rgb48>(tuple.Item2);
 	stereogram.Pattern = Image.Load<Rgba32>(tuple.Item3);
 	//stereogram.MinSeparation = 120;
 	//stereogram.MaxSeparation = 160;
-	stereogram.YShift = 0;
 	stereogram.Generate();
 	stereogram.SaveResult(OutputPath($"output-{tuple.Item1}-default.png"));
 
@@ -44,6 +59,6 @@ foreach (var tuple in tests)
 
 	stereogram.Oversampling = 8;
 	stereogram.Generate();
-	stereogram.SaveResult(OutputPath($"output-{tuple.Item1}-over-8.png"));
+	stereogram.SaveResult(OutputPath($"output-{tuple.Item1}-over-8.png"));*/
 }
 Console.WriteLine("Done!");
