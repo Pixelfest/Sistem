@@ -1,10 +1,11 @@
-﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
 using System.Runtime.CompilerServices;
 using OpenStereogramCreator.Annotations;
 using OpenStereogramCreator.Dtos;
+using Sistem.Core.Generation;
 
 namespace OpenStereogramCreator.ViewModels
 {
@@ -51,25 +52,29 @@ namespace OpenStereogramCreator.ViewModels
 		{
 			if (DepthImage == null || PatternImage == null || DepthImage.Width > PatternImage.Width)
 				return;
-		
+
 			if (CachedImage != null)
 				return;
 
 			var start = Start;
+			var generator = new StereogramGenerator();
 
-            var result = new Image<Rgba32>(DepthImage.Width, DepthImage.Height);
+			var result = new Image<Rgba32>(DepthImage.Width, DepthImage.Height);
 
 			while (start < DepthImage.Width - MaximumSeparation && start < End)
 			{
-				var stereogram = CreateStereogram();
-
-				stereogram.Pattern = RenderPatternImage(start);
-				stereogram.Oversampling = Oversampling;
-				stereogram.Origin = start - (int) Math.Floor(MaximumSeparation / 2f) + Shift;
-
-				if (stereogram.Generate() && stereogram.Result != null)
+				var options = CreateOptions() with
 				{
-					result.Mutate(t => t.DrawImage(stereogram.Result, new Point(0,0), Opacity));
+					Pattern = RenderPatternImage(start),
+					Oversampling = Oversampling,
+					Origin = start - (int)Math.Floor(MaximumSeparation / 2f) + Shift,
+				};
+
+				var stereogramResult = generator.Generate(options);
+
+				if (stereogramResult.Success)
+				{
+					result.Mutate(t => t.DrawImage(stereogramResult.Image!, new Point(0, 0), Opacity));
 				}
 
 				start += (int)MaximumSeparation;
