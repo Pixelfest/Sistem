@@ -17,10 +17,12 @@ internal static class StereogramValidator
 		var warnings = new List<string>();
 
 		var oversampling = Math.Clamp(options.Oversampling, 1, 8);
-		var patternWidth = Math.Max(options.PatternWidth, options.MaxSeparation);
+		var minSeparation = options.GetResolvedMinSeparation();
+		var maxSeparation = options.GetResolvedMaxSeparation();
+		var patternWidth = Math.Max(options.PatternWidth, maxSeparation);
 
-		if (patternWidth < options.MaxSeparation)
-			errors.Add($"Pattern width ({patternWidth}) should be bigger or equal to maximum separation ({options.MaxSeparation}).");
+		if (patternWidth < maxSeparation)
+			errors.Add($"Pattern width ({patternWidth}) should be bigger or equal to maximum separation ({maxSeparation}).");
 
 		var depthMap = options.DepthMap;
 
@@ -29,13 +31,13 @@ internal static class StereogramValidator
 		else if (!options.PostProcessingOversampling && (long)depthMap.Width * depthMap.Height * 4 > int.MaxValue)
 			errors.Add("The depthmap is too big. The depthmap is limited to 536MP.");
 
-		if (options.MaxSeparation < 10)
+		if (maxSeparation < 10)
 			errors.Add("Maximum separation is too small.");
 
-		if (options.MinSeparation < 10)
+		if (minSeparation < 10)
 			errors.Add("Minimum separation is too small.");
 
-		var ratio = options.MaxSeparation / (double)options.MinSeparation;
+		var ratio = maxSeparation / (double)minSeparation;
 
 		if (ratio < 1)
 			errors.Add("Maximum separation must be bigger than minimum separation.");

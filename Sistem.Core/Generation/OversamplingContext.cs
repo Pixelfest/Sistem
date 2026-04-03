@@ -115,15 +115,17 @@ internal sealed class OversamplingContext
 		var height = depthMap.Height;
 		var postProcessingOversampling = options.PostProcessingOversampling;
 
+		var minSeparation = options.GetResolvedMinSeparation();
+		var maxSeparation = options.GetResolvedMaxSeparation();
+
 		// Prepare pattern
 		Image<Rgba32>? preparedPattern = null;
-		var maxSep = options.MaxSeparation;
-		var patternWidth = Math.Max(options.PatternWidth, maxSep);
+		var patternWidth = Math.Max(options.PatternWidth, maxSeparation);
 
 		if (options.Pattern is not null)
 		{
 			preparedPattern = options.Pattern.Width != patternWidth
-				? Resize(options.Pattern, Math.Max(patternWidth, maxSep))
+				? Resize(options.Pattern, Math.Max(patternWidth, maxSeparation))
 				: options.Pattern;
 		}
 		else if (oversampling > 1)
@@ -147,21 +149,21 @@ internal sealed class OversamplingContext
 		int virtualMinSep, virtualMaxSep;
 		if (options.CrossView)
 		{
-			virtualMinSep = maxSep * oversampling;
-			virtualMaxSep = options.MinSeparation * oversampling;
+			virtualMinSep = maxSeparation * oversampling;
+			virtualMaxSep = minSeparation * oversampling;
 		}
 		else
 		{
-			virtualMinSep = options.MinSeparation * oversampling;
-			virtualMaxSep = maxSep * oversampling;
+			virtualMinSep = minSeparation * oversampling;
+			virtualMaxSep = maxSeparation * oversampling;
 		}
 
 		// Resolve origin
 		var origin = options.Origin;
 		if (!origin.HasValue)
-			origin = width / 2 - maxSep / 2;
-		else if (origin > width - maxSep)
-			origin = width - maxSep;
+			origin = width / 2 - maxSeparation / 2;
+		else if (origin > width - maxSeparation)
+			origin = width - maxSeparation;
 		else if (origin < 0)
 			origin = 0;
 

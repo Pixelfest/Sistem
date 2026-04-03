@@ -145,8 +145,8 @@ namespace Sistem.CommandLine
 				{
 					DepthMap = depthMap,
 					Pattern = pattern,
-					MinSeparation = MinSeparation ?? 60,
-					MaxSeparation = MaxSeparation ?? 90,
+					MinSeparation = MinSeparation ?? StereogramOptions.AutoSeparation,
+					MaxSeparation = MaxSeparation ?? StereogramOptions.AutoSeparation,
 					PatternWidth = PatternWidth ?? MaxSeparation ?? 90,
 					Origin = Origin,
 					YShift = YShift ?? 16,

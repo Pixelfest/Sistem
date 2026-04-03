@@ -5,11 +5,10 @@ using System;
 namespace Sistem.Core.Generation;
 
 /// <summary>
-/// Legacy pattern-based stereogram algorithm ported from the original
-/// <c>Stereogram.MakeLinePattern</c>. Uses modulo-based pattern tiling
-/// with last-linked propagation instead of phase-based tiling.
+/// Pattern-based stereogram algorithm. Handles both user-supplied patterns
+/// and synthetic random-dot patterns when oversampling > 1.
 /// </summary>
-internal sealed class PatternAlgorithm : IStereogramAlgorithm
+internal sealed class NewPatternAlgorithm : IStereogramAlgorithm
 {
 	/// <inheritdoc />
 	public void ProcessLine(int y, OversamplingContext context)
@@ -29,13 +28,12 @@ internal sealed class PatternAlgorithm : IStereogramAlgorithm
 		var resultImage = context.ResultImage;
 		var width = context.Width;
 
-		var virtualPatternOffset = maxSep - (startingPoint % maxSep);
-
 		var colors = new Rgba32[virtualWidth];
 		var lookLeft = new int[virtualWidth];
 		var lookRight = new int[virtualWidth];
 		var setLeft = new int[virtualWidth];
 		var setRight = new int[virtualWidth];
+		var separations = new int[virtualWidth];
 
 		for (var x = 0; x < virtualWidth; x++)
 		{
@@ -51,85 +49,89 @@ internal sealed class PatternAlgorithm : IStereogramAlgorithm
 		{
 			FillLookArrays(y, x, lookLeft, setLeft, lookRight, setRight, ref sep,
 				oversampling, depthMap, maxSep, minSep, virtualWidth);
+			separations[x] = sep;
 		}
 
 		if (noiseThreshold > 0 && noiseRadius > 0)
 			ApplyNoiseReduction(lookLeft, lookRight, virtualWidth, noiseThreshold, noiseRadius);
 
-		// Everything from starting point to the right
-		var lastLinked = -10;
+		var phases = new double[virtualWidth];
+
+		// Right of starting point
+		var phase = 0.0;
 		for (var x = startingPoint; x < virtualWidth; x++)
 		{
 			if (lookLeft[x] == x || lookLeft[x] < startingPoint)
 			{
-				if (lastLinked == x - 1)
-				{
-					colors[x] = colors[x - 1];
-				}
-				else
-				{
-					var calculatedY = y;
+				if (x > startingPoint)
+					phase += 1.0 / Math.Max(separations[x], 1);
+				phases[x] = phase;
 
-					if (yShift > 0)
-						calculatedY = (y + (x - startingPoint) / maxSep * yShift) + patternHeight;
+				var calculatedY = y;
 
-					var locationX = (x + virtualPatternOffset) % maxSep / oversampling;
-					var locationY = (calculatedY + patternHeight) % patternHeight;
+				if (yShift > 0)
+					calculatedY = (y + (x - startingPoint) / maxSep * yShift) + patternHeight;
 
-					if (locationY < 0)
-						locationY += patternHeight;
+				var fractionalPhase = phase - Math.Floor(phase);
+				var locationX = (int)(fractionalPhase * maxSep) / oversampling;
+				var locationY = (calculatedY + patternHeight) % patternHeight;
 
-					colors[x] = pattern[locationX, locationY];
-				}
+				if (locationY < 0)
+					locationY += patternHeight;
+
+				colors[x] = pattern[locationX, locationY];
 			}
 			else if (lookLeft[x] == int.MinValue)
 			{
-				colors[x] = Rgba32.ParseHex("00000000");
+				phase += 1.0 / Math.Max(separations[x], 1);
+				phases[x] = phase;
+				colors[x] = x > startingPoint ? colors[x - 1] : default;
 			}
 			else
 			{
 				colors[x] = colors[lookLeft[x]];
-				lastLinked = x;
+				phase = phases[lookLeft[x]] + 1.0;
+				phases[x] = phase;
 			}
 
 			if (postProcessing)
 				resultImage[x, y] = new Rgba32(colors[x].R, colors[x].G, colors[x].B, colors[x].A);
 		}
 
-		// Everything from starting point to the left
-		lastLinked = -10;
+		// Left of starting point
+		phase = 0.0;
 		for (var x = startingPoint - 1; x >= 0; x--)
 		{
 			if (lookRight[x] == x)
 			{
-				if (lastLinked == x + 1)
-				{
-					colors[x] = colors[x + 1];
-				}
-				else
-				{
-					var calculatedY = y;
+				phase += 1.0 / Math.Max(separations[x], 1);
+				phases[x] = phase;
 
-					if (yShift > 0)
-						calculatedY = (y + (x - startingPoint) / maxSep * yShift) + patternHeight;
+				var calculatedY = y;
 
-					var locationX = (x + virtualPatternOffset) % maxSep / oversampling;
-					var locationY = (calculatedY + patternHeight) % patternHeight;
+				if (yShift > 0)
+					calculatedY = (y + (x - startingPoint) / maxSep * yShift) + patternHeight;
 
-					if (locationY < 0)
-						locationY += patternHeight;
+				var fractionalPhase = phase - Math.Floor(phase);
+				var locationX = (maxSep - (int)(fractionalPhase * maxSep) % maxSep) % maxSep / oversampling;
+				var locationY = (calculatedY + patternHeight) % patternHeight;
 
-					colors[x] = pattern[locationX, locationY];
-				}
+				if (locationY < 0)
+					locationY += patternHeight;
+
+				colors[x] = pattern[locationX, locationY];
 			}
 			else if (lookRight[x] == int.MinValue)
 			{
-				colors[x] = Rgba32.ParseHex("00000000");
+				phase += 1.0 / Math.Max(separations[x], 1);
+				phases[x] = phase;
+				colors[x] = x < startingPoint - 1 ? colors[x + 1] : default;
 			}
 			else
 			{
 				colors[x] = colors[lookRight[x]];
-				lastLinked = x;
+				phase = phases[lookRight[x]] + 1.0;
+				phases[x] = phase;
 			}
 
 			if (postProcessing)
@@ -241,9 +243,7 @@ internal sealed class PatternAlgorithm : IStereogramAlgorithm
 						break;
 
 					if (Math.Abs(lookLeft[lookAhead] - lookLeft[x - 1]) < threshold)
-					{
 						break;
-					}
 				}
 			}
 
@@ -257,9 +257,7 @@ internal sealed class PatternAlgorithm : IStereogramAlgorithm
 						break;
 
 					if (Math.Abs(lookRight[lookAhead] - lookRight[invertX + 1]) < threshold)
-					{
 						break;
-					}
 				}
 			}
 		}

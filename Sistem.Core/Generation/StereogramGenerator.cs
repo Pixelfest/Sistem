@@ -12,6 +12,7 @@ public sealed class StereogramGenerator : IStereogramGenerator
 {
 	private static readonly RandomDotAlgorithm RandomDot = new();
 	private static readonly PatternAlgorithm Pattern = new();
+	private static readonly NewPatternAlgorithm NewPattern = new();
 
 	/// <inheritdoc />
 	public StereogramResult Generate(StereogramOptions options)

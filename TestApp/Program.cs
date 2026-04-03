@@ -25,7 +25,8 @@ result.Save(OutputPath("output-Simpsons-outline.png"));
 var tests = new List<(string, string, string)>
 {
 	("Test01", "Test01-Depthmap.png", "Test01-Pattern.png"),
-	("Test02", "Test02-Depthmap.png", "Test01-Pattern.png")
+	("Test02", "Test02-Depthmap.png", "Test01-Pattern.png"),
+	("Test03", "Test03-Depthmap.png", "Test02-Pattern.png")
 };
 
 foreach (var tuple in tests)

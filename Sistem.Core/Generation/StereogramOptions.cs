@@ -1,3 +1,4 @@
+using System;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -8,6 +9,11 @@ namespace Sistem.Core.Generation;
 /// </summary>
 public record StereogramOptions
 {
+	/// <summary>
+	/// Sentinel value meaning the separation should be calculated from depth map width.
+	/// </summary>
+	public const int AutoSeparation = 0;
+
 	/// <summary>
 	/// The depth map image (required).
 	/// </summary>
@@ -20,15 +26,15 @@ public record StereogramOptions
 
 	/// <summary>
 	/// Minimum separation in pixels.
-	/// Default = 60
+	/// Default = DepthMap.Width / 6 (auto).
 	/// </summary>
-	public int MinSeparation { get; init; } = 60;
+	public int MinSeparation { get; init; } = AutoSeparation;
 
 	/// <summary>
 	/// Maximum separation in pixels.
-	/// Default = 90
+	/// Default = DepthMap.Width / 8 (auto).
 	/// </summary>
-	public int MaxSeparation { get; init; } = 90;
+	public int MaxSeparation { get; init; } = AutoSeparation;
 
 	/// <summary>
 	/// Pattern width in pixels. Should be >= MaxSeparation.
@@ -92,4 +98,30 @@ public record StereogramOptions
 	/// Default = true
 	/// </summary>
 	public bool PostProcessingOversampling { get; init; } = true;
+
+	internal int GetResolvedMinSeparation() => ResolveSeparations().Min;
+	internal int GetResolvedMaxSeparation() => ResolveSeparations().Max;
+
+	private (int Min, int Max) ResolveSeparations()
+	{
+		var min = MinSeparation;
+		var max = MaxSeparation;
+
+		if (min > 0 && max > 0)
+			return (min, max);
+
+		var depthMapBasedMin = Math.Max(10, DepthMap.Width / 6);
+		var depthMapBasedMax = Math.Max(10, DepthMap.Width / 8);
+
+		var autoMin = Math.Min(depthMapBasedMin, depthMapBasedMax);
+		var autoMax = Math.Max(depthMapBasedMin, depthMapBasedMax);
+
+		if (min <= 0)
+			min = autoMin;
+
+		if (max <= 0)
+			max = autoMax;
+
+		return (min, max);
+	}
 }
