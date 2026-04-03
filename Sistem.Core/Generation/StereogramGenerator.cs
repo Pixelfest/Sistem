@@ -12,7 +12,9 @@ public sealed class StereogramGenerator : IStereogramGenerator
 {
 	private static readonly RandomDotAlgorithm RandomDot = new();
 	private static readonly PatternAlgorithm Pattern = new();
+	private static readonly OptimizedPatternAlgorithm OptimizedPattern = new();
 	private static readonly NewPatternAlgorithm NewPattern = new();
+	private static readonly BidirectionalAveragingAlgorithm BidirectionalAveraging = new();
 
 	/// <inheritdoc />
 	public StereogramResult Generate(StereogramOptions options)
@@ -52,7 +54,9 @@ public sealed class StereogramGenerator : IStereogramGenerator
 		if (options.Pattern is null && context.Factor == 1)
 			return RandomDot;
 
-		return Pattern;
+		//return BidirectionalAveraging;
+		return OptimizedPattern;
+		//return Pattern;
 	}
 
 	/// <summary>
