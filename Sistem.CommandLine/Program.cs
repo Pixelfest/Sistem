@@ -37,9 +37,6 @@ namespace Sistem.CommandLine
 		[Option(CommandOptionType.SingleValue, Description = "The number of pixels to shift on y-axis, to fix echoes", Template = "-y|--y-shift")]
 		protected int? YShift { get; set; }
 
-		[Option(CommandOptionType.SingleValue, Description = "Fix small echoes by filling pattern gaps (in pixels to fill, default 1)", Template = "-g|--gap-filling")]
-		protected int? GapFilling { get; set; }
-
 		[Option(CommandOptionType.SingleValue, Description = "Fix echo noise in the resulting image (radius, default 3)", Template = "-r|--noise-reduction-radius")]
 		protected int? NoiseReductionRadius { get; set; }
 

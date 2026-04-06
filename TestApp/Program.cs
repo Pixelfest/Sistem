@@ -38,14 +38,15 @@ var tests = new List<(string, string, string)>
 
 foreach (var tuple in tests)
 {
-	var bla = new StereogramGenerator();
+	var generator = new StereogramGenerator();
 	var options = new StereogramOptions
 	{
 		DepthMap = ImageIO.LoadDepthMap(TestFilePath(tuple.Item2)),
 		Pattern = ImageIO.LoadPattern(TestFilePath(tuple.Item3))
 	};
-	var stereogramResult = bla.Generate(options);
-	ImageIO.SaveResult(stereogramResult.Image, OutputPath(tuple.Item1, $"output-{tuple.Item1}-default.png"));
+	var stereogramResult = generator.Generate(options);
+	if(stereogramResult.Success)
+		ImageIO.SaveResult(stereogramResult.Image, OutputPath(tuple.Item1, $"output-{tuple.Item1}-default.png"));
 
 	options = new StereogramOptions
 	{
@@ -53,9 +54,9 @@ foreach (var tuple in tests)
 		Pattern = ImageIO.LoadPattern(TestFilePath(tuple.Item3)),
 		Oversampling = 8
 	};
-	stereogramResult = bla.Generate(options);
-	stereogramResult = bla.Generate(options);
-	ImageIO.SaveResult(stereogramResult.Image, OutputPath(tuple.Item1, $"output-{tuple.Item1}-over-8.png"));
+	stereogramResult = generator.Generate(options);
+	if (stereogramResult.Success)
+		ImageIO.SaveResult(stereogramResult.Image, OutputPath(tuple.Item1, $"output-{tuple.Item1}-over-8.png"));
 }
 
 Console.WriteLine("Done!");

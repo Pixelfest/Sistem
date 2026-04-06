@@ -26,13 +26,13 @@ public record StereogramOptions
 
 	/// <summary>
 	/// Minimum separation in pixels.
-	/// Default = DepthMap.Width / 6 (auto).
+	/// Default = DepthMap.Width / 8 (auto).
 	/// </summary>
 	public int MinSeparation { get; init; } = AutoSeparation;
 
 	/// <summary>
 	/// Maximum separation in pixels.
-	/// Default = DepthMap.Width / 8 (auto).
+	/// Default = DepthMap.Width / 6 (auto).
 	/// </summary>
 	public int MaxSeparation { get; init; } = AutoSeparation;
 
