@@ -1,6 +1,7 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using OpenStereogramCreator.Annotations;
 using OpenStereogramCreator.Dtos;
+using Sistem.Core.Generation;
 
 namespace OpenStereogramCreator.ViewModels
 {
@@ -37,14 +38,19 @@ namespace OpenStereogramCreator.ViewModels
 			if (CachedImage != null)
 				return;
 
-			var stereogram = CreateStereogram();
-			stereogram.Oversampling = Oversampling;
-			stereogram.ColoredNoise = ColoredNoise;
-			stereogram.NoiseDensity = Density;
-
-			if (stereogram.Generate() && stereogram.Result != null)
+			var options = CreateOptions() with
 			{
-				CachedImage = stereogram.Result;
+				Oversampling = Oversampling,
+				ColoredNoise = ColoredNoise,
+				NoiseDensity = Density,
+			};
+
+			var generator = new StereogramGenerator();
+			var result = generator.Generate(options);
+
+			if (result.Success)
+			{
+				CachedImage = result.Image;
 			}
 		}
 

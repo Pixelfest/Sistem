@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using OpenStereogramCreator.Annotations;
 using OpenStereogramCreator.Dtos;
-using Sistem.Core;
+using Sistem.Core.Generation;
 using OpenStereogramCreator.Tools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
@@ -93,19 +93,16 @@ namespace OpenStereogramCreator.ViewModels
 			}
 		}
 
-		public Stereogram CreateStereogram()
+		public StereogramOptions CreateOptions()
 		{
-			var stereogram = new Stereogram
+			return new StereogramOptions
 			{
-				DepthMap = DepthImage
+				DepthMap = DepthImage,
+				MinSeparation = (int)MinimumSeparation,
+				MaxSeparation = (int)MaximumSeparation,
+				PatternWidth = (int)MaximumSeparation,
+				Origin = (int)Origin,
 			};
-
-			// Don't use object initializer, constructor initializes values that are otherwise overwritten.
-			stereogram.MinSeparation = (int)MinimumSeparation;
-			stereogram.MaxSeparation = (int)MaximumSeparation;
-			stereogram.Origin = (int)Origin;
-
-			return stereogram;
 		}
 
 		[NotifyPropertyChangedInvocator]

@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Runtime.CompilerServices;
 using OpenStereogramCreator.Annotations;
 using OpenStereogramCreator.Dtos;
 using OpenStereogramCreator.Tools;
+using Sistem.Core.Generation;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
@@ -101,14 +102,18 @@ namespace OpenStereogramCreator.ViewModels
 			if (CachedImage != null)
 				return;
 
-			var stereogram = CreateStereogram();
-
-			stereogram.Pattern = RenderPatternImage();
-			stereogram.Oversampling = Oversampling;
-
-			if (stereogram.Generate() && stereogram.Result != null)
+			var options = CreateOptions() with
 			{
-				CachedImage = stereogram.Result;
+				Pattern = RenderPatternImage(),
+				Oversampling = Oversampling,
+			};
+
+			var generator = new StereogramGenerator();
+			var result = generator.Generate(options);
+
+			if (result.Success)
+			{
+				CachedImage = result.Image;
 			}
 		}
 

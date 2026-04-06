@@ -1,8 +1,10 @@
-﻿using McMaster.Extensions.CommandLineUtils;
+using McMaster.Extensions.CommandLineUtils;
 using System;
-using Sistem.Core;
+using Sistem.Core.Generation;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Sistem.CommandLine
 {
@@ -34,9 +36,6 @@ namespace Sistem.CommandLine
 		
 		[Option(CommandOptionType.SingleValue, Description = "The number of pixels to shift on y-axis, to fix echoes", Template = "-y|--y-shift")]
 		protected int? YShift { get; set; }
-
-		[Option(CommandOptionType.SingleValue, Description = "Fix small echoes by filling pattern gaps (in pixels to fill, default 1)", Template = "-g|--gap-filling")]
-		protected int? GapFilling { get; set; }
 
 		[Option(CommandOptionType.SingleValue, Description = "Fix echo noise in the resulting image (radius, default 3)", Template = "-r|--noise-reduction-radius")]
 		protected int? NoiseReductionRadius { get; set; }
@@ -70,11 +69,6 @@ namespace Sistem.CommandLine
 		private static int Main(string[] args)
 		{
 			var result = CommandLineApplication.Execute<Program>(args);
-
-#if false // Set to true if you want to keep the console window open
-			WriteLine("Press enter to exit.");
-			Console.ReadLine();
-#endif
 
 			return result;
 		}
@@ -111,85 +105,83 @@ namespace Sistem.CommandLine
 
 			if (result == 0)
 			{
-				using (var stereogram = new Stereogram())
+				Image<Rgb48> depthMap;
+				Image<Rgba32>? pattern = null;
+
+				try
 				{
-					var success = true;
+					depthMap = ImageIO.LoadDepthMap(depthMapFile);
+				}
+				catch (NotSupportedException)
+				{
+					WriteError("Depthmap should be png, gif, jpg or bmp.");
+					app.ShowHelp();
+					return 3;
+				}
 
-					// Load image files
-					success &= stereogram.LoadDepthMap(depthMapFile);
-
+				try
+				{
 					if (!string.IsNullOrWhiteSpace(patternFile))
-						success &= stereogram.LoadPattern(patternFile);
-
-					if (success)
 					{
-						// Set parameters
-						if (MinSeparation.HasValue)
-							stereogram.MinSeparation = MinSeparation.Value;
-
-						if (MaxSeparation.HasValue)
-							stereogram.MaxSeparation = MaxSeparation.Value;
-
-						if (PatternWidth.HasValue)
-							stereogram.PatternWidth = PatternWidth.Value;
-						
-						if (Origin.HasValue)
-							stereogram.Origin = Origin.Value;
-
-						if (YShift.HasValue)
-							stereogram.YShift = YShift.Value;
-						
-						if (GapFilling.HasValue)
-							stereogram.GapFilling = GapFilling.Value;
-
-						if (NoiseReductionRadius.HasValue)
-							stereogram.NoiseReductionRadius = NoiseReductionRadius.Value;
-
-						if (NoiseReductionThreshold.HasValue)
-							stereogram.NoiseReductionThreshold = NoiseReductionThreshold.Value;
-
-						if (Oversampling.HasValue)
-							stereogram.Oversampling = Oversampling.Value;
-
-						if (CrossView.HasValue)
-							stereogram.CrossView = true;
-
-						if (ColoredNoise.HasValue)
-							stereogram.ColoredNoise = true;
-
-						if (NoiseDensity.HasValue)
-							stereogram.NoiseDensity = NoiseDensity.Value;
-
-						if(DisablePostProcessingOverSampling.HasValue)
-							stereogram.PostProcessingOversampling = false;
-
-						if (NoParallelProcessing.HasValue)
-							stereogram.ParallelProcessing = false;
-
-						// Generate the stereogram
-						success = stereogram.Generate();
+						try
+						{
+							pattern = ImageIO.LoadPattern(patternFile);
+						}
+						catch (NotSupportedException)
+						{
+							WriteError("Pattern should be png, gif, jpg or bmp.");
+							app.ShowHelp();
+							return 3;
+						}
 					}
 
-					if (!success)
+					var options = new StereogramOptions
 					{
-						foreach (var message in stereogram.ValidationErrors)
+						DepthMap = depthMap,
+						Pattern = pattern,
+						MinSeparation = MinSeparation ?? StereogramOptions.AutoSeparation,
+						MaxSeparation = MaxSeparation ?? StereogramOptions.AutoSeparation,
+						PatternWidth = PatternWidth ?? MaxSeparation ?? 90,
+						Origin = Origin,
+						YShift = YShift ?? 16,
+						NoiseReductionRadius = NoiseReductionRadius ?? 0,
+						NoiseReductionThreshold = NoiseReductionThreshold ?? 10,
+						Oversampling = Oversampling ?? 1,
+						CrossView = CrossView.HasValue,
+						ColoredNoise = ColoredNoise.HasValue,
+						NoiseDensity = NoiseDensity ?? 50,
+						PostProcessingOversampling = !DisablePostProcessingOverSampling.HasValue,
+						ParallelProcessing = !NoParallelProcessing.HasValue,
+					};
+
+					var generator = new StereogramGenerator();
+					var stereogramResult = generator.Generate(options);
+
+					// Always write warnings
+					foreach (var message in stereogramResult.Warnings)
+						WriteWarning(message);
+
+					if (!stereogramResult.Success)
+					{
+						foreach (var message in stereogramResult.Errors)
 							WriteError(message);
 
 						result = 3;
 					}
-
-					// Always write warnings
-					foreach (var message in stereogram.ValidationWarnings)
-						WriteWarning(message);
-
-					if (success)
+					else
 					{
 						WriteSuccess("The stereogram was successfully generated. Saving...");
 
-						var fileName = stereogram.SaveResult(ResultFile);
+						using var image = stereogramResult.Image;
+						var fileName = ImageIO.SaveResult(image!, ResultFile ?? "");
 
 						WriteSuccess("The stereogram was saved as '{0}'", fileName);
 					}
+				}
+				finally
+				{
+					depthMap.Dispose();
+					pattern?.Dispose();
 				}
 			}
 

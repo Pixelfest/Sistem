@@ -5,6 +5,8 @@
     <Platforms>x64</Platforms>
     <LangVersion>default</LangVersion>
     <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <StartupObject>Sistem.CommandLine.Program</StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -60,6 +62,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sistem.Core\Sistem.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>
