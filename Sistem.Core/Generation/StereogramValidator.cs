@@ -19,10 +19,10 @@ internal static class StereogramValidator
 		var oversampling = Math.Clamp(options.Oversampling, 1, 8);
 		var minSeparation = options.GetResolvedMinSeparation();
 		var maxSeparation = options.GetResolvedMaxSeparation();
-		var patternWidth = Math.Max(options.PatternWidth, maxSeparation);
+		var patternWidth = options.PatternWidth;
 
 		if (patternWidth < maxSeparation)
-			errors.Add($"Pattern width ({patternWidth}) should be bigger or equal to maximum separation ({maxSeparation}).");
+			errors.Add($"Pattern width ({patternWidth}) should be greater than or equal to maximum separation ({maxSeparation}).");
 
 		var depthMap = options.DepthMap;
 
