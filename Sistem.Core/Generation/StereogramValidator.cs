@@ -19,11 +19,6 @@ internal static class StereogramValidator
 		var oversampling = Math.Clamp(options.Oversampling, 1, 8);
 		var minSeparation = options.GetResolvedMinSeparation();
 		var maxSeparation = options.GetResolvedMaxSeparation();
-		var patternWidth = options.PatternWidth;
-
-		if (patternWidth < maxSeparation)
-			errors.Add($"Pattern width ({patternWidth}) should be greater than or equal to maximum separation ({maxSeparation}).");
-
 		var depthMap = options.DepthMap;
 
 		if (options.PostProcessingOversampling && (long)depthMap.Width * depthMap.Height * oversampling * 4 > int.MaxValue)
@@ -45,9 +40,6 @@ internal static class StereogramValidator
 			warnings.Add("Maximum and minimum separation are quite far apart, this may cause unwanted effects.");
 		else if (ratio < 1.1)
 			warnings.Add("Maximum and minimum separation are close, there will be barely any depth in the result.");
-
-		if (options.Pattern is not null && patternWidth > options.Pattern.Width)
-			warnings.Add("Pattern width is greater than the pattern image. It will be zoomed in.");
 
 		return (errors, warnings);
 	}
