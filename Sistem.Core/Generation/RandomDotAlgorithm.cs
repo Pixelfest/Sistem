@@ -38,19 +38,19 @@ internal sealed class RandomDotAlgorithm : IStereogramAlgorithm
 
 			if (0 <= left && right < width)
 			{
-				var kkk = lookLeft[left];
+				var linkedLeft = lookLeft[left];
 
-				while (kkk != left && kkk != right)
+				while (linkedLeft != left && linkedLeft != right)
 				{
-					if (kkk < right)
-						left = kkk;
+					if (linkedLeft < right)
+						left = linkedLeft;
 					else
 					{
 						left = right;
-						right = kkk;
+						right = linkedLeft;
 					}
 
-					kkk = lookLeft[left];
+					linkedLeft = lookLeft[left];
 				}
 
 				lookLeft[left] = right;
