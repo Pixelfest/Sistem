@@ -50,7 +50,7 @@ jobs:
           path: ${{ github.workspace }}/artifacts/${{ matrix.asset_name }}.zip
 
   publish-openstereogramcreator:
-    name: Publish osc-win-x64
+    name: Publish osc-gui-win-x64
     runs-on: windows-latest
 
     steps:
@@ -66,11 +66,11 @@ jobs:
         run: dotnet restore OpenStereogramCreator/OpenStereogramCreator.csproj
 
       - name: Publish
-        run: dotnet publish OpenStereogramCreator/OpenStereogramCreator.csproj --configuration Release --framework net10.0-windows7.0 --runtime win-x64 --self-contained true -p:PublishSingleFile=false -p:PublishTrimmed=false --output ${{ github.workspace }}/artifacts/osc-win-x64
+        run: dotnet publish OpenStereogramCreator/OpenStereogramCreator.csproj --configuration Release --framework net10.0-windows7.0 --runtime win-x64 --self-contained true -p:PublishSingleFile=false -p:PublishTrimmed=false --output ${{ github.workspace }}/artifacts/osc-gui-win-x64
 
       - name: Package
         shell: pwsh
-        run: Compress-Archive -Path "$env:GITHUB_WORKSPACE/artifacts/osc-win-x64/*" -DestinationPath "$env:GITHUB_WORKSPACE/artifacts/osc-win-x64.zip" -Force
+        run: Compress-Archive -Path "$env:GITHUB_WORKSPACE/artifacts/osc-gui-win-x64/*" -DestinationPath "$env:GITHUB_WORKSPACE/artifacts/osc-gui-win-x64.zip" -Force
 
       - name: Upload package
         uses: actions/upload-artifact@v4
