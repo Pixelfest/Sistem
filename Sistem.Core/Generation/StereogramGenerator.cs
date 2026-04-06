@@ -11,10 +11,13 @@ namespace Sistem.Core.Generation;
 public sealed class StereogramGenerator : IStereogramGenerator
 {
 	private static readonly RandomDotAlgorithm RandomDot = new();
-	private static readonly PatternAlgorithm Pattern = new();
 	private static readonly OptimizedPatternAlgorithm OptimizedPattern = new();
-	private static readonly NewPatternAlgorithm NewPattern = new();
-	private static readonly BidirectionalAveragingAlgorithm BidirectionalAveraging = new();
+
+	// Other options for algorithms
+	// private static readonly PatternAlgorithm Pattern = new();
+	// private static readonly NewPatternAlgorithm NewPattern = new();
+	// private static readonly BidirectionalAveragingAlgorithm BidirectionalAveraging = new();
+
 
 	/// <inheritdoc />
 	public StereogramResult Generate(StereogramOptions options)
@@ -82,7 +85,14 @@ public sealed class StereogramGenerator : IStereogramGenerator
 	{
 		if (context.Factor == 1 || !context.PostProcessingOversampling)
 			return context.ResultImage;
+		try
+		{
+			return OversamplingContext.Resize(context.ResultImage, context.Width, context.Height);
 
-		return OversamplingContext.Resize(context.ResultImage, context.Width, context.Height);
+		}
+		finally
+		{
+			context.ResultImage.Dispose();
+		}
 	}
 }
