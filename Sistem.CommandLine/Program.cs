@@ -119,60 +119,69 @@ namespace Sistem.CommandLine
 					return 3;
 				}
 
-				if (!string.IsNullOrWhiteSpace(patternFile))
+				try
 				{
-					try
+					if (!string.IsNullOrWhiteSpace(patternFile))
 					{
-						pattern = ImageIO.LoadPattern(patternFile);
+						try
+						{
+							pattern = ImageIO.LoadPattern(patternFile);
+						}
+						catch (NotSupportedException)
+						{
+							WriteError("Pattern should be png, gif, jpg or bmp.");
+							app.ShowHelp();
+							return 3;
+						}
 					}
-					catch (NotSupportedException)
+
+					var options = new StereogramOptions
 					{
-						WriteError("Pattern should be png, gif, jpg or bmp.");
-						app.ShowHelp();
-						return 3;
+						DepthMap = depthMap,
+						Pattern = pattern,
+						MinSeparation = MinSeparation ?? StereogramOptions.AutoSeparation,
+						MaxSeparation = MaxSeparation ?? StereogramOptions.AutoSeparation,
+						PatternWidth = PatternWidth ?? MaxSeparation ?? 90,
+						Origin = Origin,
+						YShift = YShift ?? 16,
+						NoiseReductionRadius = NoiseReductionRadius ?? 0,
+						NoiseReductionThreshold = NoiseReductionThreshold ?? 10,
+						Oversampling = Oversampling ?? 1,
+						CrossView = CrossView.HasValue,
+						ColoredNoise = ColoredNoise.HasValue,
+						NoiseDensity = NoiseDensity ?? 50,
+						PostProcessingOversampling = !DisablePostProcessingOverSampling.HasValue,
+						ParallelProcessing = !NoParallelProcessing.HasValue,
+					};
+
+					var generator = new StereogramGenerator();
+					var stereogramResult = generator.Generate(options);
+
+					// Always write warnings
+					foreach (var message in stereogramResult.Warnings)
+						WriteWarning(message);
+
+					if (!stereogramResult.Success)
+					{
+						foreach (var message in stereogramResult.Errors)
+							WriteError(message);
+
+						result = 3;
+					}
+					else
+					{
+						WriteSuccess("The stereogram was successfully generated. Saving...");
+
+						using var image = stereogramResult.Image;
+						var fileName = ImageIO.SaveResult(image!, ResultFile ?? "");
+
+						WriteSuccess("The stereogram was saved as '{0}'", fileName);
 					}
 				}
-
-				var options = new StereogramOptions
+				finally
 				{
-					DepthMap = depthMap,
-					Pattern = pattern,
-					MinSeparation = MinSeparation ?? StereogramOptions.AutoSeparation,
-					MaxSeparation = MaxSeparation ?? StereogramOptions.AutoSeparation,
-					PatternWidth = PatternWidth ?? MaxSeparation ?? 90,
-					Origin = Origin,
-					YShift = YShift ?? 16,
-					NoiseReductionRadius = NoiseReductionRadius ?? 0,
-					NoiseReductionThreshold = NoiseReductionThreshold ?? 10,
-					Oversampling = Oversampling ?? 1,
-					CrossView = CrossView.HasValue,
-					ColoredNoise = ColoredNoise.HasValue,
-					NoiseDensity = NoiseDensity ?? 50,
-					PostProcessingOversampling = !DisablePostProcessingOverSampling.HasValue,
-					ParallelProcessing = !NoParallelProcessing.HasValue,
-				};
-
-				var generator = new StereogramGenerator();
-				var stereogramResult = generator.Generate(options);
-
-				// Always write warnings
-				foreach (var message in stereogramResult.Warnings)
-					WriteWarning(message);
-
-				if (!stereogramResult.Success)
-				{
-					foreach (var message in stereogramResult.Errors)
-						WriteError(message);
-
-					result = 3;
-				}
-				else
-				{
-					WriteSuccess("The stereogram was successfully generated. Saving...");
-
-					var fileName = ImageIO.SaveResult(stereogramResult.Image!, ResultFile ?? "");
-
-					WriteSuccess("The stereogram was saved as '{0}'", fileName);
+					depthMap.Dispose();
+					pattern?.Dispose();
 				}
 			}
 
