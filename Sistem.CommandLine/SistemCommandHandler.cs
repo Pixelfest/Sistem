@@ -7,7 +7,7 @@ namespace Sistem.CommandLine;
 
 internal static class SistemCommandHandler
 {
-	public static int Run(CommandLineOptions arguments)
+	public static int Run(CommandLineOptions arguments, string? commandText = null)
 	{
 		CommandLineUtilities.WriteBanner();
 
@@ -39,6 +39,12 @@ internal static class SistemCommandHandler
 		if (arguments.NoiseDensity is < 1 or > 99)
 		{
 			CommandLineUtilities.WriteError("--noise-density must be between 1 and 99.");
+			result = 2;
+		}
+
+		if (!TryCreateOverlayOptions(arguments, commandText, out var overlayOptions))
+		{
+			CommandLineUtilities.WriteError("--embed-parameters must be one of: command, detailed.");
 			result = 2;
 		}
 
@@ -112,7 +118,7 @@ internal static class SistemCommandHandler
 					CommandLineUtilities.WriteSuccess("The stereogram was successfully generated. Saving...");
 
 					using var image = stereogramResult.Image;
-					var fileName = ImageIO.SaveResult(image!, options, arguments.ResultFile ?? string.Empty, arguments.SaveMetadata);
+					var fileName = ImageIO.SaveResult(image!, options, arguments.ResultFile ?? string.Empty, arguments.SaveMetadata, overlayOptions);
 
 					CommandLineUtilities.WriteSuccess("The stereogram was saved as '{0}'", fileName);
 				}
@@ -130,5 +136,32 @@ internal static class SistemCommandHandler
 		}
 
 		return result;
+	}
+
+	private static bool TryCreateOverlayOptions(CommandLineOptions arguments, string? commandText, out ResultImageOverlayOptions overlayOptions)
+	{
+		var normalizedMode = arguments.ParameterOverlayMode.Trim().ToLowerInvariant();
+		switch (normalizedMode)
+		{
+			case "none":
+				overlayOptions = ResultImageOverlayOptions.None;
+				return true;
+			case "command":
+				overlayOptions = new ResultImageOverlayOptions
+				{
+					Mode = ResultImageParametersMode.Command,
+					CommandText = commandText,
+				};
+				return true;
+			case "detailed":
+				overlayOptions = new ResultImageOverlayOptions
+				{
+					Mode = ResultImageParametersMode.Detailed,
+				};
+				return true;
+			default:
+				overlayOptions = ResultImageOverlayOptions.None;
+				return false;
+		}
 	}
 }

@@ -20,6 +20,7 @@ internal sealed class CommandLineOptions
 	public bool NoParallelProcessing { get; init; }
 	public int? NoiseDensity { get; init; }
 	public bool SaveMetadata { get; init; } = true;
+	public string ParameterOverlayMode { get; init; } = "no-parameters";
 
 	public static readonly Option<string> DepthMapOption = CreateRequiredOption<string>("-d", "--depth-map", "The depth map (png, gif, jpg or bmp)");
 	public static readonly Option<string?> PatternOption = CreateOption<string?>("-p", "--pattern", "The pattern map (png, gif, jpg or bmp)");
@@ -37,6 +38,7 @@ internal sealed class CommandLineOptions
 	public static readonly Option<bool> NoParallelProcessingOption = CreateOption<bool>("-m", "--no-parallel-processing", "Disable parallel processing");
 	public static readonly Option<int?> NoiseDensityOption = CreateOption<int?>("-n", "--noise-density", "Noise density for monochrome random dot stereogram (1-99)");
 	public static readonly Option<bool?> SaveMetadataOption = CreateOption<bool?>("-s", "--save-metadata", "Save used stereogram options in EXIF metadata when supported by the output format.");
+	public static readonly Option<string?> ParameterOverlayModeOption = CreateOption<string?>("-e", "--embed-parameters", "Embed parameter text in output image: command, detailed.");
 
 	public static Option[] GetAll() =>
 	[
@@ -56,6 +58,7 @@ internal sealed class CommandLineOptions
 		NoParallelProcessingOption,
 		NoiseDensityOption,
 		SaveMetadataOption,
+		ParameterOverlayModeOption,
 	];
 
 	public static CommandLineOptions FromParseResult(ParseResult parseResult) => new()
@@ -76,15 +79,16 @@ internal sealed class CommandLineOptions
 		NoParallelProcessing = parseResult.GetValue(NoParallelProcessingOption),
 		NoiseDensity = parseResult.GetValue(NoiseDensityOption),
 		SaveMetadata = parseResult.GetValue(SaveMetadataOption) ?? true,
+		ParameterOverlayMode = parseResult.GetValue(ParameterOverlayModeOption) ?? "no-parameters",
 	};
 
 	private static Option<T> CreateOption<T>(string shortAlias, string longAlias, string description)
 	{
-		var option = new Option<T>(longAlias, shortAlias)
-		{
-			Description = description,
-		};
+		var option = string.IsNullOrWhiteSpace(shortAlias)
+			? new Option<T>(longAlias)
+			: new Option<T>(longAlias, shortAlias);
 
+		option.Description = description;
 		return option;
 	}
 
