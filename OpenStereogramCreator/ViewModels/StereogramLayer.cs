@@ -100,7 +100,6 @@ namespace OpenStereogramCreator.ViewModels
 				DepthMap = DepthImage,
 				MinSeparation = (int)MinimumSeparation,
 				MaxSeparation = (int)MaximumSeparation,
-				PatternWidth = (int)MaximumSeparation,
 				Origin = (int)Origin,
 			};
 		}

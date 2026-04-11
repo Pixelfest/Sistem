@@ -120,7 +120,7 @@ internal sealed class OversamplingContext
 
 		// Prepare pattern
 		Image<Rgba32>? preparedPattern = null;
-		var patternWidth = Math.Max(options.PatternWidth, maxSeparation);
+		var patternWidth = maxSeparation;
 
 		if (options.Pattern is not null)
 		{

@@ -37,12 +37,6 @@ public record StereogramOptions
 	public int MaxSeparation { get; init; } = AutoSeparation;
 
 	/// <summary>
-	/// Pattern width in pixels. Should be >= MaxSeparation.
-	/// Default = 90
-	/// </summary>
-	public int PatternWidth { get; init; } = 90;
-
-	/// <summary>
 	/// Origin x-coordinate for the pattern. Null for auto-center.
 	/// </summary>
 	public int? Origin { get; init; }
