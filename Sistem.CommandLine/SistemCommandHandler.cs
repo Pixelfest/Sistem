@@ -1,7 +1,8 @@
-using System;
 using Sistem.Core.Generation;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System;
+using System.Diagnostics;
 
 namespace Sistem.CommandLine;
 
@@ -96,8 +97,10 @@ internal static class SistemCommandHandler
 					ParallelProcessing = !arguments.NoParallelProcessing,
 				};
 
+				var keeper = Stopwatch.StartNew();
 				var generator = new StereogramGenerator();
 				var stereogramResult = generator.Generate(options);
+				CommandLineUtilities.WriteSuccess($"The stereogram was generated in {keeper.ElapsedMilliseconds}ms.");
 
 				foreach (var message in stereogramResult.Warnings)
 				{
@@ -143,6 +146,8 @@ internal static class SistemCommandHandler
 		var normalizedMode = arguments.ParameterOverlayMode.Trim().ToLowerInvariant();
 		switch (normalizedMode)
 		{
+			case null:
+			case "":
 			case "none":
 				overlayOptions = ResultImageOverlayOptions.None;
 				return true;
