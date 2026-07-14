@@ -82,3 +82,9 @@ If you're on another platform use:
 ```
 dotnet build Sistem.Standard.sln
 ```
+
+## Related reading
+
+- [Thimbleby, Inglis & Witten (1994)](https://www.cs.waikato.ac.nz/~hinze/Displaying3DImages.pdf) — classic SIRDS algorithms paper
+- [Christopher Tyler, Scholarpedia: Autostereogram](http://www.scholarpedia.org/article/Autostereogram) — history and physiology
+- [Visual Enlightenment](https://visualenlightenment.art) — contemporary printed autostereogram art / book (disclosure: optional print-scale example of the medium)
